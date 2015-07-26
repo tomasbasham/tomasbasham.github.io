@@ -1,0 +1,18 @@
+<footer class="bottom-teaser cf">
+  <div class="isLeft">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      <div class="author-image" style="background-image: url({{ site.github.owner_gravatar_url }})">Blog Logo</div>
+      <h4>{{ site.github.owner_name }}</h4>
+      <p class="bio">{{ site.bio }}</p>
+    </section>
+  </div>
+  <div class="isRight">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    {% include tags.html %}
+  </div>
+</footer>

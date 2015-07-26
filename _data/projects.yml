@@ -1,0 +1,84 @@
+- project:
+  title: "Arduino-MMA7455"
+  short: "A convenience class written to interface with the Freescale MMA7455 accelerometer."
+  image: "http://cdn.tomasbasham.co.uk/mma7455.png"
+  url:   "https://github.com/tomasbasham/Arduino-MMA7455"
+
+- project:
+  title: "bond"
+  short: "WebRTC session and data channel wrapper to setup and manage peer connections."
+  image: "http://cdn.tomasbasham.co.uk/bond.png"
+  url:   "https://github.com/tomasbasham/bond"
+
+- project:
+  title: "Burger NOW!"
+  short: "iOS application to discover burger joints near you."
+  image: "http://cdn.tomasbasham.co.uk/burger.png"
+  url:	 "http://www.burgernow.co.uk"
+
+- project:
+  title: "colours"
+  short: "A set of base colour classes to be used within HTML."
+  image: "http://cdn.tomasbasham.co.uk/colours.png"
+  url:   "https://github.com/tomasbasham/colours"
+
+- project:
+  title: "conical"
+  short: "Statistical hypothesis testing library for front end applications."
+  image: "http://cdn.tomasbasham.co.uk/conical.png"
+  url:   "https://github.com/whichledlight/conical"
+
+- project:
+  title: "ember-campfire"
+  short: "WebRTC video chat application."
+  url:   "https://github.com/tomasbasham/ember-campfire"
+
+- project:
+  title: "ember-cli-gingerbread"
+  short: "An ember-cli addon to integrate several boilerplate components complete with styling."
+  image: "http://cdn.tomasbasham.co.uk/gingerbread.png"
+  url:   "https://github.com/tomasbasham/ember-cli-gingerbread"
+
+- project:
+  title: "ember-cli-guardsman"
+  short: "An ember-cli addon to interface with any server-side authentication and authorisation system"
+  image: "http://cdn.tomasbasham.co.uk/guardsman.png"
+  url:   "https://github.com/tomasbasham/ember-cli-guardsman"
+
+- project:
+  title: "ember-cli-link-tags"
+  short: "An ember-cli addon to easily add link tags to the head of a HTML document."
+  url:   "https://github.com/tomasbasham/ember-cli-link-tags"
+
+- project:
+  title: "ember-cli-scss-lint"
+  short: "An ember-cli addon to integrate scss-lint for standards adherence and improved style consistency."
+  url:   "https://github.com/tomasbasham/ember-cli-scss-lint"
+
+- project:
+  title: "ember-cli-tag-manager"
+  short: "An ember-cli addon to manage third-party JavaScript tags and tracking codes."
+  url:   "https://github.com/tomasbasham/ember-cli-tag-manager"
+
+- project:
+  title: "generator-node-boilerplate"
+  short: "Web application generator for Yeoman."
+  image: "http://cdn.tomasbasham.co.uk/boilerplate.png"
+  url:   "https://github.com/tomasbasham/generator-node-boilerplate"
+
+- project:
+  title: "guardsman"
+  short: "Object Orientated Authentication for Rails."
+  image: "http://cdn.tomasbasham.co.uk/guardsman.png"
+  url:   "https://github.com/tomasbasham/guardsman"
+
+- project:
+  title: "omnipresent"
+  short: "Omnipresent user for Rails."
+  url:   "https://github.com/tomasbasham/omnipresent"
+
+- project:
+  title: "responds"
+  short: "Test for nested properties within complicated JavaScript objects."
+  image: "http://cdn.tomasbasham.co.uk/responds.png"
+  url:   "https://github.com/tomasbasham/responds"

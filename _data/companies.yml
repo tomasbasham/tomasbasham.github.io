@@ -1,0 +1,106 @@
+- comapny:
+  title: "WhichLEDLight"
+  position: "Technical Director"
+  image: "http://cdn.tomasbasham.co.uk/whichledlight.png"
+  url: "http://www.whichledlight.com"
+  duration:
+    start: "September 2014"
+    end: "Present"
+  description: "WhichLedLight is the number 1 LED bulb comparison search engine. WhichLEDLight.com independently compares LED lamps from across the sector on quality, performance and price helping the end purchaser make an informed decision on which LED lamp to buy."
+  responsibilities:
+    - "Responsible for the daily management of the company"
+    - "Responsible as lead developer to build an online LED price comparison platform"
+    - "Define functional requirements and work within an agile environment"
+    - "Work alongside a creative team to flesh out design decisions"
+
+- company:
+  title: "Dayamo"
+  position: "Co-Founder & Full Stack Developer"
+  image: "http://cdn.tomasbasham.co.uk/dayamo.png"
+  url: "/"
+  duration:
+    start: "Feburary 2014"
+    end: "October 2014"
+  description: "Dayamo is a technology company based in Wales, developing software solutions to provide positive lifestyle related outcomes. Dayamo aims to establish an ecosystem of interoperable lifestyle systems that empowers people to better manage their health and wellness."
+  responsibilities:
+    - "Responsible as lead developer to build an online lifestyle platform"
+    - "Worked alongside a leading UK media provider to define project goals and direction"
+    - "Ran and coordinated a UK based lifestyle and wellbeing trial"
+    - "Trained University graduates to help with ongoing development"
+
+- company:
+  title: "Aerian Studios"
+  position: "Software Developer"
+  image: "http://cdn.tomasbasham.co.uk/aerian.png"
+  url: "http://beta.aerian.com"
+  duration:
+    start: "March 2014"
+    end: "July 2014"
+  description: "Aerian Studios is a design house based in Wiltshire, England that develop bespoke software for many of the UK's biggest titles. Aerian Studios has built industry leading campaigns, websites, products and mobile apps for 18 years and never lost a client."
+  responsibilities:
+    - "Delivered iOS applications and websites for large customers"
+    - "Communicated with clients to define product design and architecture"
+    - "Worked across project teams to complete several projects"
+
+- company:
+  title: "Alacrity Foundation"
+  position: "Associate"
+  image: "http://cdn.tomasbasham.co.uk/alacrity.png"
+  url: "http://alacrityfoundation.co.uk"
+  duration:
+    start: "September 2012"
+    end: "February 2014"
+  description: "The Alacrity Foundation is a startup incubator that boast to be a collaboration between Welsh Government, The Waterloo Foundation and the Wesley Clover Corporation, with the mandate of turning engineering and business graduates into entrepreneurs."
+  responsibilities:
+    - "Delivered technology solutions to demand-driven problems as part of a project team"
+    - "Pitched product ideas and requirements based on thorough market research"
+    - "Collaborated with senior management of high-tech and IT companies to narrow requirements"
+    - "Worked with a variety of current technologies ranging from mobile to web"
+    - "Reported to high-tech entrepreneurs such as Sir Terry Matthews (Investor) and Simon Gibson (Founder) for mentorship and guidance"
+    - "Underwent three months on secondment to Canada under the leadership of Sir Terry Matthews"
+
+- company:
+  title: "Benbria"
+  position: "Node.js Developer"
+  image: "http://cdn.tomasbasham.co.uk/benbria.png"
+  url: "http://www.benbria.com"
+  duration:
+    start: "July 2013"
+    end: "October 2013"
+  description: "Benbria is a Canadian startup and the leading provider of customer engagement solutions and customer notification solutions for hotels, events, restaurants, retail and other industries."
+  responsibilities:
+    - "Identified new markets to introduce the current multi-tenant software (Loop&trade;)"
+    - "Performed daily software developments; implementing new features and fixing bugs"
+    - "Reported to the project manager and used project management tools to track tasks and bugs"
+    - "Kept up to date with customer demands, catering for strict deadlines"
+    - "Collaborated as part of a multi-disciplined team"
+
+- company:
+  title: "Cardiff University"
+  position: "PHP Developer"
+  image: "http://cdn.tomasbasham.co.uk/cardiff.png"
+  url: "https://www.cs.cf.ac.uk"
+  duration:
+    start: "June 2012"
+    end: "September 2012"
+  description: "Hired by the Computer Science department to develop software to explore the full extent of species diversity. I worked on both the frontend and backend to implement a cross mapping tool to match biological species from multiple sources including the Catalog of Life."
+  responsibilities:
+    - "Developed software to explore the full extent of species diversity"
+    - "Performed daily software developments; implementing new features and fixing bugs"
+    - "Collaborated with a multinational team spanning across Europe"
+    - "The project has been submitted for review, with personal commendation for the work which I was involved"
+
+- company:
+  title: "Cardiff University"
+  position: "iOS Developer"
+  image: "http://cdn.tomasbasham.co.uk/cardiff.png"
+  url: "https://www.cs.cf.ac.uk"
+  duration:
+    start: "June 2011"
+    end: "September 2011"
+  description: "Hired by the Computer Science department to develop a Twitter application that read additional inputs to determine the reading behaviour of users."
+  responsibilities:
+    - "Worked within the largely popular research area of mobile communications and social media"
+    - "Responsible for developing a Twitter application that takes additional inputs to determine the reading behaviour of users"
+    - "Collaborated with a small group of like minded individuals to complete this project"
+    - "Was able to present the application to a group of peers"

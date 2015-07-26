@@ -1,0 +1,21 @@
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting" role="article">
+  <div class="article-item">
+    <header class="post-header">
+      <h2 class="post-title" itemprop="name"><a href="{{ post.url }}" itemprop="url">{{ post.title }}</a></h2>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>{{ post.content | strip_html | truncatewords: 50 }}</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="{{ post.date | date_to_long_string }}">{{ post.date | date_to_long_string }}</time>
+      <section class="category">
+        {% if post.category %}
+        <div class="tag post-tag post-tag-{{ post.category | downcase }}">
+          <!-- <a class="link" href="/tag/{{ post.category | downcase }}" title="Go to {{ post.category }}" aria-label="Go to {{ post.category }}">{{ post.category }}</a> -->
+          <a class="link" href="/" title="Go to {{ post.category }}" aria-label="Go to {{ post.category }}">{{ post.category }}</a>
+        </div>
+        {% endif %}
+      </section>
+    </footer>
+  </div>
+</article>

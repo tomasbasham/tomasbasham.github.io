@@ -1,23 +1,52 @@
 ---
 layout: default
+sitemap:
+  priority: 1
+  changefreq: 'weekly'
 ---
-
-<div class="home">
-
-  <h1 class="page-heading">Posts</h1>
-
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
-
+<div class="teaserimage">
+  <div class="teaserimage-image" {% if site.cover %}style="background-image: url({{ site.cover }})"{% endif %}>
+    {{ site.title }}
+  </div>
 </div>
+
+<header class="blog-header">
+  {% if site.github.owner_gravatar_url %}
+  <a class="blog-logo" href="{{ site.url }}" style="background-image: url('{{ site.github.owner_gravatar_url }}')">{{ site.title }}</a>
+  {% endif %}
+
+  <h1 class="blog-title">{{ site.title }}</h1>
+  <h2 class="blog-description">{{ site.description }}</h2>
+  <div class="custom-links">
+    <a href="/about/">About</a>
+    &nbsp;&nbsp;·&nbsp;&nbsp;
+    <a href="/projects/">Projects</a>
+    &nbsp;&nbsp;·&nbsp;&nbsp;
+    <a href="/work/">Work</a>
+  </div>
+</header>
+
+<main class="content" role="main">
+  {% if site.tags.featured %}
+  <h5 class="index-headline featured">
+    <span>Featured</span>
+  </h5>
+
+  <div class="container featured">
+    {% for post in site.tags.featured %}
+    {% include post.html %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <h5 class="index-headline normal">
+    <span>Articles</span>
+  </h5>
+
+  <div class="cf frame">
+    {% for post in paginator.posts %}
+    {% include post.html %}
+    {% endfor %}
+  </div>
+  {% include pagination.html %}
+</main>
