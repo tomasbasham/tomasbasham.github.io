@@ -436,6 +436,10 @@ body {
 }
 
 .share-title {
+  @include respond-to(768) {
+    font-size: 2rem;
+  }
+
   padding: 6.8rem 0 3rem 0;
   margin: 0;
   font-size: 3.6rem;
@@ -460,6 +464,7 @@ body {
 
     .post-image-image {
       background-size: cover;
+      background-position: center;
       position: absolute;
       top: 0;
       left: 0;
