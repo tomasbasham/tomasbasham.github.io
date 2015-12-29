@@ -11,10 +11,10 @@
   url:   "https://github.com/tomasbasham/bond"
 
 - project:
-  title: "Burger NOW!"
+  title: "Pickle"
   short: "iOS application to discover burger joints near you."
   image: "http://cdn.tomasbasham.co.uk/burger.png"
-  url:	 "http://www.burgernow.co.uk"
+  url:	 "http://www.pickleapp.co.uk"
 
 - project:
   title: "colours"
