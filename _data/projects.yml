@@ -5,10 +5,10 @@
   url:   "https://github.com/tomasbasham/Arduino-MMA7455"
 
 - project:
-  title: "bond"
+  title: "negotiator"
   short: "WebRTC session and data channel wrapper to setup and manage peer connections."
-  image: "http://cdn.tomasbasham.co.uk/bond.png"
-  url:   "https://github.com/tomasbasham/bond"
+  image: "http://cdn.tomasbasham.co.uk/negotiator.png"
+  url:   "https://github.com/tomasbasham/negotiator"
 
 - project:
   title: "Pickle"
