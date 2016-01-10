@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Stack Overflow is full of trigger happy moderators
+title: Why Stack Overflow is Bad
 description: The pretentious nature of the largest programming Q&A monster.
 author: Tomas Basham
 comments: true
