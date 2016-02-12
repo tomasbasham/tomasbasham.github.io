@@ -1,8 +1,8 @@
 - project:
-  title: "Arduino-MMA7455"
+  title: "MMA7455"
   short: "A convenience class written to interface with the Freescale MMA7455 accelerometer."
   image: "http://cdn.tomasbasham.co.uk/mma7455.png"
-  url:   "https://github.com/tomasbasham/Arduino-MMA7455"
+  url:   "https://github.com/tomasbasham/MMA7455"
 
 - project:
   title: "negotiator"

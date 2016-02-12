@@ -5,8 +5,8 @@ description: 3 golden rules for object-oriented development.
 author: Tomas Basham
 comments: true
 image: http://cdn.tomasbasham.co.uk/aladdin-3-wishes.jpg
-category: SEO
-tags: featured development
+category: Development
+tags: development
 ---
 I have been working on a fairly large Ruby on Rails application for about a year now and have noticed a decline in the readability of the code base as the application has become more complex and exacerbated with small hacks to attempt to solve problems. After all this is supposed to be an agile development team, right? As of late the project team and I have decided to take a small pivot in our business model and whilst the application will still meet the requirements of the project, it has become obvious that there are many features in the application that are no longer required and adding bloat. As such we have decided to start again (as developers do...). However this time we have devised the "Golden Rules" to ensure our application controllers and models are not overcrowded with code that could really be elsewhere.
 
