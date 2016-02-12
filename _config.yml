@@ -18,7 +18,7 @@ github_username: tomasbasham
 
 # Build settings
 markdown: redcarpet
-highlighter: pygments
+highlighter: rouge
 
 redcarpet:
   extensions: ["no_intra_emphasis", "tables", "autolink", "strikethrough"]
