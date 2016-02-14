@@ -959,13 +959,13 @@ code {
 }
 
 pre {
-  padding: 8px 12px;
+  margin: 0 0 30px 0;
   overflow-x: scroll;
 
   > code {
     border: 0;
-    padding-right: 0;
-    padding-left: 0;
+    display: block;
+    padding: 8px 12px;
   }
 }
 

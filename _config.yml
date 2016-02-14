@@ -17,11 +17,8 @@ twitter_username: tomasbasham
 github_username: tomasbasham
 
 # Build settings
-markdown: redcarpet
+markdown: kramdown
 highlighter: rouge
-
-redcarpet:
-  extensions: ["no_intra_emphasis", "tables", "autolink", "strikethrough"]
 
 # blog cover
 cover: //cdn.tomasbasham.co.uk/cover.jpg
