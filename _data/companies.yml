@@ -1,8 +1,8 @@
 - comapny:
   title: "WhichLEDLight"
   position: "Technical Director"
-  image: "http://cdn.tomasbasham.co.uk/whichledlight.png"
-  url: "http://www.whichledlight.com"
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/whichledlight.png"
+  url: "https://www.whichledlight.com"
   duration:
     start: "September 2014"
     end: "Present"
@@ -16,8 +16,8 @@
 - company:
   title: "Dayamo"
   position: "Co-Founder & Full Stack Developer"
-  image: "http://cdn.tomasbasham.co.uk/dayamo.png"
-  url: "/"
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/dayamo.png"
+  url: "http://www.dayamo.co.uk"
   duration:
     start: "Feburary 2014"
     end: "October 2014"
@@ -31,7 +31,7 @@
 - company:
   title: "Aerian Studios"
   position: "Software Developer"
-  image: "http://cdn.tomasbasham.co.uk/aerian.png"
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/aerian.png"
   url: "http://beta.aerian.com"
   duration:
     start: "March 2014"
@@ -45,7 +45,7 @@
 - company:
   title: "Alacrity Foundation"
   position: "Associate"
-  image: "http://cdn.tomasbasham.co.uk/alacrity.png"
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/alacrity.png"
   url: "http://alacrityfoundation.co.uk"
   duration:
     start: "September 2012"
@@ -62,7 +62,7 @@
 - company:
   title: "Benbria"
   position: "Node.js Developer"
-  image: "http://cdn.tomasbasham.co.uk/benbria.png"
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/benbria.png"
   url: "http://www.benbria.com"
   duration:
     start: "July 2013"
@@ -78,7 +78,7 @@
 - company:
   title: "Cardiff University"
   position: "PHP Developer"
-  image: "http://cdn.tomasbasham.co.uk/cardiff.png"
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/cardiff.png"
   url: "https://www.cs.cf.ac.uk"
   duration:
     start: "June 2012"
@@ -93,7 +93,7 @@
 - company:
   title: "Cardiff University"
   position: "iOS Developer"
-  image: "http://cdn.tomasbasham.co.uk/cardiff.png"
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/cardiff.png"
   url: "https://www.cs.cf.ac.uk"
   duration:
     start: "June 2011"

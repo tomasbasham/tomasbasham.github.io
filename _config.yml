@@ -11,7 +11,7 @@ email: me@tomasbasham.co.uk
 description: A Personal Jekyll Blog and Portfolio
 bio: Technical Director at a fast growing statup company.
 baseurl: ""
-url: "http://tomasbasham.co.uk" # the base hostname & protocol for your site
+url: "https://tomasbasham.co.uk" # the base hostname & protocol for your site
 repository: tomasbasham/tomasbasham.github.io
 twitter_username: tomasbasham
 github_username: tomasbasham
@@ -21,7 +21,7 @@ markdown: kramdown
 highlighter: rouge
 
 # blog cover
-cover: //cdn.tomasbasham.co.uk/cover.jpg
+cover: https://dl.dropboxusercontent.com/u/59426690/cdn/cover.jpg
 
 paginate: 5
 
@@ -62,7 +62,7 @@ social:
     share_link:
 
   - icon: rss
-    url: http://tomasbasham.co.uk/feed.xml
+    url: https://tomasbasham.co.uk/feed.xml
     desc: Subscribe
     share_url:
     share_title:

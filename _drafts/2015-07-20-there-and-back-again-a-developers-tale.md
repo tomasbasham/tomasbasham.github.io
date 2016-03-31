@@ -4,7 +4,7 @@ title: There and Back Again, a Developers Tale
 description: To the fiery SEO pits of Mount Doom and back.
 author: Tomas Basham
 comments: true
-image: http://cdn.tomasbasham.co.uk/the-shire.jpg
+image: https://dl.dropboxusercontent.com/u/59426690/cdn/the-shire.jpg
 category: SEO
 tags: seo
 ---
