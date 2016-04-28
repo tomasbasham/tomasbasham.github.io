@@ -8,9 +8,10 @@ image: https://dl.dropboxusercontent.com/u/59426690/cdn/aladdin-3-wishes.jpg
 category: Development
 tags: development ruby
 ---
-I have been working on a fairly large Ruby on Rails application for about a year now and have noticed a decline in the readability of the code base as the application has become more complex and exacerbated with small hacks to attempt to solve problems. After all this is supposed to be an agile development team, right? As of late the project team and I have decided to take a small pivot in our business model and whilst the application will still meet the requirements of the project, it has become obvious that there are many features in the application that are no longer required and adding bloat. As such we have decided to start again (as developers do...). However this time we have devised the "Golden Rules" to ensure our application controllers and models are not overcrowded with code that could really be elsewhere.
+I have been working on a fairly large Ruby on Rails application for about a year now and have noticed a decline in the readability of the code base as the application has become more complex and exacerbated, with small hacks to attempt to solve problems. After all, this is supposed to be an agile development team, right? As of late the project team and I have decided to take a small pivot in our business model and whilst the application will still meet the requirements of the project, it has become obvious that there are many features that are no longer required and adding bloat. To prevent this bloat from occurring in future we have devised the "Golden Rules" to ensure our application controllers and models are not overcrowded with code that could really be elsewhere.
 
 ## The Rules
+
 Here are the rules:
 
 1. Classes can be no longer than one hundred lines of code. This includes tests,
@@ -20,7 +21,8 @@ Here are the rules:
 Under no circumstance can these rules be broken, or all hell will break loose.
 
 ## The Tools
-Fortunately using Ruby we have been blessed with [RuboCop](https://github.com/bbatsov/rubocop), "A Ruby static code analyzer, based on the community Ruby style guide". Just like other linting tools RuboCop allows us to define our "Golden Rules" in a configuration file so it can be committed to version control and shared amongst the team. The configuration we use is as such:
+
+Fortunately using Ruby we have been blessed with [RuboCop](https://github.com/bbatsov/rubocop), "A Ruby static code analyzer, based on the community Ruby style guide". Just like other linting tools RuboCop allows us to define our "Golden Rules" in a configuration file so it can be committed to version control and shared amongst the team. The configuration we use is as follows:
 
 
     ClassLength:
