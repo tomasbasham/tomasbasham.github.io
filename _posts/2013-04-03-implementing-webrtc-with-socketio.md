@@ -9,7 +9,7 @@ tags: technology javascript webrtc p2p
 ---
 WebRTC is a free, open source project enabling web browsers the ability of Real-Time Communications (RTC) capabilities via simple Javascript APIs.
 
-WebRTC is currently only available in Google Chrome and Mozilla Firefox (only the nightly builds) but will soon be available in other browsers, if Microsoft and Apple decide to pull their fingers out. The way in which this set of APIs works is first by receiving IP information from a signaling server which details all of the hosts that wish to establish a connection to stream audio and video. The signaling server is up to the developer to implement and is not strictly a WebRTC specific component. When this information has been exchanged it is used to create a P2P connection between the hosts, where streams are exchanged. From here the signaling server has no further interaction and the hosts are free to disconnect from it.
+WebRTC is currently only available in Google Chrome and Mozilla Firefox (only the nightly builds) but will soon be available in other browsers, if Microsoft and Apple decide to pull their fingers out. The way in which this set of APIs works is first by receiving IP information from a signalling server which details all of the hosts that wish to establish a connection to stream audio and video. The signalling server is up to the developer to implement and is not strictly a WebRTC specific component. When this information has been exchanged it is used to create a P2P connection between the hosts, where streams are exchanged. From here the signalling server has no further interaction and the hosts are free to disconnect from it.
 
 ## GetUserMedia
 
@@ -21,7 +21,7 @@ The callbacks that are provided to this function deal with the cases when the br
 
 ## Signaling Server
 
-For the signaling server I have trialled a few options: WebSockets, Socket.io and Faye. Whilst WebSockets and Socket.io worked very well for establishing connections between hosts they are not able to run natively on rails which is when I turned to Faye which is an rack based extension to rails for implementing an RTC server. It is based on WebSockets (as is Socket.io) and as such should have been easy to work with. However I have yet to get this server working and I may just resort back to using Socket.io which was an abstract framework for working with WebSockets. However this was done is Nodejs, independent from rails. This is not really a problem but is rather annoying.
+For the signalling server I have trialled a few options: WebSockets, Socket.io and Faye. Whilst WebSockets and Socket.io worked very well for establishing connections between hosts they are not able to run natively on rails which is when I turned to Faye which is an rack based extension to rails for implementing an RTC server. It is based on WebSockets (as is Socket.io) and as such should have been easy to work with. However I have yet to get this server working and I may just resort back to using Socket.io which was an abstract framework for working with WebSockets. However this was done is Nodejs, independent from rails. This is not really a problem but is rather annoying.
 
 In order to create a server in Nodejs using Socket.io the following code is used.
 
@@ -61,7 +61,7 @@ Lastly it is also necessary to know what to do when a user disconnects. In this 
 
 ## Client Side Server Connection
 
-From the client side Javascript, in order to establish a connection to the signaling server one must create an TCP/IP object and point it to connect to the server. Lets assume that we are to be using Socket.io and Nodejs as the signaling server frameworks and platforms respectively, you would connect to the server like so:
+From the client side Javascript, in order to establish a connection to the signalling server one must create an TCP/IP object and point it to connect to the server. Lets assume that we are to be using Socket.io and Nodejs as the signalling server frameworks and platforms respectively, you would connect to the server like so:
 
     // Create a new socket to the server to be
     // used as a signalling channel. This is on
@@ -79,7 +79,7 @@ Here we can see that each of the callbacks get called when a certain even happen
 
 ## RTCPeerConnection
 
-An RTCPeerConnection object is really the heart and soul of WebRTC. It is this which establishes the P2P connection between two hosts in order for them to exchange video and audio stream. After having connected to a signaling server one needs to invoke the following methods to instantiate an RTCPeerConnection object and create an offer to connect:
+An RTCPeerConnection object is really the heart and soul of WebRTC. It is this which establishes the P2P connection between two hosts in order for them to exchange video and audio stream. After having connected to a signalling server one needs to invoke the following methods to instantiate an RTCPeerConnection object and create an offer to connect:
 
     connection = new RTCPeerConnection ( {
       iceServers: [{ url:'stun:stun.l.google.com:19302' }],
@@ -87,7 +87,7 @@ An RTCPeerConnection object is really the heart and soul of WebRTC. It is this w
     });
     connection.createOffer ( gotDescription, createOfferFailed, mediaConstraints );
 
-By calling create offer, the creates a SDP message which contains the offer to connect. This is sent to the **gotDescription** callback and can then be sent through the signaling server to each connected host. If however this call fails then the **createOfferFailed** callback will be called. The media constrains argument is a JSON formatted object which denotes the constraints on what type of media is being offered and what type should be offered in return. In this case we enforce video and audio.
+By calling create offer, the creates a SDP message which contains the offer to connect. This is sent to the **gotDescription** callback and can then be sent through the signalling server to each connected host. If however this call fails then the **createOfferFailed** callback will be called. The media constrains argument is a JSON formatted object which denotes the constraints on what type of media is being offered and what type should be offered in return. In this case we enforce video and audio.
 
 When a remote host receives the offer, they too create an RTCPeerConnection object and return with an answer. This is achieved as follows:
 
@@ -97,7 +97,7 @@ When a remote host receives the offer, they too create an RTCPeerConnection obje
     });
     connection.createAnswer ( gotDescription, createAnswerFailed, mediaConstraints );
 
-This creates another SDP message which contains the answer. This is sent to the **gotDescription** callback and can then be sent through the signaling server to the host that sent the offer. This completes the P2P connection and the hosts can now disconnect from the signaling server.
+This creates another SDP message which contains the answer. This is sent to the **gotDescription** callback and can then be sent through the signalling server to the host that sent the offer. This completes the P2P connection and the hosts can now disconnect from the signalling server.
 
 ## External Resources
 

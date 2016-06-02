@@ -4,6 +4,7 @@ title: Netflix and Chill
 description: Building my own Netflix and chill button.
 author: Tomas Basham
 comments: true
+image: https://dl.dropboxusercontent.com/u/59426690/cdn/netflix.jpg
 category: Technology
 tags: featured technology netflix electronics
 ---
