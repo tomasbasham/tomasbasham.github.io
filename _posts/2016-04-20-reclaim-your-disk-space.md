@@ -43,4 +43,4 @@ The best solution to prevent this in future would be to keep the amount that is 
 
 ## Is There an Easier Way?
 
-If trawling through your filesystem for old, unnecessary files is too much hassle, and lets face it, it is there is a much easier way to discover files wasting disk space. [DaisyDisk4](https://daisydiskapp.com/) is a disk analyser tool for OS X that visualizes hard disk usage and allows you to free up hard disk space. It can be downloaded from the [App Store](#)
+If trawling through your filesystem for old, unnecessary files is too much hassle, and lets face it, it is there is a much easier way to discover files wasting disk space. [DaisyDisk4](https://daisydiskapp.com/) is a disk analyser tool for OS X that visualizes hard disk usage and allows you to free up hard disk space. It can be downloaded from the DaisyDisk [website](https://daisydiskapp.com/).

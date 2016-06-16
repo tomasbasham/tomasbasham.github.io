@@ -69,4 +69,4 @@ Again it may take time for the DNS records to settle and for your certificate to
 
 ## External Resources
 
-<a name="cite-note-1"></a>[Indexing HTTPS Pages by Default](https://webmasters.googleblog.com/2015/12/indexing-https-pages-by-default.html)
+* <a name="cite-note-1"></a>[Indexing HTTPS Pages by Default](https://webmasters.googleblog.com/2015/12/indexing-https-pages-by-default.html)

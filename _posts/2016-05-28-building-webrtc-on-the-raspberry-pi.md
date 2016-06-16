@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Building WebRTC on the Raspberry Pi
-description: A step by step guide to cross-compile the WebRTC (Jingle) library for the Raspberry Pi.
+title: Building libjingle for the Raspberry Pi
+description: A step by step guide to cross-compile the libjingle library for the Raspberry Pi.
 author: Tomas Basham
 comments: true
 category: Technology
@@ -19,9 +19,9 @@ Originally an [open source](https://en.wikipedia.org/wiki/Open-source_software) 
 
 WebRTC is designed as a JavaScript API with 3 major components:
 
-- `getUserMedia`, which allows a web browser to access the camera and microphone
-- `RTCPeerConnection`, which sets up audio/video calls
-- `RTCDataChannel`, which allow browsers to share data through a P2P connection
+* `getUserMedia`, which allows a web browser to access the camera and microphone
+* `RTCPeerConnection`, which sets up audio/video calls
+* `RTCDataChannel`, which allow browsers to share data through a P2P connection
 
 ### The libjingle library
 
@@ -31,7 +31,7 @@ The code includes network and proxy negotiation classes, XML parsing classes, a 
 
 `libjingle` was created at about the same time as the [Jingle](https://en.wikipedia.org/wiki/Jingle_(protocol)) Extensible Messaging and Presence Protocol (XMPP) extension. Despite sharing similar names, it is worth noting that `libjingle` implements its own protocol to handle session negotiation; thus, although the `libjingle` protocol and Jingle are very similar, they are not the same, and are not interoperable.
 
-## Installing libjingle on the Raspberry Pi
+## Cross-compiling libjingle for the Raspberry Pi
 
 From the command line install the necessary toolchain:
 

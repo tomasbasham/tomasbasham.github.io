@@ -13,33 +13,12 @@ Firefox Nightly (as of 1/30/13) and Chrome M25 Beta and later are interoperable,
 
 Firefox and Chrome both prefix their interfaces and are likely to continue to do so until the standard is more finalised. The following table shows the relevant names:
 
-<table border="1" width="100%" style="text-align:center; margin: 10px 0;">
-  <tr>
-    <th>W3C Standard</th>
-    <th>Chrome</th>
-    <th>Firefox</th>
-  </tr>
-  <tr>
-    <td>getUserMedia</td>
-    <td>webkitGetUserMedia</td>
-    <td>mozGetUserMedia</td>
-  </tr>
-  <tr>
-    <td>RTCPeerConnection</td>
-    <td>webkitRTCPeerConnection</td>
-    <td>mozRTCPeerConnection</td>
-  </tr>
-  <tr>
-    <td>RTCSessionDescription</td>
-    <td>RTCSessionDescription</td>
-    <td>mozRTCSessionDescription</td>
-  </tr>
-  <tr>
-    <td>RTCIceCandidate</td>
-    <td>RTCIceCandidate</td>
-    <td>mozRTCIceCandidate</td>
-  </tr>
-</table>
+| W3C Standard          | Chrome                  | Firefox              |
+|-----------------------|-------------------------|----------------------|
+| getUserMedia          | webkitGetUserMedia      | mozGetUserMedia      |
+| RTCPeerConnection     | webkitRTCPeerConnection | mozRTCPeerConnection |
+| RTCSessionDescription | RTCSessionDescription   | mozRTCPeerConnection |
+| RTCIceCandidate       | RTCIceCandidate         | mozRTCIceCandidate   |
 
 Firefox and Chrome use different syntax for attaching media streams to video/audio tags.
 
