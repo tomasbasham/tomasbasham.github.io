@@ -1,16 +1,17 @@
 exclude: [vendor]
 
 gems:
-  - jemoji
   - jekyll-github-metadata
+  - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-youtube
+  - jemoji
 
 # Site settings
 title: Tomas Basham
 email: me@tomasbasham.co.uk
 description: A Personal Jekyll Blog and Portfolio
 bio: Technical Director at a fast growing statup company.
-baseurl: ""
 url: "https://tomasbasham.co.uk" # the base hostname & protocol for your site
 repository: tomasbasham/tomasbasham.github.io
 twitter_username: tomasbasham
@@ -23,7 +24,7 @@ highlighter: rouge
 # blog cover
 cover: https://dl.dropboxusercontent.com/u/59426690/cdn/cover.jpg
 
-paginate: 5
+paginate: 8
 
 analytics:
   google_tracking_id: UA-51944071-1
@@ -33,33 +34,34 @@ comments:
 
 # social icons and sharing options
 social:
-  - icon:	twitter
-    url: https://twitter.com/tomasbasham
-    desc: Follow me on twitter
-    share_url: https://twitter.com/share
-    share_title: ?text=
-    share_link: "&amp;url="
-
-  - icon:	facebook
-    url: https://facebook.com/tomasbasham
-    desc: Connect with me facebook
+  - icon: facebook
     share_url: https://www.facebook.com/sharer.php
     share_title: ?t=
     share_link: "&amp;u="
 
-  - icon:	google-plus
-    url: https://google.com/+TomasBasham
-    desc:	Add me on google+
-    share_url: https://plus.google.com/share
-    share_title: ?t=
-    share_link: "&amp;url="
-
-  - icon:	github
+  - icon: github
     url: https://github.com/tomasbasham
     desc:	Fork me on github
     share_url:
     share_title:
     share_link:
+
+  - icon: google-plus
+    share_url: https://plus.google.com/share
+    share_title: ?t=
+    share_link: "&amp;url="
+
+  - icon: linkedin
+    url: https://uk.linkedin.com/in/tomas-basham-06244646
+    desc: Connect with me linkedin
+    share_url: https://www.linkedin.com/shareArticle
+    share_title: ?title=
+    share_link: "&amp;mini=true&amp;url="
+
+  - icon: twitter
+    share_url: https://twitter.com/share
+    share_title: ?text=
+    share_link: "&amp;url="
 
   - icon: rss
     url: https://tomasbasham.co.uk/feed.xml
