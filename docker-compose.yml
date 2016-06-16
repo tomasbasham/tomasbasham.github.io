@@ -1,0 +1,12 @@
+version: '2'
+services:
+  ruby: &defaults
+    build: .
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/usr/src/app
+
+  test:
+    <<: *defaults
+    command: ["htmlproofer ./_site --check-favicon --check-html"]
