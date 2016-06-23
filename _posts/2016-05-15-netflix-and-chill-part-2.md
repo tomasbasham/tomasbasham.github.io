@@ -19,7 +19,7 @@ I have hosted the code as a 3 part [gist](https://gist.github.com/tomasbasham/66
 
 For the switch to work with your brand of TV you must first know the encoded signal to turn it on and off. This signal is just a series of pules emitted from the IR LED that we can represent as an array of timing information (how long to turn the IR LED on, how long to turn it off, how long to turn it on, etc...).
 
-There is a great [library](https://github.com/z3t0/Arduino-IRremote) that can capture this information for us written by Ken Shirriff. Specifically you want to be looking at [this file](/blob/master/examples/IRrecvDumpV2/IRrecvDumpV2.ino) but you will need to download and extract the entire library for this to work.
+There is a great [library](https://github.com/z3t0/Arduino-IRremote) that can capture this information for us written by Ken Shirriff. Specifically you want to be looking at [this file](https://github.com/z3t0/Arduino-IRremote/blob/master/examples/IRrecvDumpV2/IRrecvDumpV2.ino) but you will need to download and extract the entire library for this to work.
 
 You will need to run this on a separate Arduino hooked up to an IR receiver. This is fairly simple to do requiring very little setup. More information on this can be found on [sparkfun](https://learn.sparkfun.com/tutorials/ir-communication). Once you have your raw signal, the output should be assigned to the `data` array within [Netflix.ino](https://gist.github.com/tomasbasham/660c84c97bda9d8acb116062c2f56ae2#file-netflix-ino-L45).
 

@@ -9,4 +9,4 @@ services:
 
   test:
     <<: *defaults
-    command: ["htmlproofer ./_site --check-favicon --check-html"]
+    command: ["htmlproofer ./_site --check-favicon --check-html --disable-external"]

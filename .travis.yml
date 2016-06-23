@@ -12,7 +12,7 @@ env:
 
 script:
   - bundle exec jekyll build
-  - bundle exec htmlproofer ./_site --check-favicon --check-html
+  - bundle exec htmlproofer ./_site --check-favicon --check-html --disable-external
 
 notifications:
   email: false
