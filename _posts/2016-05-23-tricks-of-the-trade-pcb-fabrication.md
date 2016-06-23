@@ -47,7 +47,6 @@ Applying the paste is easy. I followed this youtube video that describes the pro
 
 <div class="embed-container">
   <iframe width="640" height="390" src="https://www.youtube.com/embed/1RMtOAHbfvU" frameborder="0" allowfullscreen></iframe>
-  </iframe>
 </div>
 
 ## Placement
