@@ -3,8 +3,8 @@ exclude: [vendor]
 gems:
   - jekyll-github-metadata
   - jekyll-paginate
+  - jekyll-seo-tag
   - jekyll-sitemap
-  - jekyll-youtube
   - jemoji
 
 # Site settings
@@ -12,6 +12,7 @@ title: Tomas Basham
 email: me@tomasbasham.co.uk
 description: A Personal Jekyll Blog and Portfolio
 bio: Technical Director at a fast growing statup company.
+baseurl: ""
 url: "https://tomasbasham.co.uk" # the base hostname & protocol for your site
 repository: tomasbasham/tomasbasham.github.io
 twitter_username: tomasbasham
