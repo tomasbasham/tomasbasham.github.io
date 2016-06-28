@@ -8,11 +8,11 @@ image: https://dl.dropboxusercontent.com/u/59426690/cdn/netflix.jpg
 category: Product Design
 tags: featured technology netflix electronics
 ---
-Last year the team at Netflix posted a tutorial on how to create your own [Netflix switch](http://makeit.netflix.com/the-switch); automating the arduous task of manually turning on your TV, launching the Netflix app and setting the mood with a movie favourite - pizza. However the step-by-step guide they have written left me more confused that pleased with my new toy.
+Last year the team at Netflix posted a tutorial on how to create your own [Netflix switch](http://makeit.netflix.com/the-switch); automating the arduous task of manually turning on your TV, launching the Netflix app and setting the mood with a movie favourite - pizza. However the step-by-step guide left me more confused than pleased with my new toy.
 
 Beyond confusion the guide at Netflix expects you to have a slightly more than average electronics skill set and access to a variety of devices and tools for cutting out and moulding some of the more custom parts, most notably the enclosure for both the electronics and the device as a whole.
 
-In this series of article you will learn the process I went through to build my own Netflix button and the services I used to acquire 3D printed models. Of course if you have access to your own 3D printer then you wont need this service.
+In this series of article you will learn the process I went through to build my own Netflix switch and the services I used to acquire 3D printed parts. Of course if you have access to your own 3D printer then you wont need these service.
 
 ## Electronics
 
@@ -31,7 +31,7 @@ The electronic components for this project are fairly simple, only requiring a h
 | [Male-to-Male Jumper Cables](https://shop.pimoroni.com/products/jumper-jerky)           | 1    | Pimoroni        |
 | [5mm IR LED](http://uk.rs-online.com/web/p/ir-leds/6997635/)                            | 1    | RS Components   |
 | [3mm White LED](http://uk.rs-online.com/web/p/visible-leds/8184452/)                    | 1    | RS Components   |
-| [3mm Red LED](http://uk.rs-online.com/web/p/visible-leds/7082807/)                      | 4    | RS Components   |
+| [3mm Red LED](http://uk.rs-online.com/web/p/visible-leds/7734053/)                      | 4    | RS Components   |
 | [10KΩ Resistor](http://uk.rs-online.com/web/p/through-hole-fixed-resistors/0148736/)    | 1    | RS Components   |
 | [4.7KΩ Resistor](http://uk.rs-online.com/web/p/through-hole-fixed-resistors/0148663/)   | 2    | RS Components   |
 | [560Ω Resistor](http://uk.rs-online.com/web/p/through-hole-fixed-resistors/0148449/)    | 5    | RS Components   |

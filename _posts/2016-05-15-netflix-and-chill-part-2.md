@@ -7,7 +7,7 @@ comments: true
 category: Product Design
 tags: technology netflix
 ---
-We finished [last time](/product%20design/2016/05/12/netflix-and-chill.html) with a complete electronics prototype of our Netflix Switch. Next we must implement the code to make this a working system.
+We finished [last time](/product%20design/2016/05/12/netflix-and-chill.html) with a complete electronics prototype of our Netflix switch. Next we must implement the code to make this a working system.
 
 By now we know what hardware we have available to us, but what are we actually trying to achieve? The goal for the original switch from Netflix was to turn on the TV and perhaps launch the Netflix app (if you have a compatible TV); perform a little light show using the LEDs we hooked up previously; and send messages to another internet enabled device. This other device could be used to extend the functionality of the switch; making API calls or performing some home automation.
 
