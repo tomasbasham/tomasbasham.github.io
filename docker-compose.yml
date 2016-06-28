@@ -2,10 +2,14 @@ version: '2'
 services:
   ruby: &defaults
     build: .
-    ports:
-      - "4000:4000"
     volumes:
       - .:/usr/src/app
+
+  jekyll:
+    <<: *defaults
+    ports:
+      - "4000:4000"
+    command: ["jekyll serve -H 0.0.0.0"]
 
   test:
     <<: *defaults
