@@ -1,39 +1,44 @@
 exclude: [vendor]
 
 gems:
+  - jekyll-feed
   - jekyll-github-metadata
   - jekyll-paginate
+  - jekyll-redirect-from
   - jekyll-seo-tag
   - jekyll-sitemap
   - jemoji
 
 # Site settings
 title: Tomas Basham
-email: me@tomasbasham.co.uk
 description: A Personal Jekyll Blog and Portfolio
-bio: Technical Director at a fast growing statup company.
-baseurl: ""
 url: "https://tomasbasham.co.uk" # the base hostname & protocol for your site
+
+# Personal settings
+bio: Technical Director at a fast growing statup company.
+email: me@tomasbasham.co.uk
 repository: tomasbasham/tomasbasham.github.io
-twitter_username: tomasbasham
-github_username: tomasbasham
 
 # Build settings
 markdown: kramdown
 highlighter: rouge
 
-# blog cover
+# Blog cover
 cover: https://dl.dropboxusercontent.com/u/59426690/cdn/cover.jpg
 
+# Pagination settings
 paginate: 8
+paginate_path: "/page:num/"
 
-analytics:
-  google_tracking_id: UA-51944071-1
-
+# Disqus settings
 comments:
   disqus_shortname: tomasbasham
 
-# social icons and sharing options
+# Analytics settings
+analytics:
+  google_tracking_id: UA-51944071-1
+
+# Social icons and sharing options
 social:
   - icon: facebook
     share_url: https://www.facebook.com/sharer.php

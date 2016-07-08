@@ -1,22 +1,4 @@
 - project:
-  title: "MMA7455"
-  short: "A convenience class written to interface with the Freescale MMA7455 accelerometer."
-  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/mma7455.png"
-  url:   "https://github.com/tomasbasham/MMA7455"
-
-- project:
-  title: "negotiator"
-  short: "WebRTC session and data channel wrapper to setup and manage peer connections."
-  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/negotiator.png"
-  url:   "https://github.com/tomasbasham/negotiator"
-
-- project:
-  title: "Pickle"
-  short: "iOS application to discover burger joints near you."
-  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/burger.png"
-  url:	 "http://www.pickleapp.co.uk"
-
-- project:
   title: "colours"
   short: "A set of base colour classes to be used within HTML."
   image: "https://dl.dropboxusercontent.com/u/59426690/cdn/colours.png"
@@ -34,16 +16,19 @@
   url:   "https://github.com/tomasbasham/ember-campfire"
 
 - project:
-  title: "ember-cli-gingerbread"
-  short: "An ember-cli addon to integrate several boilerplate components complete with styling."
-  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/gingerbread.png"
-  url:   "https://github.com/tomasbasham/ember-cli-gingerbread"
+  title: "ember-cli-adapter-pattern"
+  short: "An ember-cli addon to standardise a common adapter pattern."
+  url:   "https://github.com/tomasbasham/ember-cli-adapter"
 
 - project:
-  title: "ember-cli-guardsman"
-  short: "An ember-cli addon to interface with any server-side authentication and authorisation system"
-  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/guardsman.png"
-  url:   "https://github.com/tomasbasham/ember-cli-guardsman"
+  title: "ember-cli-analytics"
+  short: "An ember-cli addon to interface with analytics services and external integrations."
+  url:   "https://github.com/tomasbasham/ember-cli-analytics"
+
+- project:
+  title: "ember-cli-dispatch"
+  short: "An ember-cli addon to extend computed properties with asynchronous values."
+  url:   "https://github.com/tomasbasham/ember-cli-dispatch"
 
 - project:
   title: "ember-cli-link-tags"
@@ -51,14 +36,19 @@
   url:   "https://github.com/tomasbasham/ember-cli-link-tags"
 
 - project:
+  title: "ember-cli-persistence"
+  short: "An ember-cli addon to interface with front end persistence containers."
+  url:   "https://github.com/tomasbasham/ember-cli-persistence"
+
+- project:
+  title: "ember-cli-pubnub"
+  short: "An ember-cli addon to to integrate the PubNub low-latency, realtime messaging platform."
+  url:   "https://github.com/tomasbasham/ember-cli-pubnub"
+
+- project:
   title: "ember-cli-scss-lint"
   short: "An ember-cli addon to integrate scss-lint for standards adherence and improved style consistency."
   url:   "https://github.com/tomasbasham/ember-cli-scss-lint"
-
-- project:
-  title: "ember-cli-tag-manager"
-  short: "An ember-cli addon to manage third-party JavaScript tags and tracking codes."
-  url:   "https://github.com/tomasbasham/ember-cli-tag-manager"
 
 - project:
   title: "generator-node-boilerplate"
@@ -73,9 +63,22 @@
   url:   "https://github.com/tomasbasham/guardsman"
 
 - project:
-  title: "omnipresent"
-  short: "Omnipresent user for Rails."
-  url:   "https://github.com/tomasbasham/omnipresent"
+  title: "Motion"
+  short: "A convenience class written to interface with the Freescale MMA7455 accelerometer."
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/mma7455.png"
+  url:   "https://github.com/tomasbasham/Motion"
+
+- project:
+  title: "negotiator"
+  short: "WebRTC session and data channel wrapper to setup and manage peer connections."
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/negotiator.png"
+  url:   "https://github.com/tomasbasham/negotiator"
+
+- project:
+  title: "Pickle"
+  short: "iOS application to discover burger joints near you."
+  image: "https://dl.dropboxusercontent.com/u/59426690/cdn/burger.png"
+  url:	 "http://www.pickleapp.co.uk"
 
 - project:
   title: "responds"

@@ -3,8 +3,10 @@ source 'https://rubygems.org'
 gem 'jekyll',                   '3.1.6'
 
 group :jekyll_plugins do
+  gem 'jekyll-feed',            '~> 0.5.1'
   gem 'jekyll-github-metadata', '~> 2.0.0'
   gem 'jekyll-paginate',        '~> 1.1.0'
+  gem 'jekyll-redirect-from',   '~> 0.11.0'
   gem 'jekyll-seo-tag',         '~> 2.0'
   gem 'jekyll-sitemap',         '~> 0.10.0'
   gem 'jemoji',                 '~> 0.6.2'

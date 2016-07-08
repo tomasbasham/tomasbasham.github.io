@@ -12,7 +12,7 @@ Last year the team at Netflix posted a tutorial on how to create your own [Netfl
 
 Beyond confusion the guide at Netflix expects you to have a slightly more than average electronics skill set and access to a variety of devices and tools for cutting out and moulding some of the more custom parts, most notably the enclosure for both the electronics and the device as a whole.
 
-In this series of article you will learn the process I went through to build my own Netflix switch and the services I used to acquire 3D printed parts. Of course if you have access to your own 3D printer then you wont need these service.
+In this series of article you will learn the process I went through to build my own Netflix switch and the services I used to acquire 3D printed parts. Of course if you have access to your own 3D printer then you wont need this service.
 
 ## Electronics
 
