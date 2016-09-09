@@ -24,7 +24,7 @@ The electronic components for this project are fairly simple, only requiring a h
 
 | Item                                                                                    | Qty. | Merchant        |
 |-----------------------------------------------------------------------------------------|------|-----------------|
-| [White LED Backlight](https://www.adafruit.com/products/1622)                           | 1    | Adafruit        |
+| [White LED Backlight](https://www.coolcomponents.co.uk/white-led-backlight-module-small-12mm-x-40mm.html) | 1    | Cool Components |
 | [Momentary Arcade Button](http://www.arcadeworlduk.com/products/Chrome-Ultralux-Illuminated-Arcade-Button.html) | 1    | Arcade World UK |
 | [SPDT On/Off Switch](http://www.digikey.com/product-detail/en/EG1201A/EG1902-ND/101723) | 1    | Digikey         |
 | [Particle Photon](https://store.particle.io/)                                           | 1    | Particle.io     |

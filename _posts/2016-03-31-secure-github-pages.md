@@ -67,6 +67,10 @@ It is just as easy to secure any subdomains you have setup. Go to your Kloudsec 
 
 Again it may take time for the DNS records to settle and for your certificate to be generated and be applied to your site, but be patient.
 
+## Update
+
+Since writing this article Kloudsec has been shutdown. However CloudFlare offer an alternative solution called [Universal SSL](https://blog.cloudflare.com/introducing-universal-ssl/). This provides that same level of security that Kloudsec offered whilst remaining free to use. In my honest opinion CloudFlare also has a more streamlined interface including a few more features that Kloudsec lacked, namely HTTP Strict Transport Security (HSTS) support.
+
 ## External Resources
 
 * <a name="cite-note-1"></a>[Indexing HTTPS Pages by Default](https://webmasters.googleblog.com/2015/12/indexing-https-pages-by-default.html)
