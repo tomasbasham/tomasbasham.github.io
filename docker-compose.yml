@@ -7,10 +7,20 @@ services:
 
   jekyll:
     <<: *defaults
+    command: ["jekyll serve -H 0.0.0.0"]
     ports:
       - "4000:4000"
-    command: ["jekyll serve -H 0.0.0.0"]
 
   test:
     <<: *defaults
     command: ["htmlproofer ./_site --check-favicon --check-html --disable-external"]
+
+  travis:
+    image: tomasbasham/travis:1.8.2
+    volumes:
+      - travis-data:/root/.travis
+      - .:/usr/src/app
+
+volumes:
+  travis-data:
+    external: true

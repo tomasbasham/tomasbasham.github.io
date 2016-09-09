@@ -65,6 +65,8 @@ social:
     share_link: "&amp;mini=true&amp;url="
 
   - icon: twitter
+    url: https://twitter.com/tomasbasham
+    desc: Follow me on twitter
     share_url: https://twitter.com/share
     share_title: ?text=
     share_link: "&amp;url="
