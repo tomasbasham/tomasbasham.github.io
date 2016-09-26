@@ -991,37 +991,6 @@ td {
   border: 1px solid #000;
 }
 
-.card {
-  @include outer-container;
-  border-bottom: 1px solid #f2f2f0;
-  padding: 60px 0;
-
-  .card-head {
-    @include span-columns(3);
-    height: 100%;
-    position: relative;
-
-    .card-image {
-      @include respond-to(768) {
-        display: none;
-      }
-      min-height: 150px;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-  }
-
-  .card-info {
-    @include span-columns(9);
-
-    h2 {
-      margin: 0;
-      padding: 0;
-    }
-  }
-}
-
 .embed-container {
   height: 0;
   max-width: 100%;
