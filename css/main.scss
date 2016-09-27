@@ -3,29 +3,9 @@
 ---
 @charset 'utf-8';
 
-@import 'syntax-highlighting';
+@import 'base';
 @import 'bourbon/bourbon';
 @import 'neat/neat';
-
-.cf {
-  @include clearfix;
-}
-
-.hidden {
-  display: none;
-}
-
-a {
-  @include transition(all 0.3s ease);
-  text-decoration: none;
-}
-
-$rs: 16px;
-
-$font-serif: Linux Libertine;
-$font-sans: Open Sans, MundoSans, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-$font-color: #468c54;
-$border-color: #a9d8b2;
 
 @mixin respond-to($breakpoint) {
   @media only screen and (max-width: $breakpoint + px) {
@@ -33,26 +13,9 @@ $border-color: #a9d8b2;
   }
 }
 
-// Only needed for syntax highlighting
-%vertical-rhythm {
-  margin-bottom: $rs;
-}
-
-main {
-  display: block;
-}
-
-body {
-  font-family: $font-sans;
-  margin: 0;
-  padding: 0;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-font-feature-settings: 'liga=1, dlig=1';
-  -ms-font-feature-settings: 'liga', 'dlig';
-  -webkit-font-feature-settings: 'liga', 'dlig';
-  -o-font-feature-settings: 'liga', 'dlig';
-  font-feature-settings: 'liga', 'dlig';
+a {
+  @include transition(all 0.3s ease);
+  text-decoration: none;
 }
 
 .logo-readium {
@@ -403,6 +366,17 @@ body {
   margin: 0 .5rem;
   text-align: center;
   width: 64px;
+
+  > svg {
+    display: inline-block;
+    height: 16px;
+    vertical-align: middle;
+    width: 16px;
+
+    path {
+      fill: #d3d3d3;
+    }
+  }
 }
 
 .footer-share .inner > a:hover {
@@ -410,7 +384,7 @@ body {
 }
 
 .footer-share .inner > a i {
-  vertical-align: -3px;
+  vertical-align: -8px;
 }
 
 .footer-legal .inner p,
@@ -950,45 +924,6 @@ body {
 
 .post-tag-article-image {
   display: none;
-}
-
-pre,
-code {
-  font-size: 15px;
-  border: 1px solid #e8e8e8;
-  border-radius: 3px;
-  background-color: #eeeeff;
-}
-
-code {
-  padding: 1px 5px;
-}
-
-pre {
-  margin: 0 0 30px 0;
-  overflow-x: scroll;
-
-  > code {
-    border: 0;
-    display: block;
-    padding: 8px 12px;
-  }
-}
-
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  border: 1px solid #000;
-  margin-bottom: 1rem;
-  width: 100%;
-}
-
-th {
-  border: 1px solid #000;
-}
-
-td {
-  border: 1px solid #000;
 }
 
 .embed-container {

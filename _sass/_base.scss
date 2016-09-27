@@ -1,6 +1,12 @@
-/**
- * Clearfix
- */
+@import 'syntax-highlighting';
+
+$rs: 16px;
+
+$font-serif: Linux Libertine;
+$font-sans: Open Sans, MundoSans, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+$font-color: #468c54;
+$border-color: #a9d8b2;
+
 %clearfix {
   &:after {
     clear: both;
@@ -9,121 +15,42 @@
   }
 }
 
-/**
- * Reset some basic elements
- */
-body, h1, h2, h3, h4, h5, h6,
-p, blockquote, pre, hr,
-dl, dd, ol, ul, figure {
-  margin: 0;
-  padding: 0;
-}
-
-/**
- * Basic styling
- */
-body {
-  background-color: $background-color;
-  color: $text-color;
-  font-family: $base-font-family;
-  font-size: $base-font-size;
-  font-weight: 300;
-  line-height: $base-line-height;
-  -webkit-text-size-adjust: 100%;
-}
-
-/**
- * Set `margin-bottom` to maintain vertical rhythm
- */
-h1, h2, h3, h4, h5, h6,
-p, blockquote, pre,
-ul, ol, dl, figure,
+// Only needed for syntax highlighting
 %vertical-rhythm {
-  margin-bottom: $spacing-unit / 2;
+  margin-bottom: $rs;
 }
 
-/**
- * Images
- */
-img {
-  max-width: 100%;
-  vertical-align: middle;
+.clearfix {
+  @extend %clearfix;
 }
 
-/**
- * Figures
- */
-figure > img {
+.hidden {
+  display: none;
+}
+
+main {
   display: block;
 }
 
-figcaption {
-  font-size: $small-font-size;
+body {
+  font-family: $font-sans;
+  margin: 0;
+  padding: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-feature-settings: 'liga=1, dlig=1';
+  -ms-font-feature-settings: 'liga', 'dlig';
+  -webkit-font-feature-settings: 'liga', 'dlig';
+  -o-font-feature-settings: 'liga', 'dlig';
+  font-feature-settings: 'liga', 'dlig';
 }
 
-/**
- * Lists
- */
-ul, ol {
-  margin-left: $spacing-unit;
-}
-
-li {
-  > ul,
-  > ol {
-    margin-bottom: 0;
-  }
-}
-
-/**
- * Headings
- */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 300;
-}
-
-/**
- * Links
- */
-a {
-  color: $brand-color;
-  text-decoration: none;
-
-  &:visited {
-    color: darken($brand-color, 15%);
-  }
-
-  &:hover {
-    color: $text-color;
-    text-decoration: underline;
-  }
-}
-
-/**
- * Blockquotes
- */
-blockquote {
-  border-left: 4px solid $grey-color-light;
-  color: $grey-color;
-  font-size: 18px;
-  font-style: italic;
-  letter-spacing: -1px;
-  padding-left: $spacing-unit / 2;
-
-  > :last-child {
-    margin-bottom: 0;
-  }
-}
-
-/**
- * Code formatting
- */
 pre,
 code {
-  background-color: #eef;
-  border: 1px solid $grey-color-light;
-  border-radius: 3px;
   font-size: 15px;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  background-color: #eeeeff;
 }
 
 code {
@@ -131,48 +58,28 @@ code {
 }
 
 pre {
+  margin: 0 0 30px 0;
   overflow-x: scroll;
-  padding: 8px 12px;
 
   > code {
     border: 0;
-    padding-left: 0;
-    padding-right: 0;
+    display: block;
+    padding: 8px 12px;
   }
 }
 
-/**
- * Wrapper
- */
-.wrapper {
-  @extend %clearfix;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit} * 2));
-  max-width:         calc(#{$content-width} - (#{$spacing-unit} * 2));
-  padding-left: $spacing-unit;
-  padding-right: $spacing-unit;
-
-  @include media-query($on-laptop) {
-    max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit}));
-    max-width:         calc(#{$content-width} - (#{$spacing-unit}));
-    padding-left: $spacing-unit / 2;
-    padding-right: $spacing-unit / 2;
-  }
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #000;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
-/**
- * Icons
- */
-.icon {
-  > svg {
-    display: inline-block;
-    height: 16px;
-    vertical-align: middle;
-    width: 16px;
+th {
+  border: 1px solid #000;
+}
 
-    path {
-      fill: $grey-color;
-    }
-  }
+td {
+  border: 1px solid #000;
 }

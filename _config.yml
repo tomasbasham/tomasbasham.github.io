@@ -42,38 +42,32 @@ analytics:
 social:
   - icon: facebook
     share_url: https://www.facebook.com/sharer.php
-    share_title: ?t=
+    share_title: "?t="
     share_link: "&amp;u="
 
   - icon: github
     url: https://github.com/tomasbasham
     desc:	Fork me on github
-    share_url:
-    share_title:
-    share_link:
 
   - icon: google-plus
     share_url: https://plus.google.com/share
-    share_title: ?t=
+    share_title: "?t="
     share_link: "&amp;url="
 
   - icon: linkedin
     url: https://www.linkedin.com/in/tomas-basham-06244646
     desc: Connect with me linkedin
     share_url: https://www.linkedin.com/shareArticle
-    share_title: ?title=
+    share_title: "?title="
     share_link: "&amp;mini=true&amp;url="
 
   - icon: twitter
     url: https://twitter.com/tomasbasham
     desc: Follow me on twitter
     share_url: https://twitter.com/share
-    share_title: ?text=
+    share_title: "?text="
     share_link: "&amp;url="
 
   - icon: rss
     url: https://tomasbasham.co.uk/feed.xml
     desc: Subscribe
-    share_url:
-    share_title:
-    share_link:
