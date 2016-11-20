@@ -40,34 +40,40 @@ analytics:
 
 # Social icons and sharing options
 social:
-  - icon: facebook
-    share_url: https://www.facebook.com/sharer.php
-    share_title: "?t="
-    share_link: "&amp;u="
+  share:
+    - icon: facebook
+      share_url: https://www.facebook.com/sharer.php
+      share_title: "?t="
+      share_link: "&amp;u="
 
-  - icon: github
-    url: https://github.com/tomasbasham
-    desc:	Fork me on github
+    - icon: google-plus
+      share_url: https://plus.google.com/share
+      share_title: "?t="
+      share_link: "&amp;url="
 
-  - icon: google-plus
-    share_url: https://plus.google.com/share
-    share_title: "?t="
-    share_link: "&amp;url="
+    - icon: linkedin
+      share_url: https://www.linkedin.com/shareArticle
+      share_title: "?title="
+      share_link: "&amp;mini=true&amp;url="
 
-  - icon: linkedin
-    url: https://www.linkedin.com/in/tomas-basham-06244646
-    desc: Connect with me linkedin
-    share_url: https://www.linkedin.com/shareArticle
-    share_title: "?title="
-    share_link: "&amp;mini=true&amp;url="
+    - icon: twitter
+      share_url: https://twitter.com/share
+      share_title: "?text="
+      share_link: "&amp;url="
 
-  - icon: twitter
-    url: https://twitter.com/tomasbasham
-    desc: Follow me on twitter
-    share_url: https://twitter.com/share
-    share_title: "?text="
-    share_link: "&amp;url="
+  accounts:
+    - name: Github
+      url: https://github.com/tomasbasham
+      desc:	Fork me on github
 
-  - icon: rss
-    url: https://tomasbasham.co.uk/feed.xml
-    desc: Subscribe
+    - name: Linkedin
+      url: https://www.linkedin.com/in/tomas-basham-06244646
+      desc: Connect with me linkedin
+
+    - name: Twitter
+      url: https://twitter.com/tomasbasham
+      desc: Follow me on twitter
+
+    - name: RSS
+      url: https://tomasbasham.co.uk/feed.xml
+      desc: Subscribe

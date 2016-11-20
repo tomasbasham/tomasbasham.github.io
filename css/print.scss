@@ -3,6 +3,21 @@
 ---
 @charset 'utf-8';
 
+// Rules of SCSS
+// 1.  @extend first
+// 2.  @include next
+// 3.  "Regular" style next
+// 4.  Nested selectors last
+// 5.  All vendor prefixes use @mixin
+// 6.  Maximum nesting: 3 levels deep
+// 7.  Maximum nesting: 50 lines
+// 8.  Variablise all common numbers, fonts, colours, etc...
+// 9.  Nest and name media queries
+// 10. Shame last - all those quick fixes. tut, tut, tut
+
+// Variables
+@import 'variables';
+
 @import 'base';
 
 .article-image{

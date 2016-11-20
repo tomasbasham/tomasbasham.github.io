@@ -1,0 +1,23 @@
+---
+layout: default
+title: Archive
+permalink: /archive/
+sitemap:
+  priority: 0.5
+  changefreq: 'monthly'
+---
+<main class="content" role="main">
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">{{ page.title }}</h1>
+      </div>
+    </div>
+    <section class="post-content">
+      <ul class="clearfix frame">
+        {% for post in site.posts %}
+        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+        {% endfor %}
+    </section>
+  </article>
+</main>

@@ -3,19 +3,47 @@
 ---
 @charset 'utf-8';
 
+// Rules of SCSS
+// 1.  @extend first
+// 2.  @include next
+// 3.  "Regular" style next
+// 4.  Nested selectors last
+// 5.  All vendor prefixes use @mixin
+// 6.  Maximum nesting: 3 levels deep
+// 7.  Maximum nesting: 50 lines
+// 8.  Variablise all common numbers, fonts, colours, etc...
+// 9.  Nest and name media queries
+// 10. Shame last - all those quick fixes. tut, tut, tut
+
+// Functions
+// @import 'functions';
+
+// Mixins
+@import 'mixins/responsive';
+
+// Variables
+@import 'variables';
+
+// Modules
+// @import 'modules/buttons';
+
+// Partials
+// @import 'partials/blocks';
+
+// Shame
+
 @import 'base';
 @import 'bourbon/bourbon';
 @import 'neat/neat';
 
-@mixin respond-to($breakpoint) {
-  @media only screen and (max-width: $breakpoint + px) {
-    @content;
-  }
-}
-
 a {
   @include transition(all 0.3s ease);
+  color: $link-color;
   text-decoration: none;
+
+  &:hover {
+    color: #333333;
+  }
 }
 
 .logo-readium {
@@ -227,7 +255,7 @@ a {
   letter-spacing: -0.02em;
   font-weight: 400;
   font-style: normal;
-  color: rgba(0,0,0,0.44);
+  color: rgba($font-color, 0.44);
   font-size: 13px;
   letter-spacing: 0;
   text-transform: none;
@@ -240,9 +268,8 @@ a {
   margin-bottom: 8px;
 
   &:hover {
-    color: $font-color;
     border-color: $border-color;
-    background: rgba(87,173,104,0.1);
+    background: $background-color;
     text-decoration: none;
   }
 }
@@ -274,51 +301,6 @@ a {
   }
 }
 
-.pagination {
-  font-size: $rs / 4 * 3;
-  padding: $rs * 2 0 $rs * 6 0;
-  position: relative;
-  text-align: center;
-
-  a {
-    @include transition(none);
-    @include respond-to(768) {
-      padding: .4rem;
-      width: 36px;
-      height: 36px;
-      border-radius: 100%;
-    }
-
-    position: absolute;
-    display: inline-block;
-    padding: .8rem 0;
-    width: 130px;
-    color: #57ad68;
-    border-radius: 50px;
-    border: 1px solid #57ad68;
-    font-size: .8rem;
-
-    &:hover {
-      color: #468c54;
-      border: 1px solid #468c54;
-    }
-
-    span {
-      @include respond-to(768) {
-        display: none;
-      }
-    }
-  }
-}
-
-.newer-posts {
-  left: 0;
-}
-
-.older-posts {
-  right: 0;
-}
-
 .post-reading {
   color: rgba(0, 0, 0, 0.25);
   display: inline-block;
@@ -335,77 +317,6 @@ a {
   z-index: 999;
 }
 
-.site-footer {
-  background-attachment: fixed;
-  background-color: #303030;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 490px;
-  margin-top: 4rem;
-  position: relative;
-  text-align: center;
-
-  &:before {
-    @include linear-gradient(to bottom, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.3) 60%,rgba(0,0,0,0.6) 100%);
-    content: '';
-    display: block;
-    height: 100%;
-    position: absolute;
-    width: 100%;
-  }
-}
-
-.icon {
-  background: rgba(87, 173, 104, .8);
-  border-radius: 100%;
-  color: #fff;
-  display: inline-block;
-  font-size: 2.5rem;
-  height: 64px;
-  margin: 0 .5rem;
-  text-align: center;
-  width: 64px;
-
-  > svg {
-    display: inline-block;
-    height: 16px;
-    vertical-align: middle;
-    width: 16px;
-
-    path {
-      fill: #d3d3d3;
-    }
-  }
-}
-
-.footer-share .inner > a:hover {
-  background: rgba(87, 173, 104, 1);
-}
-
-.footer-share .inner > a i {
-  vertical-align: -8px;
-}
-
-.footer-legal .inner p,
-.footer-legal .inner a, {
-  color: #fff;
-  font-size: 0.8rem;
-  text-shadow: 0 0 4px #000;
-  line-height: 1.4;
-  margin: 0 auto;
-}
-
-.footer-legal .inner a {
-  font-weight: bold;
-}
-
-.footer-share {
-  position: absolute;
-  height: 300px;
-  width: 100%;
-}
-
 .share-title {
   @include respond-to(768) {
     font-size: 2rem;
@@ -415,12 +326,6 @@ a {
   margin: 0;
   font-size: 3.6rem;
   color: #fff;
-}
-
-.footer-legal {
-  position: absolute;
-  bottom: 2rem;
-  width: 100%;
 }
 
 .post {
@@ -914,32 +819,210 @@ a {
   }
 }
 
+// PAGINATION
+
+.pagination a {
+  color: $mute-color;
+  display: inline-block;
+
+  &:hover {
+    color: $link-color;
+  }
+
+  &.newer-posts {
+    float: left;
+  }
+
+  &.older-posts {
+    float: right;
+  }
+}
+
+// FOOTER
+
+.site-footer {
+  background-color: $background-color;
+  border-top: 1px solid $border-color;
+  margin-top: 4rem;
+  position: relative;
+  text-align: center;
+  width: 100%;
+
+  .footer-links {
+    margin: 1rem 0;
+  }
+
+  .footer-links > .content {
+    @include outer-container;
+
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 640px;
+    width: 100%;
+
+    .footer-menu {
+      @include span-columns(4);
+      @include respond-to(768) {
+        @include span-columns(12);
+        text-align: center;
+      }
+
+      text-align: left;
+    }
+  }
+
+  .menu-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .menu-item {
+    line-height: 1.5rem;
+  }
+
+  .footer-landscape {
+    @include respond-to(768) {
+      display: none;
+    }
+
+    background: url('https://dl.dropboxusercontent.com/u/59426690/CDN/desk.svg');
+    //background: url('//s3-media4.ak.yelpcdn.com/assets/2/www/img/e41bc8917803/structural/happy_footer.png');
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    height: 266px;
+    margin: 30px auto;
+  }
+
+  .footer-legal {
+    padding-bottom: 2rem;
+
+    .inner p, .inner a, {
+      color: #333;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      margin: 0 auto;
+    }
+
+    .inner a {
+      font-weight: bold;
+    }
+  }
+}
+
+// SOCIAL SHARES
+
+.social-links {
+  @include transition(left 0.3s ease);
+  @include respond-to(768) {
+    display: none;
+  }
+
+  left: 0;
+  list-style: none;
+  padding: 0;
+  position: fixed;
+  top: 30%;
+  z-index: 999999;
+
+  .social-link {
+    box-sizing: border-box;
+    display: block;
+    height: 50px;
+    overflow: hidden;
+    position: relative;
+    width: 50px;
+    z-index: 100;
+
+    &:before, &:after {
+      @include transition(all 0.3s ease);
+      color: #fff;
+      display: block;
+      font-family: 'FontAwesome';
+      line-height: 50px;
+      text-align: center;
+      width: 100%;
+    }
+
+    &:before {
+      left: 0;
+      z-index: 2;
+      position: relative;
+    }
+
+    &:after {
+      height: 100%;
+      position: absolute !important;
+      right: 100%;
+      top: 0;
+      width: 100%;
+    }
+
+    &:hover {
+      &:before {
+        left: 100%;
+      }
+
+      &:after {
+        right: 0;
+      }
+    }
+  }
+}
+
+.social-link-facebook {
+  background-color: #3a579a;
+
+  &:before, &:after {
+    content: '\f09a';
+  }
+
+  &:hover {
+    background-color: #314a83;
+  }
+}
+
+.social-link-google-plus {
+  background-color: #df4a32;
+
+  &:before, &:after {
+    content: '\f0d5';
+  }
+
+  &:hover {
+    background-color: #be3f2b;
+  }
+}
+
+.social-link-linkedin {
+  background-color: #127bb6;
+
+  &:before, &:after {
+    content: '\f0e1';
+  }
+
+  &:hover {
+    background-color: #096e97;
+  }
+}
+
+.social-link-twitter {
+  background-color: #00abf0;
+
+  &:before, &:after {
+    content: '\f099';
+  }
+
+  &:hover {
+    background-color: #0092cc;
+  }
+}
+
+// DISQUS
+
 #disqus_thread {
   margin-top: 50px;
 
   a {
-    color: #468c54;
+    color: $border-color;
   }
-}
-
-.post-tag-article-image {
-  display: none;
-}
-
-.embed-container {
-  height: 0;
-  max-width: 100%;
-  overflow: hidden;
-  padding-bottom: 56.25%;
-  position: relative;
-}
-
-.embed-container iframe,
-.embed-container object,
-.embed-container embed {
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
 }

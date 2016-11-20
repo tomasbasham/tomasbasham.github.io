@@ -1,12 +1,5 @@
 @import 'syntax-highlighting';
 
-$rs: 16px;
-
-$font-serif: Linux Libertine;
-$font-sans: Open Sans, MundoSans, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-$font-color: #468c54;
-$border-color: #a9d8b2;
-
 %clearfix {
   &:after {
     clear: both;

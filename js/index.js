@@ -1,6 +1,6 @@
 /* globals jQuery, document */
 
-(function ($) {
+(function($) {
   'use strict';
 
   $(document).ready(function(){
@@ -21,3 +21,8 @@
     });
   });
 }(jQuery));
+
+function openShare(event, providerName) {
+  window.open(event.href, providerName + '-share', 'width=550,height=255');
+  return false;
+}

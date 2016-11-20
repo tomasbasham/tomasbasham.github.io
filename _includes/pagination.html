@@ -1,19 +1,9 @@
 <nav class="pagination" role="navigation">
-  {% if paginator.next_page %}
-  <a class="newer-posts" href="/page{{ paginator.next_page }}">
-    <i class="fa fa-arrow-left"></i>
-    <span>Older Posts</span>
-  </a>
+  {% if paginator.previous_page %}
+  <a class="newer-posts" href="{% if paginator.page == 2 %}/{% else %}/page{{ paginator.previous_page }}{% endif %}">Newer Posts</a>
   {% endif %}
 
-  {% if paginator.previous_page %}
-  {% if paginator.page == 2 %}
-  <a class="older-posts" href="/">
-  {% else %}
-  <a class="older-posts" href="/page{{ paginator.previous_page }}">
-  {% endif %}
-    <span>Newer Posts</span>
-    <i class="fa fa-arrow-right"></i>
-  </a>
+  {% if paginator.next_page %}
+  <a class="older-posts" href="/page{{ paginator.next_page }}">Older Posts</a>
   {% endif %}
 </nav>

@@ -1,31 +1,49 @@
-<footer class="site-footer" {%if site.cover %}style="background-image: url({{ site.cover }})"{% endif %}>
-  <div class="footer-share">
-    <div class="inner">
-
-      {% if page.id %}
-      <h6 class="share-title">Share this post</h6>
-      {% for social in site.social %}
-      {% if social.share_url %}
-      <a target="_blank" class="icon icon-{{ social.icon }}" href="{{ social.share_url }}{{ social.share_title }}{{ page.title | cgi_escape }}{{ social.share_link }}{{ site.url }}{{ page.id }}" onclick="window.open(this.href, '{{ social.icon }}-share', 'width=550,height=255');return false;">
-        <i class="fa fa-{{ social.icon }}"></i>
-        <span class="hidden">{{ social.icon }}</span>
-      </a>
-      {% endif %}
-      {% endfor %}
-      {% else %}
-      <h6 class="share-title">Subscribe</h6>
-      {% for social in site.social %}
-      {% if social.url %}
-      <a class="icon icon-{{ social.icon }}" href="{{ social.url }}">
-        <i class="fa fa-{{ social.icon }}"></i>
-        <span class="hidden">{{ social.icon }}</span>
-      </a>
-      {% endif %}
-      {% endfor %}
-      {% endif %}
-
+<footer class="site-footer">
+  <div class="footer-links">
+    <div class="content">
+      <div class="footer-menu">
+        <h3>Big &hearts;</h3>
+        <ul class="menu-list">
+          <li class="menu-item">
+            <a href="http://emberjs.com/">ember.js</a>
+          </li>
+          <li class="menu-item">
+            <a href="https://www.whichledlight.com/">whichledlight</a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-menu">
+        <h3>Links</h3>
+        <ul class="menu-list">
+          <li class="menu-item">
+            <a href="/">Blog</a>
+          </li>
+          <li class="menu-item">
+            <a href="/about">About</a>
+          </li>
+          <li class="menu-item">
+            <a href="https://github.com/tomasbasham?tab=repositories">Projects</a>
+          </li>
+          <ul class="menu-list">
+            <li class="menu-item">
+              <a href="/archive">Archive</a>
+            </li>
+          </ul>
+        </ul>
+      </div>
+      <div class="footer-menu">
+        <h3>Become a Friend</h3>
+        <ul class="menu-list">
+          {% for account in site.social.accounts %}
+          <li class="menu-item">
+            <a href="{{ account.url }}">{{ account.name }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
+  <div class="footer-landscape"></div>
   <div class="footer-legal">
     <div class="inner">
       <section class="copyright">
