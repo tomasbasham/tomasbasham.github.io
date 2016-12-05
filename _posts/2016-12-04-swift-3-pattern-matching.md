@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Swift 3 - Pattern Matching
-description: Has Britain leaving the EU delayed energy efficiency initiatives within the UK?
+description: Pattern matching in Swift. A function paradigm in a largely procedural language.
 author: Tomas Basham
 comments: true
 category: Development
