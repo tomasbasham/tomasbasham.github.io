@@ -16,7 +16,16 @@ sitemap:
     <section class="post-content">
       <ul class="clearfix frame">
         {% for post in site.posts %}
-        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+          {% unless post.next %}
+            <h2>{{ post.date | date: '%Y' }}</h3>
+          {% else %}
+            {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+            {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
+            {% if year != nyear %}
+              <h2>{{ post.date | date: '%Y' }}</h3>
+            {% endif %}
+          {% endunless %}
+          <li><a href="{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
     </section>
   </article>
