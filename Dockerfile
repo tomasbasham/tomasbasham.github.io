@@ -8,6 +8,7 @@ WORKDIR /usr/src/app
 # Install necessary software packages
 RUN apk add --no-cache \
   g++ \
+  git \
   libxml2-dev \
   libxslt-dev \
   make \
