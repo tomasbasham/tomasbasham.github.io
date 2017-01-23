@@ -31,8 +31,9 @@ Before settling with CryEngine V I also ventured into UnrealEngine 4 (UE4) and U
 
 So far I have been singing CryEngine praises, but like most things it is not perfect. In particular:
 
-- It is not user friendly, although it is vastly more so that in previous versions,
-- It has poor support, documentation and elitist community (at least on Slack),
+- It is not as user friendly as other engines, although it is vastly more so than in previous versions,
+- It currently has little support and scattered documentation,
+- I found there to be a partially elitist community (at least those I spoke to on Slack), whilst the forums are most helpful,
 - It's asset store is lacking in... well, assets. I assume this will improve over time. CryEngine (with launcher and store) is very new so the community has yet to release many assets.
 
 ## The Missing Answers
@@ -41,7 +42,7 @@ Now with an introduction to the game engine I present the questions that I had w
 
 ### How to Launch the Code, Editor and the Game?
 
-I believe it is important to note that Visual Studio (or MonoDevelop for C#) should be launched using the `Code_CPP.bat` file (Code_CS.bar for C#) created after bootstrapping a new game project. This script creates a series of environment variables that presumably enable Visual Studio to successfully build the game.
+I believe it is important to note that Visual Studio (or MonoDevelop for C#) should be launched using the `Code_CPP.bat` file (Code_CS.bat for C#) created after bootstrapping a new game project. This script creates a series of environment variables that presumably enable Visual Studio to successfully build the game.
 
 Similarly launching the sandbox editor should be done via the `Editor.bat` file or from the CryEngine Launcher.
 
@@ -59,6 +60,8 @@ There are a couple of configuration files scattered around the engine and indivi
 
 **Update**: Prior to version 5.2 `project.cfg` is the loaded last. This file seemed superflous to me as `game.cfg` would do the job. It would appear it has been removed.
 
+**Upadte**: Having updated to version 5.3 it appears that `system.cfg` has been removed so I was unable to continue using this file to host my audio middleware configurations. Instead I have moved it over to `game.cfg`. This has made a little more sense to me considering how the new plugin system is supposed to help separate engine logic from specific game code. Putting my configurations variables here keeps all my game specific values in one place.
+
 #### Available Configuration Variables
 
 The various configuration variables and console commands are documented on the CryEngine website and prefixed with the initials of it parent subcomponent of the engine. For example the `s_` prefix is for the sound engine subcomponent. A full list of the available configuration variables can be found [here](http://docs.cryengine.com/display/CRYAUTOGEN/Home).
@@ -71,6 +74,8 @@ Furthermore `MakeAssets.bat` contains syntax such as `%~dp0`. This is a Windows 
 
 **Update**: In version 5.2 of the engine this feature seems to be broken since the project.cfg file was removed. I questioned this on the forums to only have it confirmed. Hopefully this will be fixed ASAP.
 
+**Update**: In version 5.3 `MakeAssets.bat` has been removed from the game templates. I can only assume it is now handled entirely within the [CMake system](http://docs.cryengine.com/display/CEPROG/CMake).
+
 ### How to implement Wwise sound engine?
 
 When I start a project I like to setup and integrate all the other 3rd party software I intend to use first. So to begin I wanted to switch the audio middleware that the engine uses. By default this is SDL Mixer. In order for the engine to interact with different audio middleware it implements an Audio Translation Layer (ATL) which is an abstraction interface between CryEngine and other audio middlewares i.e. Wwise.
@@ -81,6 +86,8 @@ I wont be going through the setup of Wwise in this article as it is covered well
     s_AudioImplName CryAudioImplWwise  <-- Switch to the Wwise audio middleware. Other options include CryAudioImplFmod (for fmod studio) and CryAudioImplSDLMixer (for sdl mixer).
 
 I also set these in my `system.cfg` file as mentioned earlier. Now every time I create a new project, or launch a current project the correct audio middleware is selected.
+
+**Update**: As of version 5.3 I have transitioned this configuration to `game.cfg` as `system.cfg` has been removed (at least according to my editor log file which is unable to find it).
 
 ## The Unanswered Questions
 
