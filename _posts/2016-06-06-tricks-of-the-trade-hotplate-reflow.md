@@ -19,7 +19,7 @@ When you are content with the placement of your solder paste and components turn
 
 You'll want to remove the PCB with tweezers or needle-nose pliers after this process, as the PCB will be very hot, and transfer it onto a piece of wood or metal so not to set it down on anything prone to burning or melting.
 
-![PCB Fabrication Reflow](https://dl.dropboxusercontent.com/u/59426690/cdn/pcb-fabrication-reflow.jpg)
+![PCB Fabrication Reflow](https://cdn.tomasbasham.co.uk/pcb-fabrication-reflow.jpg)
 
 This process can be quick; only a couple minutes for the board to reflow completely. The downside is it requires constant attention, and unless you are doing something else to preheat the boards, you’re not putting them through anywhere near the proper temperature profile. This may result in the development of stress fractures as the board cool, or the flux won’t burn off completely. Other long term issues may crop up in higher volumes, but for one or two boards this process is fine.
 

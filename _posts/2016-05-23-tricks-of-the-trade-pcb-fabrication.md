@@ -31,7 +31,7 @@ When you have your Gerber files head on over to [OSH Park](https://oshpark.com/)
 
 The best feature of the site, in my opinion, is the visual representation of what they think the board will look like after fabrication, giving you an account of what you should expect to come through the post.
 
-![PCB Fabrication Board](https://dl.dropboxusercontent.com/u/59426690/cdn/pcb-fabrication-board.jpg)
+![PCB Fabrication Board](https://cdn.tomasbasham.co.uk/pcb-fabrication-board.jpg)
 
 The above image is the PCB I ordered. I am very happy with the quality of the print and will definitely use this service again.
 

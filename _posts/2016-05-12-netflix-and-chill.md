@@ -4,7 +4,7 @@ title: Netflix and Chill
 description: Building your own Netflix and chill button tutorial series starting with the electronics.
 author: Tomas Basham
 comments: true
-image: https://dl.dropboxusercontent.com/u/59426690/cdn/netflix.jpg
+image: https://cdn.tomasbasham.co.uk/netflix.jpg
 category: Product Design
 tags: featured technology netflix electronics
 ---
@@ -46,17 +46,17 @@ The electronic components for this project are fairly simple, only requiring a h
 
 I have drawn a simple schematic piecing the components together. It should be easy to read providing you are on top of your electronic symbols. The most confusing point here is which way around the transistors go. Taking a look at the [datasheet](http://docs-europe.electrocomponents.com/webdocs/13d1/0900766b813d19a8.pdf) for the transistor listed in the materials section we can see the three pins listed as the emitter, base and collector. The emitter is the pin that goes to ground; the base the pin that receives a signal from the Particle Photon; and the collector the pin that draws from the power supply.
 
-![Netflix Switch Schematic](https://dl.dropboxusercontent.com/u/59426690/cdn/netflix-switch-schematic.png)
+![Netflix Switch Schematic](https://cdn.tomasbasham.co.uk/netflix-switch-schematic.png)
 
 Everything on this schematic goes to a common ground. This will be the pin marked GND (next to pin D7) on the Photon. LED6 here is the LED Backlight and D1 is the IR LED. If you prefer I have also drawn a breadboard layout detailing precisely where I placed my components and wiring.
 
-![Netflix Switch Layout](https://dl.dropboxusercontent.com/u/59426690/cdn/netflix-switch-layout.png)
+![Netflix Switch Layout](https://cdn.tomasbasham.co.uk/netflix-switch-layout.png)
 
 You may be able to see that I tend to use a fairly common colour coded convention when wiring. The red cables are power, black are ground and yellow are signal. If you follow this style then you cannot go wrong.
 
 I have also not yet attached the external LiPo battery to the circuit but instead connected an extra jumper cable from the VIN pin on the Photon to the power line on the breadboard. This enables the Photon to share the power from the USB when prototyping. Later we'll use this same pin to power the Photon, LED backlight and IR LED without the use of the USB.
 
-![Netflix Switch Electronics](https://dl.dropboxusercontent.com/u/59426690/cdn/netflix-switch-electronics.jpg)
+![Netflix Switch Electronics](https://cdn.tomasbasham.co.uk/netflix-switch-electronics.jpg)
 
 ## Conclusion
 

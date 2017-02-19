@@ -24,7 +24,7 @@ markdown: kramdown
 highlighter: rouge
 
 # Blog cover
-cover: https://dl.dropboxusercontent.com/u/59426690/cdn/cover.jpg
+cover: https://cdn.tomasbasham.co.uk/cover.jpg
 
 # Pagination settings
 paginate: 8
