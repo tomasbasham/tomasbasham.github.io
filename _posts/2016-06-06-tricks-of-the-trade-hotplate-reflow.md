@@ -5,7 +5,7 @@ description: Simple at-home solution to surface mount reflow.
 author: Tomas Basham
 comments: true
 category: Electronics
-tags: technology electronics pcb
+tags: electronics pcb technology
 ---
 I previous covered [PCB fabrication](/electronics/2016/05/23/tricks-of-the-trade-pcb-fabrication.html) and how to apply solder paste using a stencil. Now we're ready to secure our components.
 

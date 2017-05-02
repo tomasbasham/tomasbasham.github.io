@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Secure GitHub Pages
+title: Securing GitHub Pages
 description: Adding SSL to your GitHub pages.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: security web
+category: Development
+tags: development security web
 ---
 Towards the end of 2015 [Google announced](http://thenextweb.com/google/2015/12/17/unsecured-websites-are-about-to-get-hammered-in-googles-search-ranking/) that it will start favouring those sites encrypted by SSL. In light of this I have secured my personal website and a few of the sites I have created for a handful of projects.
 

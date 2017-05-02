@@ -4,8 +4,8 @@ title: Creating P2P Connections with WebSockets
 description: Creating persistent connections between web peers using sockets.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: technology javascript p2p
+category: Development
+tags: development javascript p2p websockets
 ---
 WebSockets are a technology that creates a persistent connection between a web browser and a web server allowing two way communication between the two to occur at any time. The types of application this technology is best suited are that of real time software applications offering instant updates and that possibly share data between multiple parties. For example WebSockets are used to create such applications as multiplayer online games; chat and videoconferecing; update feeds; collaboration tools and any other application where the sever may be expected to send data to the client at any given time.
 

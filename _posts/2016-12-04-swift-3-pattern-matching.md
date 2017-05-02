@@ -5,7 +5,7 @@ description: Pattern matching in Swift. A function paradigm in a largely procedu
 author: Tomas Basham
 comments: true
 category: Development
-tags: development swift iOS
+tags: development iOS swift
 ---
 Whilst working on an iOS app, I was able to really jump into some Swift 3 features that were very new to me. Swift 3 has so many advantages over Objective-C but the one I am most impressed with is pattern matching.
 

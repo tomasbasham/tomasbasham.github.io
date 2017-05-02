@@ -4,8 +4,8 @@ title: Installing Java 6 on Ubuntu
 description: How to install Java 6 on Ubuntu for legacy applications.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: technology java ubuntu
+category: Development
+tags: development java ubuntu
 ---
 As of August 2011 Java no longer comes part of the default installation. This is due to Oracle retiring the distributor license that allows operating system vendors from providing Java as a package along with their products. This means that Canonical have removed the Java JDK package from it's partner repositories, thus making it unavailable for installation through this means. The only alternative it seems is to use OpenJDK, but often stability wins over features, and as such I needed a way to install the official Oracle Java JDK opposed to OpenJDK.
 

@@ -5,7 +5,7 @@ description: Reclaiming the disk on you Mac.
 author: Tomas Basham
 comments: true
 category: Technology
-tags: technology development
+tags: technology osx
 ---
 This article focusses on OS X developers that have installed a series of development tools such as Xcode and Docker and finding they are very quickly burning through storage space.
 

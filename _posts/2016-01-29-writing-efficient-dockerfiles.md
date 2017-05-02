@@ -4,8 +4,8 @@ title: Writing Efficient Dockerfiles
 description: How to write an efficient Dockerfile for development and production environments.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: technology docker
+category: Development
+tags: development docker
 ---
 In this article, you will learn the importance of structuring Dockerfiles when containerising an application and the pitfalls of doing otherwise.
 

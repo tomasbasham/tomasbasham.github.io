@@ -4,8 +4,8 @@ title: Building libjingle for the Raspberry Pi
 description: A step by step guide to cross-compile the libjingle library for the Raspberry Pi.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: technology
+category: Development
+tags: development p2p webrtc
 ---
 Following an increasing trend in decentralised applications there is an ever growing demand to produce secure protocols and software development frameworks from which to implement these applications. The modern browser implements an API definition drafted by the World Wide Web Consortium (W3C), called WebRTC, that supports peer-to-peer (P2P) voice/video calling and file sharing without the need to install external plugins.
 

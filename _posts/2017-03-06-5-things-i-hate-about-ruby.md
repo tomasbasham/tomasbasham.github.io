@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 5 Things I Hate About Ruby
-description: As an objective advocate of the Ruby language, here are 5 things that I hate about it.
+description: An objective Ruby advocate's pet hates about the language.
 author: Tomas Basham
 comments: true
 image: https://cdn.tomasbasham.co.uk/ruby.svg

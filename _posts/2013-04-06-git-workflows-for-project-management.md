@@ -4,8 +4,8 @@ title: Git Workflows for Project Management
 description: Basic Git workflow for project management.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: featured technology git management
+category: Development
+tags: featured development git management
 ---
 This is how I use `git` either working as part of a team or individually.
 

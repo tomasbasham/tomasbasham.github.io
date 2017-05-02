@@ -5,7 +5,7 @@ description: Building your own Netflix and chill button tutorial series continui
 author: Tomas Basham
 comments: true
 category: Product Design
-tags: technology netflix
+tags: development netflix technology
 ---
 We finished [last time](/product%20design/2016/05/12/netflix-and-chill.html) with a complete electronics prototype of our Netflix switch. Next we must implement the code to make this a working system.
 

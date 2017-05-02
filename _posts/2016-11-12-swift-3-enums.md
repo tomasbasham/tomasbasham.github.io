@@ -5,7 +5,7 @@ description: Useful application of enums and how to implement them.
 author: Tomas Basham
 comments: true
 category: Development
-tags: development swift iOS
+tags: development iOS swift
 ---
 I am always looking out for better solutions to implement software features where the language lends itself well to the problem. This way I get the most out of the language and offload some responsibility to the specific nuances the language offers. In this article I talk about Swift enums and how I have used them.
 

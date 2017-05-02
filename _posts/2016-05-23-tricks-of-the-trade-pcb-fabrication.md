@@ -5,7 +5,7 @@ description: Low cost PCB and stencil printing.
 author: Tomas Basham
 comments: true
 category: Electronics
-tags: technology electronics pcb
+tags: electronics pcb technology
 ---
 In a [previous article](/product%20design/2016/05/12/netflix-and-chill.html) I describe prototyping an electronics project using through hole components and breadboarding. This is an effective method for quickly slapping together a simple circuit but falls short when you need to scale up or miniaturise your design.
 

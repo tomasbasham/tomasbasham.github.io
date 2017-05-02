@@ -5,7 +5,7 @@ description: Building your own Netflix and chill button tutorial series concludi
 author: Tomas Basham
 comments: true
 category: Product Design
-tags: technology netflix
+tags: 3d-printing netflix technology
 ---
 If you have been following along with this tutorial series you should have a working [electronic prototype](/product%20design/2016/05/12/netflix-and-chill.html) with the necessary [code](/product%20design/2016/05/15/netflix-and-chill-part-2.html) to turn on your TV and signal an external messaging queue to later extend the functionality of your switch using a Raspberry Pi or other internet enabled device.
 

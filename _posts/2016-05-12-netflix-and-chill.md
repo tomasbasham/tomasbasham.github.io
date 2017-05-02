@@ -6,7 +6,7 @@ author: Tomas Basham
 comments: true
 image: https://cdn.tomasbasham.co.uk/netflix.jpg
 category: Product Design
-tags: featured technology netflix electronics
+tags: electronics netflix technology
 ---
 Last year the team at Netflix posted a tutorial on how to create your own [Netflix switch](http://makeit.netflix.com/the-switch); automating the arduous task of manually turning on your TV, launching the Netflix app and setting the mood with a movie favourite - pizza. However the step-by-step guide left me more confused than pleased with my new toy.
 

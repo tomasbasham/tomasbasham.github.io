@@ -5,7 +5,7 @@ description: My experiences starting out in game development with CryEngine V.
 author: Tomas Basham
 comments: true
 category: Gaming
-tags: technology gaming development
+tags: cryengine development engine game technology
 ---
 It is an irrefutable fact that CryEngine is a fantastic game engine. This is made evident be the AAA titles that are being released. As a developer I have been keen to get in on this action and create my own stunning landscapes with a captivating storyline. However upon being faced with a blank canvas I really do feel like the David to this game engine Goliath.
 

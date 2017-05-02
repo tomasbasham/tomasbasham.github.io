@@ -6,7 +6,7 @@ author: Tomas Basham
 comments: true
 image: https://cdn.tomasbasham.co.uk/warp-speed.jpg
 category: Technology
-tags: technology led
+tags: led technology
 ---
 
 The vote for Britain to leave the European Union may delay benefits UK households would receive as a result of switching to energy efficient LED lighting.

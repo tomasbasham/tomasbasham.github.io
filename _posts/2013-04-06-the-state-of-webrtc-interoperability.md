@@ -4,10 +4,10 @@ title: The State of WebRTC Interoperability
 description: The status of WebRTC interoperability across browsers.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: technology javascript webrtc
+category: Development
+tags: development javascript webrtc
 ---
-Firefox Nightly (as of 1/30/13) and Chrome M25 Beta and later are interoperable, but currently require a small degree of adaptation on the part of the calling site.
+Firefox Nightly (as of 06/04/13) and Chrome M25 Beta and later are interoperable, but currently require a small degree of adaptation on the part of the calling site.
 
 ## API Differences
 

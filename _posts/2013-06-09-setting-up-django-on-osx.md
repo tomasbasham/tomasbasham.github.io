@@ -4,8 +4,8 @@ title: Setting up Django on OS X
 description: Web development with Django within virtual Python installations
 author: Tomas Basham
 comments: true
-category: Technology
-tags: technology python osx
+category: Development
+tags: development osx python
 ---
 Django is a Python web framework that encourages rapid development and clean, pragmatic design. Developed initially for a fast-paced environment where strict deadlines were the 'norm' Django was designed to make common web development task simple, quick and easy.
 

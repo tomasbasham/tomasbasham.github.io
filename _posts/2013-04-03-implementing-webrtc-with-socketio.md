@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Implementing WebRTC with Socket.io
-description: How to implement WebRTC and signalling server for P2P videoconferencing.
+description: How to implement WebRTC and a signalling server for P2P videoconferencing.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: technology javascript webrtc p2p
+category: Development
+tags: development javascript p2p webrtc
 ---
 WebRTC is a free, open source project enabling web browsers the ability of Real-Time Communications (RTC) capabilities via simple Javascript APIs.
 

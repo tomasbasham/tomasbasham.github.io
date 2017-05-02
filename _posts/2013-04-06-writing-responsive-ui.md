@@ -4,8 +4,8 @@ title: Writing Responsive UI
 description: The basics of responsive web UI and how to implement it.
 author: Tomas Basham
 comments: true
-category: Technology
-tags: technology html css design
+category: Development
+tags: css design development html
 ---
 Responsive web design (RWD) is a web design approach aimed at crafting sites to provide an optimal viewing experience-easy reading and navigation with a minimum of resizing, panning, and scrolling-across a wide range of devices (from desktop computer monitors to mobile phones).
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Why Stack Overflow is Bad
+title: Bow to our Stack Overflow Overlords
 description: The pretentious nature of the largest programming Q&A monster.
 author: Tomas Basham
 comments: true
@@ -11,7 +11,7 @@ I have used Stack Overflow now for many years and it saves my bacon on a daily b
 
 The conflict that Stack Overflow faces is that it seems uninterested in users getting answers for their usually well formed and coherent questions but prefers to house the "**best**" and most grammatically correct questions and answers the internet has to offer.
 
-If a question is considered poor by a user with moderating privileges, it will be downvoted, closed and finally deleted. On top of this users providing questions and answers that receive low marks can be banned by robots. I know about moderators on Stack Overflow because I am one of them, albeit with very low privileges where I am unable to immediately edit questions and any edits I do make have to be further moderated by those with a higher reputation. So I feel somewhat responsible for the development of this Nazi hierarchy.
+If a question is considered poor by a user with moderating privileges, it will be downvoted, closed and finally deleted. On top of this users providing questions and answers that receive low marks can be banned by robots. This pretentious, opinionated community demonstrates an online society where the rich (those with high reputation) remain rich (or get richer) whilst the poor remain poor and are subsequently judged, often harshly, by those with greater power.
 
 An example of a question I recently asked on Stack Overflow was:
 
@@ -34,7 +34,7 @@ An example of a question I recently asked on Stack Overflow was:
 >       { "range": { "properties.price": { "gte": 50, "lte": 100 } } }
 >     ]
 
-I felt this was a perfectly clear question with a coherent outcome. After all I was really only asking for some advice from somebody more familiar with Ruby to tell me whether I would have to write my own method to achieve my desired result; because who wants to waste time writing something themselves if it already exists as a language feature, right?
+I felt this was a perfectly clear question with a coherent expected outcome. After all I was really only asking for some advice from somebody more familiar with Ruby to tell me whether I would have to write my own method to achieve my desired result; because who wants to waste time writing something themselves if it already exists as a language feature, right?
 
 A Ruby Guru comes along to take a look at my question. This guy was the bees knees: 88K reputation on Stack Overflow with 93% of his posts within the Ruby category. Surely this guy could answer my question with ease. Instead he proceeds to edit my post as such:
 
