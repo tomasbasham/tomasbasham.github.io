@@ -16,7 +16,7 @@ However I don't really believe you can trust an advocate who doesn’t know enou
 
 In Ruby there is no such thing as private or protected scope, at least semantically speaking. The `private` and `protected` keywords only act as hints to the interpreter not to allow access to methods outside their intended scope. This leads to a language feature that is not entirely transparent, but equally as trivial.
 
-It would appear that the language instead guides developers down the "right" path by making private method invocations more annoying, throwing warnings, but does not stop you from doing so. I believe having this relaxed attitude to method visibility opens the doors to poor code design. Personally I would prefer to forced to code in a certain way than have a mechanism guide my coding best practices.
+It would appear that the language instead guides developers down the "right" path by making private method invocations more annoying, throwing exceptions, but does not stop you from doing so. I believe having this relaxed attitude to method visibility opens the doors to poor code design. Personally I would prefer to be forced to code in a certain way than have a mechanism to guide my coding best practices.
 
 To invoke a private method on an object you may simply use the `Object.send` method.
 

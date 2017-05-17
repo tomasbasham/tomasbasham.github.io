@@ -18,7 +18,7 @@ services:
     command: ["htmlproofer ./_site --check-favicon --check-html --disable-external"]
 
   travis:
-    image: tomasbasham/travis:1.8.2
+    image: tomasbasham/travis:1.8.8
     volumes:
       - travis-data:/root/.travis
       - .:/usr/src/app
