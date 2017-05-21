@@ -1,4 +1,7 @@
-exclude: [vendor]
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
 
 gems:
   - jekyll-feed
