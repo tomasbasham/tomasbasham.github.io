@@ -55,7 +55,7 @@ To tell Ubuntu which Java installation is the default is pretty easy. Since ther
 
 Now to actually find Java when it is typed into the terminal or invoked through another application the system wide path needs to be altered to include the directory in which Java is installed. Open up `/etc/profile` with a text editor (I prefer to use `nano`) and add to the bottom the following:
 
-    JAVA_HOME=/usr/lib/jvm/jdk1.6.0_32
+    JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45
     PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
     export JAVA_HOME
     export PATH
