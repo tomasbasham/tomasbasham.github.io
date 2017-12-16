@@ -2,7 +2,13 @@
 
 define(['domReady', 'jquery'], function(domReady, $) {
   domReady(function() {
+    $document = $(document);
+
     // Print contact info
-    console.log(document.childNodes[1].textContent);
+    var banner = $document.contents().filter(function() {
+      return this.nodeType == 8;
+    })[0];
+
+    console.log(banner);
   });
 });
