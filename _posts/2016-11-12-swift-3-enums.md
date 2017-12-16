@@ -7,17 +7,33 @@ comments: true
 category: Development
 tags: development iOS swift
 ---
-I am always looking out for better solutions to implement software features where the language lends itself well to the problem. This way I get the most out of the language and offload some responsibility to the specific nuances the language offers. In this article I talk about Swift enums and how I have used them.
+I am always looking out for better solutions to implement software features
+where the language lends itself well to the problem. This way I get the most
+out of the language and offload some responsibility to the specific nuances the
+language offers. In this article I talk about Swift enums and how I have used
+them.
 
 ## What is an Enum?
 
-An enum encapsulates a group of related values within a particular domain. Unlike enums in C which map values to a set of integers, Swift does not enforce this mapping. If however a value is associated with the related values it is not limited to integers, but can be represented by any type conforming to `RawRepresentable` protocol. This means that an associated value can a string, a character, or a value of any integer or floating-point type.
+An enum encapsulates a group of related values within a particular domain.
+Unlike enums in C which map values to a set of integers, Swift does not enforce
+this mapping. If however a value is associated with the related values it is
+not limited to integers, but can be represented by any type conforming to
+`RawRepresentable` protocol. This means that an associated value can a string,
+a character, or a value of any integer or floating-point type.
 
-Swift extends enums further to adopt features traditionally supported only by classes. This includes the adoption of instance methods, computed properties, initialisers and the ability to conform to protocols. These features are particularly useful when needing to implement enums where associated values do no conform to `RawRepresentable`.
+Swift extends enums further to adopt features traditionally supported only by
+classes. This includes the adoption of instance methods, computed properties,
+initialisers and the ability to conform to protocols. These features are
+particularly useful when needing to implement enums where associated values do
+no conform to `RawRepresentable`.
 
 ## Using Enum To Implement a Type
 
-Part of an app I am writing required a way to encapsulate the colour scheme I intend to use. Since there would be a discrete number of colours  an enum seemed like the best solution. It was also important that I be able to select a random colour from the enum.
+Part of an app I am writing required a way to encapsulate the colour scheme I
+intend to use. Since there would be a discrete number of colours  an enum
+seemed like the best solution. It was also important that I be able to select a
+random colour from the enum.
 
 Using an enum the solution was simple as shown in this snippet:
 
@@ -48,6 +64,11 @@ Using an enum the solution was simple as shown in this snippet:
       }
     }
 
-Take note of the implementation of `random()`. It instantiates and returns a `ColourPalette` using a raw value to identify one of it's cases. Each case has been automatically assigned a numerical default value because the enum has been declared to store associated values of the `UInt32` type.
+Take note of the implementation of `random()`. It instantiates and returns a
+`ColourPalette` using a raw value to identify one of it's cases. Each case has
+been automatically assigned a numerical default value because the enum has been
+declared to store associated values of the `UInt32` type.
 
-**Note**: As stated in the Apple documentation `arc4random_uniform()` is recommended over constructions like `arc4random() % upper_bound` as it avoids modulo bias when the upper bound is not a power of two.
+**Note**: As stated in the Apple documentation `arc4random_uniform()` is
+recommended over constructions like `arc4random() % upper_bound` as it avoids
+modulo bias when the upper bound is not a power of two.
