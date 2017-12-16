@@ -1,7 +1,7 @@
 FROM ruby:2.2.5-alpine
 
-LABEL maintainer "Tomas Basham <me@tomasbasham.co.uk>"
-LABEL description "A Personal Jekyll Blog and Portfolio"
+LABEL com.tomasbasham.maintainer "Tomas Basham <me@tomasbasham.co.uk>" \
+      com.tomasbasham.description "A Personal Jekyll Blog and Portfolio"
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
