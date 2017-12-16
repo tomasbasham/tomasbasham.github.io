@@ -1,18 +1,16 @@
-/* globals jQuery, document */
+/* globals define */
 
-(function($) {
-  'use strict';
-
-  $(document).ready(function(){
+define(['domReady', 'jquery', 'jquery.fitvids.min', 'jquery.readingTime.min'], function(domReady, $) {
+  domReady(function() {
     $('.post-content').fitVids();
 
-    // Calculates Reading Time
+    // Calculates reading time
     $('.post-content').readingTime({
       readingTimeTarget: '.post-reading-time',
       wordCountTarget: '.post-word-count',
     });
 
-    // Creates Captions from Alt tags
+    // Creates captions from alt tags
     $('.post-content img').each(function() {
       // Let's put a caption if there is one
       if($(this).attr('alt') && !$(this).hasClass('emoji')) {
@@ -20,9 +18,4 @@
       }
     });
   });
-}(jQuery));
-
-function openShare(event, providerName) {
-  window.open(event.href, providerName + '-share', 'width=550,height=255');
-  return false;
-}
+});
