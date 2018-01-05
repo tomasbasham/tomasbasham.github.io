@@ -21,7 +21,7 @@ After reading this article, you should be familiar with what SSL is and how you
 can utilise it to boost your ranking on Google and more importantly secure your
 sites.
 
-## Update
+### Update
 
 Since writing this article Kloudsec has been shutdown. However CloudFlare offer
 an alternative solution called [Universal
@@ -31,7 +31,7 @@ In my honest opinion CloudFlare also has a more streamlined interface including
 a few more features that Kloudsec lacked, namely HTTP Strict Transport Security
 (HSTS) support.
 
-## What is SSL
+### What is SSL
 
 SSL is the umbrella term for both the Transport Layer Security (TLS) protocol
 and it's predecessor Secure Socker Layer (SSL). Both are cryptographic
@@ -59,7 +59,7 @@ boost from Google, you'll appreciate that when a site is secured by TLS, the
 connection between a web server and a visitor's web browser has the following 3
 properties:
 
-#### 1. Privacy
+### 1. Privacy
 
 The connection is private because symmetric cryptography is used to encrypt the
 data transmitted. The keys for this symmetric encryption are generated uniquely
@@ -72,19 +72,19 @@ attacker who places himself in the middle of the connection) and reliable (no
 attacker can modify the communications during the negotiation without being
 detected).
 
-#### 2. Authenticated
+### 2. Authentication
 
 The identity of the communicating parties can be authenticated using public-key
 cryptography. This authentication can be made optional, but is generally
 required for at least one of the parties (typically the server).
 
-#### 3. Reliability
+### 3. Reliability
 
 The connection is reliable because each message transmitted includes a message
 integrity check using a message authentication code to prevent undetected loss
 or alteration of the data during transmission.
 
-## What is Kloudsec
+### What is Kloudsec
 
 Kloudsec is an online platform geared toward finding performance issues on your
 websites and attempts to fix them automatically. It is free of charge for the
@@ -138,7 +138,7 @@ back over to your Kloudsec dashboard and click through to 'Protection'. Enable
 And that is it. It may take some time for the DNS records to settle and for
 your certificate to be generated and be applied to your site, but be patient.
 
-#### Secure Subdomains
+### Secure Subdomains
 
 It is just as easy to secure any subdomains you have setup. Go to your Kloudsec
 dashboard and click through to 'Settings'. You should see a list of subdomains.
@@ -149,7 +149,7 @@ registrar pointing to the same IP address as the others.
 Again it may take time for the DNS records to settle and for your certificate
 to be generated and be applied to your site, but be patient.
 
-## External Resources
+### External Resources
 
 * <a name="cite-note-1"></a>[Indexing HTTPS Pages by
   Default](https://webmasters.googleblog.com/2015/12/indexing-https-pages-by-default.html)

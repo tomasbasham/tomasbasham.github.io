@@ -68,7 +68,7 @@ proceeds to edit my post as such:
 > that</strike> **Array that** could flatten/merge this array into something
 > more compact. If not, I'll just have to write my own method.
 >
->For example, I have an array:
+> For example, I have an array:
 >
 >     [
 >       { "match": { "properties.name": "name1" } },
@@ -76,7 +76,7 @@ proceeds to edit my post as such:
 >       { "range": { "properties.price": { "lte": 100 } } }
 >     ]
 >
->and I would like to flatten/merge it such that it looks like this:
+> and I would like to flatten/merge it such that it looks like this:
 >
 >     [
 >       { "match": { "properties.name": "name1" } },

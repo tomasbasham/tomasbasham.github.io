@@ -19,23 +19,25 @@ pattern matching is concerned), and we may take examples from these other
 language to adapt them to work with Swift. So without further ado, lets talk
 about pattern matching.
 
-## The Model
+### The Model
 
 Say you are modelling your favourite burger. Here's
 [mine](http://glutenfreeregina.com/wp-content/uploads/2016/08/Five-Guys.jpg).
 Each topping could be represented as a separate case within an `enum`.
 
-    enum BurgerTopping {
-      case Bun(type: String, seeds: Bool)
-      case Patty(type: String)
-      case Cheese(type: String)
-      case Pickle
-      case Tomato
-    }
+{% highlight swift %}
+  enum BurgerTopping {
+    case Bun(type: String, seeds: Bool)
+    case Patty(type: String)
+    case Cheese(type: String)
+    case Pickle
+    case Tomato
+  }
+{% endhighlight %}
 
 You get the idea. Add whatever toppings take your fancy.
 
-## The Humble Switch
+### The Humble Switch
 
 In essence we have been using very basic pattern matching for a long time in
 languages such as Objective-C, C, Java, and many others through the form of
@@ -47,21 +49,23 @@ Using pattern matching switch statements can be used to match more complex
 structures containing placeholder variables, and bind these variables to real
 values if they match:
 
-    func add(_ topping: BurgerTopping) {
-      switch topping {
-      case let .Bun(type, _):
-        print("\(type) bun with or without seeds. The mystery is killing me")
-      case let .Patty(type):
-        print("Juicy. Delicious. Succulant \(type) patty")
-      case let .Cheese(type):
-        print("You genius! \(type) Cheese. Sounds great!")
-      case .Pickle:
-        print("Pickles? Ok, if you're sure")
-      case .Tomato:
-        print("Gotta love those tomatoes")
-      default: break
-      }
+{% highlight swift %}
+  func add(_ topping: BurgerTopping) {
+    switch topping {
+    case let .Bun(type, _):
+      print("\(type) bun with or without seeds. The mystery is killing me")
+    case let .Patty(type):
+      print("Juicy. Delicious. Succulant \(type) patty")
+    case let .Cheese(type):
+      print("You genius! \(type) Cheese. Sounds great!")
+    case .Pickle:
+      print("Pickles? Ok, if you're sure")
+    case .Tomato:
+      print("Gotta love those tomatoes")
+    default: break
     }
+  }
+{% endhighlight %}
 
 When the `BurgerTopping` instance matches one of the cases, lets take the
 second case as an example, then a new variable `type` is created and the
@@ -77,7 +81,7 @@ Also note the fourth and fifth cases where no variables have been bound.
 `let` keyword. Furthermore if we were to write `case let .Bun(_, _)` this would
 be equivalent to `case .Bun` as we dont need to bind any values.
 
-## Where and Fixed Values
+### Where and Fixed Values
 
 As you can see there are a few way in which pattern matching can be made useful
 for this use case. The `BurgerTopping`s could be made a lot more complex or you
@@ -89,76 +93,89 @@ value I now want to have a separate case for when seeds is either `true` or
 `false`. We can do this with the `where` clause. This is added to the end of a
 case as shown below:
 
-    func add(_topping: BurgerTopping) {
-      switch topping {
-      case let .Bun(type, seeds) where seeds == true:
-        print("\(type) bun with seeds. Yeeha!")
-      case let .Bun(type, seeds) where seeds == false:
-        print("Ooooo. A lovely \(type) bun. Good choice!")
-      ...
-      }
+{% highlight swift %}
+  func add(_ topping: BurgerTopping) {
+    switch topping {
+    case let .Bun(type, seeds) where seeds == true:
+      print("\(type) bun with seeds. Yeeha!")
+    case let .Bun(type, seeds) where seeds == false:
+      print("Ooooo. A lovely \(type) bun. Good choice!")
     }
+  }
+{% endhighlight %}
 
-Here the first case will match with a `Bun` where it's seeds value is equal to
-`true`, whereas the seconds case will match with a `Bun` where it's seeds value
-is equal to `false`.
+Here the first case will match with a `Bun` where its seeds value is equal to
+`true`, whereas the seconds case will match with a `Bun` where its seeds value
+is equal to `false`. Of course this is a very trivial equality whereby the
+value can only ever be `true` or `false` and can alternatively be written with
+Fixed Values:
 
-Of course this is a very trivial equality whereby the value can only ever be
-`true` or `false` and can alternatively be written with Fixed Values i.e. `case
-let .Bun(type, true):`. This does the exact same thing as the first case above
-except instead of using `where` I have explicitly attempted to mach a constant
-value.
+{% highlight swift %}
+  func add(_ topping: BurgerTopping) {
+    switch topping {
+    case let .Bun(type, true):
+      print("\(type) bun with seeds. Yeeha!")
+    case let .Bun(type, false):
+      print("Ooooo. A lovely \(type) bun. Good choice!")
+    }
+  }
+{% endhighlight %}
 
-## If and Guard Case
+This does the exact same thing as the first case except instead of using
+`where` I have explicitly attempted to match a constant value.
+
+### If and Guard Case
 
 The switch statement is not the only to benefit from pattern matching. It may
 also be used with `if case` and `guard case`. Below is a reimplementation of
 the switch statement we have been using:
 
-    func add(_ topping: BurgerTopping) {
-      if case let .Bun(type, seeds), seeds == true {
-        print("\(type) bun with seeds. Yeeha!")
-      }
-
-      if case let .Bun(type, seeds), seeds == false {
-        print("Ooooo. A lovely \(type) bun. Good choice!")
-      }
-
-      if case let .Patty(type) = topping {
-        print("Juicy. Delicious. Succulant \(type) patty")
-      }
-
-      if case let .Cheese(type) = topping {
-        print("You genius! \(type) Cheese. Sounds great!")
-      }
-
-      if case let .Pickle = topping {
-        print("Pickles? Ok, if you're sure")
-      }
-
-      if case .Tomato = topping {
-        print("Gotta love those tomatoes")
-      }
+{% highlight swift %}
+  func add(_ topping: BurgerTopping) {
+    if case let .Bun(type, seeds), seeds == true {
+      print("\(type) bun with seeds. Yeeha!")
     }
+
+    if case let .Bun(type, seeds), seeds == false {
+      print("Ooooo. A lovely \(type) bun. Good choice!")
+    }
+
+    if case let .Patty(type) = topping {
+      print("Juicy. Delicious. Succulant \(type) patty")
+    }
+
+    if case let .Cheese(type) = topping {
+      print("You genius! \(type) Cheese. Sounds great!")
+    }
+
+    if case let .Pickle = topping {
+      print("Pickles? Ok, if you're sure")
+    }
+
+    if case .Tomato = topping {
+      print("Gotta love those tomatoes")
+    }
+  }
+{% endhighlight %}
 
 You may notice this is more verbose than the switch case scenario, due mostly
 to curly braces and newlines, but yields the exact same results. Writing `if
 case let x = y { ... }` is strictly equivalent to writing `switch y { case let
-x: ... }:`; it’s just a more compact syntax useful when you only want to
-pattern match against one case as opposed to a switch which is more adapted to
-multiple case matching.
+x: ... }:`; it’s just a more compact syntax useful when you only want to match
+against one case as opposed to a switch which is more appropriate to multiple
+case matching.
 
 Take note that the `where` clause here is represented by a single comma,
 creating a multi-clause conditional statement.
 
-## What Else?
+### What Else?
 
 Beyond the control flow constructs mentioned above, pattern matching can also
 be used with `for case` and types. I have not yet needed to use these features
 and may write about them in a future post. Until then I am going to continue to
-altering my development habits to accomodate this functional pattern.
+altering my development habits to accommodate this functional pattern.
 
-## External Resources
+### External Resources
 
 * Patterns. See
   [developer.apple.com](https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Patterns.html).

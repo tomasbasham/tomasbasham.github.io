@@ -18,7 +18,7 @@ professionals use this engine and how to implement the next Crysis, however in
 this article you will learn the answers I had to some very basic question when
 starting out.
 
-## What is CryEngine V?
+### What is CryEngine V?
 
 CryEngine V is the fifth major iteration of the CryEngine game engine developed
 by the German company [Crytek](http://www.crytek.com/). Since the release of
@@ -68,12 +68,12 @@ perfect. In particular:
   over time. CryEngine (with launcher and store) is very new so the community
   has yet to release many assets.
 
-## The Missing Answers
+### The Missing Answers
 
 Now with an introduction to the game engine I present the questions that I had
 when starting to use CryEngine V.
 
-### How to Launch the Code, Editor and the Game?
+### 1. How to Launch the Code, Editor and the Game?
 
 I believe it is important to note that Visual Studio (or MonoDevelop for C#)
 should be launched using the `Code_CPP.bat` file (Code_CS.bat for C#) created
@@ -90,7 +90,7 @@ Studio (or MonoDevelop for C#) project file that can be opened through
 explorer, whilst the editor and game are launched through the `.cryproject`
 file.
 
-### How are the Config Files Loaded?
+### 2. How are the Config Files Loaded?
 
 There are a couple of configuration files scattered around the engine and
 individual projects. These are loaded in a particular order as discussed below:
@@ -119,15 +119,13 @@ little more sense to me considering how the new plugin system is supposed to
 help separate engine logic from specific game code. Putting my configurations
 variables here keeps all my game specific values in one place.
 
-#### Available Configuration Variables
-
 The various configuration variables and console commands are documented on the
 CryEngine website and prefixed with the initials of it parent subcomponent of
 the engine. For example the `s_` prefix is for the sound engine subcomponent. A
 full list of the available configuration variables can be found
 [here](http://docs.cryengine.com/display/CRYAUTOGEN/Home).
 
-### What is the Resource Compiler?
+### 3. What is the Resource Compiler?
 
 The `MakeAssets.bat` invokes the the resource compiler (rc.exe) that optimises
 assets for the specific platform. Some useful resources referencing the
@@ -150,7 +148,7 @@ it confirmed. Hopefully this will be fixed ASAP.
 templates. I can only assume it is now handled entirely within the [CMake
 system](http://docs.cryengine.com/display/CEPROG/CMake).
 
-### How to implement Wwise sound engine?
+### 4. How to implement Wwise sound engine?
 
 When I start a project I like to setup and integrate all the other 3rd party
 software I intend to use first. So to begin I wanted to switch the audio
@@ -164,8 +162,10 @@ well
 [here](http://docs.cryengine.com/display/CEMANUAL/Setting+up+Wwise+for+CRYENGINE)
 but the two important console commands I used are:
 
-    s_DrawAudioDebug 1  <-- Display debug information about ATL middleware.
-    s_AudioImplName CryAudioImplWwise  <-- Switch to the Wwise audio middleware. Other options include CryAudioImplFmod (for fmod studio) and CryAudioImplSDLMixer (for sdl mixer).
+{% highlight conf %}
+s_DrawAudioDebug 1  <-- Display debug information about ATL middleware.
+s_AudioImplName CryAudioImplWwise  <-- Switch to the Wwise audio middleware. Other options include CryAudioImplFmod (for fmod studio) and CryAudioImplSDLMixer (for sdl mixer).
+{% endhighlight %}
 
 I also set these in my `system.cfg` file as mentioned earlier. Now every time I
 create a new project, or launch a current project the correct audio middleware
@@ -175,9 +175,7 @@ is selected.
 `game.cfg` as `system.cfg` has been removed (at least according to my editor
 log file which is unable to find it).
 
-## The Unanswered Questions
-
-### How is the C++ Sample Project Structured?
+### 5. How is the C++ Sample Project Structured?
 
 I lean toward using C++ when I can. It seems to have been the industry standard
 for many years so there must be something about it that lends itself well to
@@ -189,20 +187,20 @@ everything.
 
 I'm cautious that this is an example of [functional
 fixedness](https://en.wikipedia.org/wiki/Functional_fixedness), a bias
-limitting me to using the engine only in the way it has traditionally been
+limiting me to using the engine only in the way it has traditionally been
 used. So I intend to figure out what were the intentions of having included
 these particular boilerplate features, yet not implement others? Beyond this I
 intend to find what each bit does.
 
-### What is Included in the Assets Folder.
+### 6. What is Included in the Assets Folder?
 
 The Assets folder contains `Textures.pak`. What is the difference between this
 and the `terraintexture.pak` within `Assets/levels/example`? I assume
 `Textures.pak` are global textures whereas `terraintexture.pak` contains
-textures pertaining to a particular levels lanscape including height maps,
+textures pertaining to a particular levels landscape including height maps,
 normal maps etc...
 
-## Moving Foreward
+### Moving Forward
 
 I am clearly still no expert here, with some questions still unanswered. I
 fully intend to keep this article up to date whilst I discover more answers to

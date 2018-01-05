@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 5 Things I Hate About Ruby
-description: An objective Ruby advocate's pet hates about the language.
+description: An objective Ruby advocates pet hates about the language.
 author: Tomas Basham
 comments: true
 image: https://cdn.tomasbasham.co.uk/ruby.svg
@@ -14,12 +14,12 @@ I know I am truly a Ruby fanboy. I much favour being able to write my
 applications in a more "plain English" syntax which offers self documenting and
 cleaner code.
 
-However I don't really believe you can trust an advocate who doesn’t know
+However I don't really believe you can trust an advocate who doesn't know
 enough to find something wrong with what they are advocating. Given that I use,
 love and shout Ruby's praises on almost a daily basis, listing out some of it's
 bug bares seems like a good exercise in humility.
 
-## 5. Private is not private
+### 5. Private is not private
 
 In Ruby there is no such thing as private or protected scope, at least
 semantically speaking. The `private` and `protected` keywords only act as hints
@@ -37,7 +37,7 @@ coding best practices.
 To invoke a private method on an object you may simply use the `Object.send`
 method.
 
-## 4. Confusing operators?
+### 4. Confusing operators?
 
 Ruby has two different, but confusing, set of operators. Those being the widely
 used `&&` and `||` which are present in almost every modern computer language,
@@ -52,48 +52,52 @@ To be fair both set of operators have different use cases so it is hard to hate
 on this feature of Ruby, however it is a very confusing syntax so anybody would
 be excused if thinking that they in fact were synonymous.
 
-## 3. Optional perentheses
+### 3. Optional perentheses
 
-Ruby does not require that you place perentheses around method arguments.
+Ruby does not require that you place parentheses around method arguments.
 Although this saves on keystrokes it can be detrimental to readability and in
 some cases cause your application to not behave as expected. Take the
 following:
 
-    x = 5
+{% highlight ruby %}
+x = 5
 
-    puts (0..10).include? x ? 'yes' : 'no'
+puts (0..10).include? x ? 'yes' : 'no'
 
-    # is equivalent to
+# is equivalent to
 
-    puts (0..10).include?(x ? 'yes' : 'no')
+puts (0..10).include?(x ? 'yes' : 'no')
 
-    # is equivalent to
+# is equivalent to
 
-    puts (0..10).include?('yes')
+puts (0..10).include?('yes')
 
-    # is equivalent to
+# is equivalent to
 
-    puts false #=> false
+puts false #=> false
+{% endhighlight %}
 
 Clearly this was not the intended result. The Ruby interpreter has taken `x ?
 'yes' : 'no'` as a single argument to the `include?` method whereas the
 intention was only to take `x`. The correct way to have written this was with
 parentheses:
 
-    x = 5
+{% highlight ruby %}
+x = 5
 
-    puts (0..10).include?(x) ? 'yes', 'no'
+puts (0..10).include?(x) ? 'yes', 'no'
 
-    # is equivalent to
+# is equivalent to
 
-    puts true #=> true
+puts true #=> true
+{% endhighlight %}
 
 The generally accepted rule is to omit parentheses around parameters for
 methods that are part of an internal DSL (e.g. Rake, Rails, RSpec); methods
-that are with 'keyword' status in Ruby (e.g. attr_reader, puts) and those which
-take no arguments. Use parentheses for all other method invocations.
+that are with 'keyword' status in Ruby (e.g. `attr_reader`, `puts`) and those
+which take no arguments. Use parentheses for all other method invocations.
 
-## 2. Conventions
+### 2. Conventions
 
 There are certain conventions to the Ruby language, but this point concerns
 itself around method naming. For example any method ending with a bang (`!`)
@@ -110,7 +114,7 @@ time. This now requires developers to remember a series of methods that do not
 follow conventions, which defeats the point of having the convention in the
 first place.
 
-## 1. Defining private class methods
+### 1. Defining private class methods
 
 This touches on the first point in this post where private methods are not
 actually private. However this point has driven me crazy in the past so was
@@ -124,17 +128,19 @@ methods.
 The problem here is when defining private class methods. You would expect to
 write something along the lines of this:
 
-    class SomeClassWithPrivateMethods
-      def self.method_one
-        puts 'method one is public'
-      end
+{% highlight ruby %}
+class SomeClassWithPrivateMethods
+  def self.method_one
+    puts 'method one is public'
+  end
 
-      private
+  private
 
-      def self.method_two
-        puts 'method two is public
-      end
-    end
+  def self.method_two
+    puts 'method two is public'
+  end
+end
+{% endhighlight %}
 
 This however does not make `method_two` private. The `private` keyword only
 affects methods on the class instance, so when we define a class method under
@@ -144,19 +150,21 @@ Using the singleton approach (`class << self`) we are defining instance methods
 on the "Eigenclass", which are just class methods of the containing class.
 Confusing, right?
 
-    class SomeClassWithPrivateMethods
-      class << self
-        def method_one
-          puts 'method one is public'
-        end
-
-        private
-
-        def method_two
-          puts 'method two is private
-        end
-      end
+{% highlight ruby %}
+class SomeClassWithPrivateMethods
+  class << self
+    def method_one
+      puts 'method one is public'
     end
+
+    private
+
+    def method_two
+      puts 'method two is private'
+    end
+  end
+end
+{% endhighlight %}
 
 This now works as expected, but adds that extra level of complexity to the Ruby
 language that does not really offer any benefits as a developer. I would much

@@ -19,7 +19,7 @@ messages to another internet enabled device. This other device could be used to
 extend the functionality of the switch; making API calls or performing some
 home automation.
 
-## Code
+### Code
 
 I have hosted the code as a 3 part
 [gist](https://gist.github.com/tomasbasham/660c84c97bda9d8acb116062c2f56ae2).
@@ -92,11 +92,11 @@ comment out anything relating to it otherwise the code will not compile.
 When you have verified and uploaded the code to your Photon it should work just
 as mine in this video:
 
-<div class="embed-container">
+<p class="embed-container">
   <iframe width="640" height="390" src="https://www.youtube.com/embed/z3rXOa8zIs0" frameborder="0" allowfullscreen></iframe>
-</div>
+</p>
 
-## Future Work
+### Future Work
 
 From my time spent working with the Particle Photon I have noticed a lack of
 simplicity when working with the hardware timers available on the board. These
@@ -119,7 +119,7 @@ requires its own IDE and some of the lower level features of the board
 (hardware timers) require more advanced C programming, which I will need to
 work through before I commit to working with this board.
 
-#### Timely Library
+### Timely Library
 
 The [Timely](https://github.com/tomasbasham/Timely) library should go some way
 to make this project possible using the RedBearLab WiFi Mini. Timely is an
@@ -127,7 +127,7 @@ Arduino compatible library capable of controlling the `TIMER` registers of both
 AVR and Texas Instrument microprocessors. This is currently still a work in
 progress and I'll update this article when it is stable.
 
-## Conclusion
+### Conclusion
 
 You should now have a fully functioning system that can turn on your TV,
 possibly launching the Netflix app if you have a Netflix recommended TV; put on

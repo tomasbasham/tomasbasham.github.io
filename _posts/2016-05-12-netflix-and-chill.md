@@ -24,7 +24,7 @@ own Netflix switch and the services I used to acquire 3D printed parts. Of
 course if you have access to your own 3D printer then you wont need this
 service.
 
-## Electronics
+### Electronics
 
 The crux of this project is the electronics. Without this you would be left
 with a dumb box, so it seems fitting to start here. I will be using through
@@ -92,7 +92,7 @@ LED backlight and IR LED without the use of the USB.
 
 ![Netflix Switch Electronics](https://cdn.tomasbasham.co.uk/netflix-switch-electronics.jpg)
 
-## Conclusion
+### Conclusion
 
 At this point you should have a breadboarded prototype of the Netflix Switch.
 In the next article we will write code for the Particle Photon to turn on the

@@ -13,7 +13,7 @@ out of the language and offload some responsibility to the specific nuances the
 language offers. In this article I talk about Swift enums and how I have used
 them.
 
-## What is an Enum?
+### What is an Enum?
 
 An enum encapsulates a group of related values within a particular domain.
 Unlike enums in C which map values to a set of integers, Swift does not enforce
@@ -28,7 +28,7 @@ initialisers and the ability to conform to protocols. These features are
 particularly useful when needing to implement enums where associated values do
 no conform to `RawRepresentable`.
 
-## Using Enum To Implement a Type
+### Using Enum To Implement a Type
 
 Part of an app I am writing required a way to encapsulate the colour scheme I
 intend to use. Since there would be a discrete number of colours  an enum
@@ -37,32 +37,34 @@ random colour from the enum.
 
 Using an enum the solution was simple as shown in this snippet:
 
-    enum ColorPalette: UInt32 {
-      case blue
-      case green
-      case orange
-      case pink
-      case purple
-      case red
-      case turquoise
+{% highlight swift %}
+  enum ColorPalette: UInt32 {
+    case blue
+    case green
+    case orange
+    case pink
+    case purple
+    case red
+    case turquoise
 
-      var color: UIColor {
-        switch self {
-        case .blue: return UIColor(red: 0.39, green: 0.62, blue: 0.71, alpha: 1)
-        case .green: return UIColor(red: 0.77, green: 0.87, blue: 0.59, alpha: 1)
-        case .orange: return UIColor(red: 0.96, green: 0.76, blue: 0.33, alpha: 1)
-        case .pink: return UIColor(red: 0.98, green: 0.82, blue: 0.85, alpha: 1)
-        case .purple: return UIColor(red: 0.56, green: 0.47, blue: 0.76, alpha: 1)
-        case .red: return UIColor(red: 0.69, green: 0.36, blue: 0.46, alpha: 1)
-        case .turquoise: return UIColor(red: 0.35, green: 0.78, blue: 0.72, alpha: 1)
-        }
-      }
-
-      static func random() -> ColorPalette {
-        let randomValue = arc4random_uniform(7)
-        return ColorPalate(rawValue: randomValue)!
+    var color: UIColor {
+      switch self {
+      case .blue: return UIColor(red: 0.39, green: 0.62, blue: 0.71, alpha: 1)
+      case .green: return UIColor(red: 0.77, green: 0.87, blue: 0.59, alpha: 1)
+      case .orange: return UIColor(red: 0.96, green: 0.76, blue: 0.33, alpha: 1)
+      case .pink: return UIColor(red: 0.98, green: 0.82, blue: 0.85, alpha: 1)
+      case .purple: return UIColor(red: 0.56, green: 0.47, blue: 0.76, alpha: 1)
+      case .red: return UIColor(red: 0.69, green: 0.36, blue: 0.46, alpha: 1)
+      case .turquoise: return UIColor(red: 0.35, green: 0.78, blue: 0.72, alpha: 1)
       }
     }
+
+    static func random() -> ColorPalette {
+      let randomValue = arc4random_uniform(7)
+      return ColorPalate(rawValue: randomValue)!
+    }
+  }
+{% endhighlight %}
 
 Take note of the implementation of `random()`. It instantiates and returns a
 `ColourPalette` using a raw value to identify one of it's cases. Each case has

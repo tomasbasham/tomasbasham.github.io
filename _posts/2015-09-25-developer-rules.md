@@ -20,7 +20,7 @@ from occurring in future we have devised the "Golden Rules" to ensure our
 application controllers and models are not overcrowded with code that could
 really be elsewhere.
 
-## The Rules
+### The Rules
 
 Here are the rules:
 
@@ -31,7 +31,7 @@ Here are the rules:
 
 Under no circumstance can these rules be broken, or all hell will break loose.
 
-## The Tools
+### The Tools
 
 Fortunately using Ruby we have been blessed with
 [RuboCop](https://github.com/bbatsov/rubocop), "A Ruby static code analyzer,
@@ -40,29 +40,31 @@ allows us to define our "Golden Rules" in a configuration file so it can be
 committed to version control and shared amongst the team. The configuration we
 use is as follows:
 
-    ClassLength:
-      Max: 100
+{% highlight yaml %}
+  ClassLength:
+    Max: 100
 
-    Documentation:
-      Enabled: false
+  Documentation:
+    Enabled: false
 
-    LineLength:
-      Max: 120
+  LineLength:
+    Max: 120
 
-    MethodLength:
-      Max: 5
+  MethodLength:
+    Max: 5
 
-    ParameterLists:
-      Max: 4
+  ParameterLists:
+    Max: 4
 
-    SingleSpaceBeforeFirstArg:
-      Enabled: false
+  SingleSpaceBeforeFirstArg:
+    Enabled: false
 
-    AllCops:
-      Include:
-        - '**/Gemfile'
-        - '**/Rakefile'
-        - '**/config.ru'
-      Exclude:
-        - 'db/schema.rb'
-        - 'db/migrate/*.rb'
+  AllCops:
+    Include:
+      - '**/Gemfile'
+      - '**/Rakefile'
+      - '**/config.ru'
+    Exclude:
+      - 'db/schema.rb'
+      - 'db/migrate/*.rb'
+{% endhighlight %}

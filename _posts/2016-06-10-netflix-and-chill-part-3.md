@@ -30,7 +30,7 @@ had him edit the models to accomodate my own design changes and export them in
 a much more compatible format. The models can be found
 [here](https://github.com/tomasbasham/netflix-switch-models/tree/master).
 
-## Chassis and Backplate
+### Chassis and Backplate
 
 The chasis will house the electronics from [part
 1](/product%20design/2016/05/12/netflix-and-chill.html) preventing bits from
@@ -50,26 +50,12 @@ however you are limited to the filament colour options and the printing house.
 Instead I'd clone the repo linked to above and manually submit the print job to
 3D Hubs.
 
-<script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-chassis.stl"></script>
+<p class="embed-container">
+  <script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-chassis.stl"></script>
+  <script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-backplate.stl"></script>
+</p>
 
-<script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-backplate.stl"></script>
-
-### 3DHubs
-
-3D Hubs mission has been to connect all 3D printers from around the globe into
-one online platform and make them accessible to anybody in need of 3D printing
-services without the up front cost of purchasing their own machine. For very
-small scale manufacturing of parts this service is ideally situated between
-affordable and practical. However if you are in need of a short turnaround time
-or a large number of parts printing you are better off buying you own printer.
-
-The service also posts a 3D printer [buyers
-guide](https://www.3dhubs.com/best-3d-printer-guide) for those interested in
-purchasing their own machine. I believe this guide is compiled by the 3D Hubs
-community of makers so you can be assured it is a reliable reflection of the
-best machines available.
-
-## Enclosure
+### Enclosure
 
 The enclosure envelops all the circuitry and the chassis, having the backplate
 securely fasten to its rear end. It is this part that gives the switch it's
@@ -86,11 +72,13 @@ order size is too small for any of the fabricators to deem worth their time.
 
 This design almost mirrors that which was originally put together by the
 Netflix team. I have merged the logo and the chassis into one solid piece, and
-I have lengthened the recess under the logo to accomodate the LED Backlight.
+I have lengthened the recess under the logo to accommodate the LED Backlight.
 
-<script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-enclosure.stl"></script>
+<p class="embed-container">
+  <script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-enclosure.stl"></script>
+</p>
 
-## Assembly
+### Assembly
 
 Due to the physical dimensions of the enclosure, assembly is no easy feat.
 First and foremost there are going to be a lot of wires living inside this box.
@@ -123,7 +111,7 @@ As for everything else it is a matter of following the prototype we made in a
 previous article and hooking it up to both the power supplied through the LiPo
 battery and the Spark Photon development board.
 
-## Conclusion
+### Conclusion
 
 Finally having come to the end of this tutorial series you should have created
 your own Netflix switch capable of controlling your TV and potentially sending

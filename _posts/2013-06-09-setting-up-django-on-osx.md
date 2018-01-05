@@ -17,7 +17,7 @@ its own simplistic server that is run through Python. This means that
 developers don't have to mess around with Apache until deployment, and can
 simply deal with a lightweight server whilst developing their application.
 
-## Environment
+### Environment
 
 I have installed Django on Mac OS X and have done so in a virtual environment.
 The basic problem being addressed with the virtual environment is one of
@@ -38,13 +38,13 @@ To accomplish this environment I have installed the following software:
 * pip
 * Virtualenv
 
-## Installing Git
+### Installing Git
 
 Git is a distributed repository manager used for software configuration
 management. This is very easy to install, just visit the
 [git-scm](http://git-scm.com) homepage and follow the download link.
 
-## Installing GCC
+### Installing GCC
 
 I already have Xcode installed on my mac so I did not have to install GCC.
 Xcode is recommended for installing Python but it is not the only way of
@@ -59,7 +59,7 @@ follows:
 However I recommend downloading an installing Xcode, which can be easily
 downloaded from the Mac App Store.
 
-## Installing Python
+### Installing Python
 
 Python comes preinstalled on OS X and so this was not a necessary step for me.
 However, it is often the case that Python is outdated on the mac and as such it
@@ -68,31 +68,37 @@ is best to download the latest version of Python from
 benefits from all of the bug fixes that have occurred since the version
 preinstalled on OS X.
 
-## Installing Pip
+### Installing Pip
 
 Pip is a Python package manager and allows for Python packages to be easily
 installed. Using Python's easy install I downloaded pip through the terminal
 with the following command:
 
-    $ easy_install pip
+{% highlight bash %}
+  $ easy_install pip
+{% endhighlight %}
 
-## Installing Virtualenv
+### Installing Virtualenv
 
 Next, to download virtualenv I issued the following command in the terminal:
 
-    $ sudo pip install virtualenv
+{% highlight bash %}
+  $ sudo pip install virtualenv
+{% endhighlight %}
 
 I have found this needs to be run as the root user (`sudo`) otherwise it fails
 to build and move the files into the appropriate place, because pip tries to
 access system owned directories.
 
-## Creating a new Virtualenv
+### Creating a new Virtualenv
 
 To create the isolated environment to install and run Django, I created a new
 folder for my project and browsed into it:
 
-    $ mkdir new_directory_name
-    $ cd new_directory_name
+{% highlight bash %}
+  $ mkdir new_directory_name
+  $ cd new_directory_name
+{% endhighlight %}
 
 I found later on that creating a directory which contains a space or having the
 directory reside within a path containing a space causes problems. The later
@@ -101,8 +107,10 @@ in the directory structure and will subsequently break. I then ran the
 following commands to start a new virtual environment (again, no spaces) and
 activate the environment:
 
-    $ virtualenv environment_name --no-site-packages
-    $ source environment_name/bin/activate
+{% highlight bash %}
+  $ virtualenv environment_name --no-site-packages
+  $ source environment_name/bin/activate
+{% endhighlight %}
 
 The first command creates a virtual Python environment to work within, whilst
 the second command runs a bash script called activate which prepends the
@@ -115,20 +123,24 @@ which environment is currently active.
 It is worth noting that to deactivate the environment type `deactivate` into
 the terminal.
 
-## Installing Django
+### Installing Django
 
 To finally install Django, I simply issued the following command in the
 terminal:
 
-    $ pip install django
+{% highlight bash %}
+  $ pip install django
+{% endhighlight %}
 
 Unlike before issuing this command as the root user will produce adverse
 effects. Using a standard user will install all the Django files into the new
 environment that was just created.
 
-## Starting a Django Project
+### Starting a Django Project
 
 Lastly I just started using Django as normal, issuing this command to create a
 new project:
 
-    $ django-admin.py startproject project_name
+{% highlight bash %}
+  $ django-admin.py startproject project_name
+{% endhighlight %}

@@ -20,7 +20,7 @@ Pi to take advantage of P2P technologies within your own applications. Note
 that this is a largely untested process and does not go through using the
 library once built.
 
-## What is WebRTC
+### What is WebRTC
 
 WebRTC is an API definition containing video and audio codecs and Realtime
 Transport (RTP) stack. Its primary goal is to provide a layer of abstraction
@@ -64,7 +64,7 @@ worth noting that `libjingle` implements its own protocol to handle session
 negotiation; thus, although the `libjingle` protocol and Jingle are very
 similar, they are not the same, and are not interoperable.
 
-## Cross-compiling libjingle for the Raspberry Pi
+### Cross-compiling libjingle for the Raspberry Pi
 
 First we requires a suitable Linux cross-compilation host. I will tend to use
 another linux host, preferably Debian based, since Raspbian is Debian based
@@ -78,33 +78,33 @@ incarnation. Any pull requests are welcome to help complete this project.
 
 ### Installing the toolchain
 
-First we need to install depot_tools and add it to the shell `PATH`.
-depot_tools is a collection of code checkout management packages maintained by
-Google that includes `gclient`, `gcl`, `git-cl`, `repo` and others. We will use
-these tools to checkout and build the webrtc codebase.
+First we need to install `depot_tools` and add it to the shell `PATH`.
+`depot_tools` is a collection of code checkout management packages maintained
+by Google that includes `gclient`, `gcl`, `git-cl`, `repo` and others. We will
+use these tools to checkout and build the webrtc codebase.
 
-```
-sudo apt-get install git
-sudo git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git /opt/depot_tools
-echo "export PATH=/opt/depot_tools:\$PATH" | sudo tee /etc/profile.d/depot_tools.sh
-```
+{% highlight bash %}
+  $ sudo apt-get install git
+  $ sudo git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git /opt/depot_tools
+  $ echo "export PATH=/opt/depot_tools:\$PATH" | sudo tee /etc/profile.d/depot_tools.sh
+{% endhighlight %}
 
 The second part of the toolchain is a series of common linux packages already
-compiled for the raspberry pi ARM architecture. These will be used to
-cross-compile the webrtc codebase for the raspberry pi.
+compiled for the Raspberry Pi ARM architecture. These will be used to
+cross-compile the webrtc codebase.
 
-```
-sudo git clone https://github.com/raspberrypi/tools.git /opt/rpi_tools
-echo "export PATH=/opt/rpi_tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin:\$PATH" | sudo tee /etc/profile.d/rpi_tools.sh
-```
+{% highlight bash %}
+  $ sudo git clone https://github.com/raspberrypi/tools.git /opt/rpi_tools
+  $ echo "export PATH=/opt/rpi_tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin:\$PATH" | sudo tee /etc/profile.d/rpi_tools.sh
+{% endhighlight %}
 
 Last we need to define a series of build flags.
 
-```
-echo "export GYP_CROSSCOMPILE=1" | sudo tee /etc/profile.d/meta_build.sh
-echo "export GYP_DEFINES=\"target_arch=arm arm_float_abi=hard clang=0 include_tests=0 sysroot=$(pwd)/rootfs werror=\"" | sudo tee -a /etc/profile.d/meta_build.sh
-echo "export GYP_GENERATOR_OUTPUT=arm" | sudo tee -a /etc/profile.d/meta_build.sh
-```
+{% highlight bash %}
+  $ echo "export GYP_CROSSCOMPILE=1" | sudo tee /etc/profile.d/meta_build.sh
+  $ echo "export GYP_DEFINES=\"target_arch=arm arm_float_abi=hard clang=0 include_tests=0 sysroot=$(pwd)/rootfs werror=\"" | sudo tee -a /etc/profile.d/meta_build.sh
+  $ echo "export GYP_GENERATOR_OUTPUT=arm" | sudo tee -a /etc/profile.d/meta_build.sh
+{% endhighlight %}
 
 Remember that despite adding these statements into the `profile.d` folder they
 will not take effect until you start a new shell session. To do this either
@@ -130,20 +130,20 @@ done using the target architecture (or by using qemu-user-static to emulate the
 target architecture). Here we opt for the latter by copying `qemu-arm-static`
 into the bootstrapped filesystem just before running the second stage.
 
-```
-sudo apt-get install qemu-user-static debootstrap
-sudo debootstrap --arch armhf --foreign --include=g++,libasound2-dev,libpulse-dev,libudev-dev,libexpat1-dev,libnss3-dev,libgtk2.0-dev wheezy rootfs
-sudo cp /usr/bin/qemu-arm-static rootfs/usr/bin/
-sudo chroot rootfs /debootstrap/debootstrap --second-stage
+{% highlight bash %}
+  $ sudo apt-get install qemu-user-static debootstrap
+  $ sudo debootstrap --arch armhf --foreign --include=g++,libasound2-dev,libpulse-dev,libudev-dev,libexpat1-dev,libnss3-dev,libgtk2.0-dev wheezy rootfs
+  $ sudo cp /usr/bin/qemu-arm-static rootfs/usr/bin/
+  $ sudo chroot rootfs /debootstrap/debootstrap --second-stage
 
-find rootfs/usr/lib/arm-linux-gnueabihf -lname '/*' -printf '%p %l\n' | while read link target; do
-  sudo ln -snfv "../../..${target}" "${link}"
-done
+  $ find rootfs/usr/lib/arm-linux-gnueabihf -lname '/*' -printf '%p %l\n' | while read link target; do
+    sudo ln -snfv "../../..${target}" "${link}"
+  done
 
-find rootfs/usr/lib/arm-linux-gnueabihf/pkgconfig -printf "%f\n" | while read target; do
-  sudo ln -snfv "../../lib/arm-linux-gnueabihf/pkgconfig/${target}" rootfs/usr/share/pkgconfig/${target}
-done
-```
+  $ find rootfs/usr/lib/arm-linux-gnueabihf/pkgconfig -printf "%f\n" | while read target; do
+    sudo ln -snfv "../../lib/arm-linux-gnueabihf/pkgconfig/${target}" rootfs/usr/share/pkgconfig/${target}
+  done
+{% endhighlight %}
 
 When this has finished you will have successfully built an environment capable
 of cross-compiling webrtc for the raspberry pi.
@@ -157,17 +157,17 @@ we're trying to achieve. From here building the libjingle library is simply a
 series of 3 commands that will checkout the code; synchronise it with the
 external repository (if necessary); and then finally build from source.
 
-```
-fetch --no-history --nohooks webrtc
-gclient sync --verbose
-ninja -C $(PWD)/src/arm/out/Release
-```
+{% highlight bash %}
+  $ fetch --no-history --nohooks webrtc
+  $ gclient sync --verbose
+  $ ninja -C $(PWD)/src/arm/out/Release
+{% endhighlight %}
 
 This can take a rather long time and the `gclient` command is prone to error
 from time to time. If this does happen then running it again should fix the
-problem. You may need to run it several more time until it finally completes.
+problem. You may need to run it several more time until it completes.
 
-## External Resources
+### External Resources
 
 * WebRTC homepage. See [webrtc.org](http://www.webrtc.org/).
 * WebRTC development documentation (see

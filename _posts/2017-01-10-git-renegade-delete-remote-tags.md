@@ -13,7 +13,9 @@ it.
 
 If you have a remote tag named `branch-name` it can be deleted with:
 
-    git tag -d branch-name
-    git push origin :refs/tags/branch-name
+{% highlight bash %}
+$ git tag -d branch-name
+$ git push origin :refs/tags/branch-name
+{% endhighlight %}
 
 This will delete the tag both locally and remotely.

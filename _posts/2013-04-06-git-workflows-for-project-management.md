@@ -20,44 +20,56 @@ never merge. I have two git aliases:
 
 To start a new change, I work in feature branches.
 
-    $ git checkout develop
-    $ git checkout -b newfeature
-    $ vim somefile.js
-    $ wip
-    $ git force
+{% highlight bash %}
+  $ git checkout develop
+  $ git checkout -b newfeature
+  $ vim somefile.js
+  $ wip
+  $ git force
+{% endhighlight %}
 
 To update a change, I amend it into HEAD.
 
-    $ vim somefile.js
-    $ squish
-    $ git force
+{% highlight bash %}
+  $ vim somefile.js
+  $ squish
+  $ git force
+{% endhighlight %}
 
 To start a new feature which depends on another feature, I branch off the
 branch. I do this rarely.
 
-    $ git checkout newfeature
-    $ git checkout -b newerfeature
-    $ vim newfile.js
-    $ wip
-    $ git force
+{% highlight bash %}
+  $ git checkout newfeature
+  $ git checkout -b newerfeature
+  $ vim newfile.js
+  $ wip
+  $ git force
+{% endhighlight %}
 
 To pull in other users' changes to a first-degree branch, I rebase. I do this
 often to keep my branch up to date.
 
-    $ git rebase develop
+{% highlight bash %}
+  $ git rebase develop
+{% endhighlight %}
 
 To rebase an nth-degree branch, I cherry-pick. This is usually painless, while
 using rebase often is not.
 
-    $ git checkout newerfeature
-    $ git show # copy commit hash
-    $ git reset --hard newfeature
-    $ git cherry-pick <hash>
+{% highlight bash %}
+  $ git checkout newerfeature
+  $ git show # copy commit hash
+  $ git reset --hard newfeature
+  $ git cherry-pick <hash>
+{% endhighlight %}
 
 Alternatively, I'll use `rebase -i`:
 
-    $ git checkout newerfeature
-    $ git rebase -i newfeature
+{% highlight bash %}
+  $ git checkout newerfeature
+  $ git rebase -i newfeature
+{% endhighlight %}
 
 In many cases, just deleting every commit from the interactive rebase except
 HEAD results in a clean rebase.

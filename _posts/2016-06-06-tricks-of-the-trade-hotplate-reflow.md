@@ -16,7 +16,7 @@ In this article, you will learn how to perform surface mount reflow using
 inexpensive tools easily purchased on Amazon. From now on I assume you have
 ready a PCB and have applied your solder paste and components.
 
-## The Hotplate Method
+### The Hotplate Method
 
 The method I describe in this article to perform surface mount reflow is also
 (in my opinion) the most simple and a personal favourite. It involves an
@@ -54,7 +54,7 @@ Please **do not** use the hotplate for food after using it to reflow PCBs. Both
 the lead and flux are toxic. If you use this method consider writing on the
 hotplate indicating it's usage.
 
-## Temperature Profile
+### Temperature Profile
 
 It is important to consider the reflow temperature profile that should be
 followed, especially using this method of reflow since it requires careful

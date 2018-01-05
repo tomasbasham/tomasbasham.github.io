@@ -21,7 +21,7 @@ In this article you will learn about the online services offering very
 affordable PCB printing and stencilling thus enabling the mere mortal the
 ability to put together a working circuit.
 
-## Prerequisites
+### Prerequisites
 
 The only prerequisite required is a PCB design. I find the most common tool to
 achieve this to be [Eagle](http://www.cadsoftusa.com/), and although it is a
@@ -36,7 +36,7 @@ Personally I used a PCB designed by [Luke
 Weston](https://twitter.com/lukeweston), and apart from a few displacements of
 vias I made to conform to particular design rules, this is all his work.
 
-## Printing
+### Printing
 
 In order for a PCB to be printed it must be represented in a format that can be
 read by a computed-aided machine. For PCB design this is the
@@ -65,7 +65,7 @@ account of what you should expect to come through the post.
 The above image is the PCB I ordered. I am very happy with the quality of the
 print and will definitely use this service again.
 
-## Stencilling
+### Stencilling
 
 When applying solder paste by hand it will be far easier for you to use a
 stencil rather than using the needle that often comes with the paste syringes.
@@ -89,11 +89,11 @@ effective.
 Applying the paste is easy. I followed this youtube video that describes the
 process very clearly:
 
-<div class="embed-container">
+<p class="embed-container">
   <iframe width="640" height="390" src="https://www.youtube.com/embed/1RMtOAHbfvU" frameborder="0" allowfullscreen></iframe>
-</div>
+</p>
 
-## Placement
+### Placement
 
 Steady hands are required for this step. Using a cheap set of
 [tweezers](https://www.amazon.co.uk/gp/product/B00H8KLZG8/ref=oh_aui_detailpage_o03_s00?ie=UTF8&psc=1)
@@ -114,7 +114,7 @@ little bit it could lead to bridging when the paste is reflowed. Using the
 magnifying glass on the helping hands is a great help here (hence the name I
 guess).
 
-## Conclusion
+### Conclusion
 
 Here I have described an extremely manual process to build your own PCB. Of
 course this technique is not going to scale well, but if the goal is to create

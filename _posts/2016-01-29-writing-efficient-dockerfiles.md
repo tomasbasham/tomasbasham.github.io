@@ -14,7 +14,7 @@ After reading this article, you will have a basic idea of what Docker is, how
 it can help you, and how it makes application development and deployment more
 streamlined.
 
-## What is Docker?
+### What is Docker?
 
 Docker is a containerisation platform capable of packaging up an application or
 service alongside all of its dependencies within a complete filesystem. This
@@ -50,7 +50,7 @@ better software? If you're looking to improve your productivity and not have to
 worry about maintaining multiple environments or tooling, you'll appreciate the
 following 5 key benefits Docker offers:
 
-#### 1. Accelerate Developer Onboarding
+### 1. Accelerate Developer Onboarding
 
 Docker prevents the need for new developers having to waste hours setting up
 their environments and manually spinning up VM instance to get production code
@@ -61,7 +61,7 @@ With Docker all developers in your team can get your multi-service application
 running on their workstation in an automated, repeatable, and efficient way.
 You just run a few commands, and minutes later it all works.
 
-#### 2. Inspire Polyglotism
+### 2. Inspire Polyglotism
 
 Sometimes relying on the language you know best can put a project at a
 disadvantage, but to switch to something else requires developers set up the
@@ -69,13 +69,13 @@ new technology of choice. Since you can isolate an application in a Docker
 container, it becomes possible to broaden your horizons as a developer by
 experimenting with new languages and frameworks.
 
-#### 3. Infrastructure Agnostic
+### 3. Infrastructure Agnostic
 
 Docker allows you to encapsulate your application in such a way that you can
 easily move it between environments. It will work properly in all environments
 and on all machines capable of running Docker.
 
-#### 4. Collaboration as a First Principle
+### 4. Collaboration as a First Principle
 
 The Docker toolset allows developers and sysadmins to work together towards the
 common goal of deploying an application. You can track of version history and
@@ -86,7 +86,7 @@ application within [Docker Hub](https://hub.docker.com/), and members of
 another team can link to or test against your application without having to
 learn or worry about how it works.
 
-#### 5. Ship It! Quicker
+### 5. Ship It! Quicker
 
 Without having to spend time setting up a production server, you already have a
 working environment contained within your Docker image. Every time an image is
@@ -96,9 +96,7 @@ hassle. This quick turn around provides increased value to end users.
 Docker containers can spin up and down in a matter of seconds making it easy to
 scale up and down applications when resources are required or no longer needed.
 
-## Dockerfiles
-
-### What are they?
+### What is a Dockerfile?
 
 To build a Docker image the Docker daemon needs to know the steps required to
 setup the environment under which your application or service will be run. This
@@ -151,71 +149,79 @@ hard and fast rule and should be viewed as a guide.
 As an example I have included the Dockerfile I use to build a Ruby on Rails
 application:
 
-    FROM ruby:2.4.2-alpine
-    LABEL com.tomasbasham.maintainer "Tomas Basham <me@tomasbasham.co.uk>" \
+{% highlight dockerfile %}
+FROM ruby:2.4.2-alpine
+LABEL com.tomasbasham.maintainer "Tomas Basham <me@tomasbasham.co.uk>" \
 
-    RUN mkdir -p /usr/src/app
-    WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-    # Install necessary software packages
-    RUN apk add --update \
-      g++ \
-      git \
-      libc-dev \
-      libxml2-dev \
-      libxslt-dev \
-      make \
-      postgresql \
-      postgresql-dev \
-      tzdata \
-      && rm -rf /var/cache/apk/*
+# Install necessary software packages
+RUN apk add --update \
+  g++ \
+  git \
+  libc-dev \
+  libxml2-dev \
+  libxslt-dev \
+  make \
+  postgresql \
+  postgresql-dev \
+  tzdata \
+  && rm -rf /var/cache/apk/*
 
-    # Add Gemfile and Gemfile.lock separately so docker can cache
-    ADD Gemfile Gemfile
-    ADD Gemfile.lock Gemfile.lock
+# Add Gemfile and Gemfile.lock separately so docker can cache
+ADD Gemfile Gemfile
+ADD Gemfile.lock Gemfile.lock
 
-    # Install things globally, for great justice
-    RUN bundle config build.nokogiri --use-system-libraries
-    RUN bundle install
+# Install things globally, for great justice
+RUN bundle config build.nokogiri --use-system-libraries
+RUN bundle install
 
-    # Add remaining rails project to project directory
-    ADD . /usr/src/app
+# Add remaining rails project to project directory
+ADD . /usr/src/app
 
-    ENTRYPOINT ["bundle", "exec"]
+ENTRYPOINT ["bundle", "exec"]
 
-    CMD ["puma", "-C", "config/puma.rb"]
+CMD ["puma", "-C", "config/puma.rb"]
+{% endhighlight %}
 
-### Breaking Down the Dockerfile
+### Breaking that Down
 
-    FROM ruby:2.4.2-alpine
-    LABEL com.tomasbasham.maintainer "Tomas Basham <me@tomasbasham.co.uk>" \
+{% highlight docker %}
+FROM ruby:2.4.2-alpine
+LABEL com.tomasbasham.maintainer "Tomas Basham <me@tomasbasham.co.uk>" \
+{% endhighlight %}
 
 The first couple of instructions define the base image and the maintainer of
 the image. These will never change and therefore go first.
 
-    # Install necessary software packages
-    RUN apk add --update \
-      g++ \
-      git \
-      libc-dev \
-      libxml2-dev \
-      libxslt-dev \
-      make \
-      postgresql \
-      postgresql-dev \
-      tzdata \
-      && rm -rf /var/cache/apk/*
+{% highlight docker %}
+# Install necessary software packages
+RUN apk add --update \
+  g++ \
+  git \
+  libc-dev \
+  libxml2-dev \
+  libxslt-dev \
+  make \
+  postgresql \
+  postgresql-dev \
+  tzdata \
+  && rm -rf /var/cache/apk/*
+{% endhighlight %}
 
 Following this are some software dependencies gathered by `apk`. These very
 rarely change whilst I am developing a Ruby on Rails application.
 
-    # Add Gemfile and Gemfile.lock separately so docker can cache
-    ADD Gemfile Gemfile
-    ADD Gemfile.lock Gemfile.lock
+{% highlight docker %}
+# Add Gemfile and Gemfile.lock separately so docker can cache
+ADD Gemfile Gemfile
+ADD Gemfile.lock Gemfile.lock
 
-    # Install things globally, for great justice
-    RUN bundle config build.nokogiri --use-system-libraries
-    RUN bundle install
+# Install things globally, for great justice
+RUN bundle config build.nokogiri --use-system-libraries
+RUN bundle install
+{% endhighlight %}
 
 Next the Gemfile is added and `bundle install` is run. This can change from
 time to time during development and as such has been placed after those steps
@@ -223,8 +229,10 @@ which change less frequently. Now when the Gemfile is changed and the image is
 built each step before `bundle install` will be taken from the Docker cache and
 not have to be recomputed.
 
-    # Add remaining rails project to project directory
-    ADD . /usr/src/app
+{% highlight docker %}
+# Add remaining rails project to project directory
+ADD . /usr/src/app
+{% endhighlight %}
 
 Last the current working directory (or the project directory) is shared with
 the image. The project code changes very frequently during development and has

@@ -11,7 +11,7 @@ This article focusses on OS X developers that have installed a series of
 development tools such as Xcode and Docker and finding they are very quickly
 burning through storage space.
 
-## OS X Library folder
+### OS X Library folder
 
 On OS X the library folder is used by installed applications to store settings
 and other necessary data for the applications to run.
@@ -33,12 +33,16 @@ the docsets I had within my `Library` folder were not listed in Xcode and I had
 to delete them manually. Don't ask me why as I have no clue either. For those
 pesky docsets, these can be found within the following directory:
 
-`~/Library/Developer/Shared/Documentation/DocSets`
+{% highlight bash %}
+~/Library/Developer/Shared/Documentation/DocSets
+{% endhighlight %}
 
 As for the simulators (each about 1GB in size), they can be found within the
 following directory:
 
-`~/Library/Application Support/iPhone Simulator`
+{% highlight bash %}
+~/Library/Application Support/iPhone Simulator
+{% endhighlight %}
 
 If you have been using Xcode for many years, you may have noticed that more
 recent versions have ditched the snapshot system, presumably because Git is a
@@ -52,7 +56,9 @@ Deleting snapshots is simple. They appear to all be stored within a
 but it is wasting space nonetheless considering the snapshot feature has been
 completely removed. They can be found within the following directory:
 
-`~/Library/Application Support/Developer/Shared/SnapshotRepository.sparseimage`
+{% highlight bash %}
+/Library/Application Support/Developer/Shared/SnapshotRepository.sparseimage
+{% endhighlight %}
 
 ### Docker
 
@@ -70,9 +76,11 @@ printed to standard output to a minimum within each container. However as an
 immediate fix the log file can simply be deleted and Docker will just recreate
 it when needed. The log file can be found within the following directory:
 
-`~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/`
+{% highlight bash %}
+~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/
+{% endhighlight %}
 
-## Is There an Easier Way?
+### Is There an Easier Way?
 
 If trawling through your filesystem for old, unnecessary files is too much
 hassle, and lets face it, it is there is a much easier way to discover files

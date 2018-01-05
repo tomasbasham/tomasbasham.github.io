@@ -27,41 +27,45 @@ along with fluid proportion-based grids and flexible images:
 We have used Bootstrap as an extension of CSS3 to accomplish responsive web
 design.
 
-## Viewport
+### Viewport
 
 In HTML 5 there exists a meta tag that makes the browser report the size of the
 screen (or viewport). This allows for CSS to appropriately query it's
 stylesheet and use the styles associated with the size of the screen. To use
 this feature of HTML5 place the following in the head of your HTML:
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+{% highlight css %}
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+{% endhighlight %}
 
 Note the comma separating the **device-width** and **initial-scale** variables.
 It is often mistakenly replaced with a semi-colon on the internet. I assure you
 that the comma is the correct usage whilst the semi-colon will throw back HTML
 warnings.
 
-## Media Queries
+### Media Queries
 
 Media queries are what makes responsive web design possible. By providing
 multiple queries with your CSS enables your website to respond to several
 window sizing constraints. An example of responsive web design via media
 queries is as follows:
 
-    html, body {
-      padding: 20px 0 0 0;
-      height: 100%;
+{% highlight css %}
+  html, body {
+    padding: 20px 0 0 0;
+    height: 100%;
+  }
+
+  @media (max-width: 979px) {
+    body, html {
+      padding: 0;
     }
 
-    @media (max-width: 979px) {
-      body, html {
-        padding: 0;
-      }
-
-      .content {
-        padding: 0;
-      }
+    .content {
+      padding: 0;
     }
+  }
+{% endhighlight %}
 
 This code snippet provides a means for the body/html elements and the content
 class to remove their padding attribute when the width of the browser window is
