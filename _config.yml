@@ -6,7 +6,7 @@ exclude:
   - Gemfile.lock
   - vendor
 
-gems:
+plugins:
   - jekyll-feed
   - jekyll-github-metadata
   - jekyll-paginate
