@@ -15,4 +15,4 @@ services:
 
   test:
     <<: *defaults
-    command: ["htmlproofer", "./_site", "--check-favicon", "--check-html", "--disable-external"]
+    command: ["htmlproofer", "./_site", "--allow-hash-href", "--check-favicon", "--check-html", "--disable-external"]
