@@ -2,8 +2,6 @@
 layout: post
 title: Writing Efficient Dockerfiles
 description: How to write an efficient Dockerfile for development and production environments.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development docker
 ---

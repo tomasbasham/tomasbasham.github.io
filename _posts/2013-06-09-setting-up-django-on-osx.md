@@ -2,8 +2,6 @@
 layout: post
 title: Setting up Django on OS X
 description: Web development with Django within virtual Python installations
-author: Tomas Basham
-comments: true
 category: Development
 tags: development osx python
 ---

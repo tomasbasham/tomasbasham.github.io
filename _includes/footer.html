@@ -37,7 +37,7 @@
       <div class="footer-menu">
         <h3>Become a Friend</h3>
         <ul class="menu-list">
-          {% for account in site.social.accounts %}
+          {% for account in site.sharing.accounts %}
           <li class="menu-item">
             <a href="{{ account.url }}">{{ account.name }}</a>
           </li>
@@ -50,7 +50,7 @@
   <div class="footer-legal">
     <div class="inner">
       <section class="copyright">
-        <p>All content copyright <a href="mailto:{{ site.email }}">{{ site.github.owner_name }}</a> &copy; {{ site.time | date: '%Y' }} &bull; All rights reserved.</p>
+        <p>All content copyright <a href="mailto:{{ site.github.owner_email }}">{{ site.github.owner_name }}</a> &copy; {{ site.time | date: '%Y' }} &bull; All rights reserved.</p>
       </section>
       <section class="poweredby">
         <p>Made with <a href="http://jekyllrb.com">Jekyll</a></p>

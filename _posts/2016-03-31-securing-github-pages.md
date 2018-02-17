@@ -2,8 +2,6 @@
 layout: post
 title: Securing GitHub Pages
 description: Adding SSL to your GitHub pages.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development security web
 ---

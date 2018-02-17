@@ -2,8 +2,6 @@
 layout: post
 title: Netflix and Chill
 description: Building your own Netflix and chill button tutorial series starting with the electronics.
-author: Tomas Basham
-comments: true
 image: https://cdn.tomasbasham.co.uk/netflix.jpg
 category: Product Design
 tags: electronics netflix technology

@@ -2,8 +2,6 @@
 layout: post
 title: Kubernetes Networking
 description: Looking under the hood of networking in Kubernetes.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development docker iptables kubernetes services
 ---

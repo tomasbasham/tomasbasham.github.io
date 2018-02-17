@@ -2,8 +2,6 @@
 layout: post
 title: Diagnosing Pods with Kubernetes
 description: Using the power of Kubernetes labels and selectors to diagnose problematic pods.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development kubernetes
 ---

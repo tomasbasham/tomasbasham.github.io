@@ -2,8 +2,6 @@
 layout: post
 title: The New Full Stack Developer
 description: The new definition of a full-stack developer.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development full-stack
 ---

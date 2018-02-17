@@ -2,8 +2,6 @@
 layout: post
 title: Implementing WebRTC with Socket.io
 description: How to implement WebRTC and a signalling server for P2P videoconferencing.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development javascript p2p webrtc
 ---

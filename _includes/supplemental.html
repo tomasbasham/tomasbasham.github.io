@@ -4,9 +4,10 @@
       <span>Written by</span>
     </h5>
     <section class="author">
+      {% assign author = site.data.authors[page.author] %}
       <div class="author-image" style="background-image: url({{ site.github.owner_gravatar_url }})">Blog Logo</div>
-      <h4>{{ site.github.owner_name }}</h4>
-      <p class="bio">{{ site.bio }}</p>
+      <h4>{{ author.name }}</h4>
+      <p class="bio">{{ author.bio }}</p>
     </section>
   </div>
   <div class="isRight">

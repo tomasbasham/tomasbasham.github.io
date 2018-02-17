@@ -2,8 +2,6 @@
 layout: post
 title: Netflix and Chill - Part 3
 description: Building your own Netflix and chill button tutorial series concluding with assembly.
-author: Tomas Basham
-comments: true
 category: Product Design
 tags: 3d-printing netflix technology
 ---

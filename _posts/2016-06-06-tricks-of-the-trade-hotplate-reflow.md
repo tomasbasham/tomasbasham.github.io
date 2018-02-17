@@ -2,8 +2,6 @@
 layout: post
 title: Tricks of the Trade - Hotplate Reflow
 description: Simple at-home solution to surface mount reflow.
-author: Tomas Basham
-comments: true
 category: Electronics
 tags: electronics pcb technology
 ---

@@ -2,8 +2,6 @@
 layout: post
 title: Developer Rules
 description: 3 golden rules for object-oriented development.
-author: Tomas Basham
-comments: true
 image: https://cdn.tomasbasham.co.uk/aladdin-3-wishes.jpg
 category: Development
 tags: development ruby

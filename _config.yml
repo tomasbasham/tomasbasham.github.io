@@ -16,25 +16,28 @@ plugins:
   - jemoji
 
 # Site settings
-title: Tomas Basham
-description: A Personal Jekyll Blog and Portfolio
-url: "https://tomasbasham.co.uk" # the base hostname & protocol for your site
-
-# Personal settings
-bio: Technical Director at a fast growing statup company.
-email: me@tomasbasham.co.uk
-repository: tomasbasham/tomasbasham.github.io
+title: Tomas Basham's Blog
+description: Tomas Basham's Personal Technology Jekyll Blog and Development Portfolio
+author: tomasbasham
+lang: en_GB
+url: https://tomasbasham.co.uk
+cover: https://cdn.tomasbasham.co.uk/cover.jpg
 
 # Build settings
 markdown: kramdown
 highlighter: rouge
 
-# Blog cover
-cover: https://cdn.tomasbasham.co.uk/cover.jpg
-
 # Pagination settings
 paginate: 8
 paginate_path: "/page:num/"
+
+# The site's twitter handle
+twitter:
+  username: tomasbahsam
+
+# The site's github data
+github:
+  owner_email: me@tomasbasham.co.uk
 
 # Disqus settings
 comments:
@@ -44,8 +47,26 @@ comments:
 analytics:
   google_tracking_id: UA-51944071-1
 
-# Social icons and sharing options
+# Set blog post defaults
+defaults:
+  - scope:
+      path: "" # an empty string here means all files in the project
+      type: "posts"
+    values:
+      layout: "post"
+      author: tomasbasham
+      type: "BlogPosting"
+      comments: true
+
 social:
+  name: Tomas Basham
+  links:
+    - https://twitter.com/tomasbasham
+    - https://github.com/tomasbasham
+    - https://www.linkedin.com/in/tomas-basham-06244646
+
+# Social icons and sharing options
+sharing:
   share:
     - icon: facebook
       share_url: https://www.facebook.com/sharer.php

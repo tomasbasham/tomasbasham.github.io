@@ -2,8 +2,6 @@
 layout: post
 title: The State of WebRTC Interoperability
 description: The status of WebRTC interoperability across browsers.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development javascript webrtc
 ---

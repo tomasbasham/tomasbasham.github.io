@@ -2,8 +2,6 @@
 layout: post
 title: Building libjingle for the Raspberry Pi
 description: A step by step guide to cross-compile the libjingle library for the Raspberry Pi.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development p2p webrtc
 ---

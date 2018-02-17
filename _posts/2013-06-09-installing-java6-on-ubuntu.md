@@ -2,8 +2,6 @@
 layout: post
 title: Installing Java 6 on Ubuntu
 description: How to install Java 6 on Ubuntu for legacy applications.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development java ubuntu
 ---

@@ -2,8 +2,6 @@
 layout: post
 title: Starting out in CryEngine V
 description: My experiences starting out in game development with CryEngine V.
-author: Tomas Basham
-comments: true
 category: Gaming
 tags: cryengine development engine game technology
 ---

@@ -2,8 +2,6 @@
 layout: post
 title: 5 Things I Hate About Ruby
 description: An objective Ruby advocates pet hates about the language.
-author: Tomas Basham
-comments: true
 image: https://cdn.tomasbasham.co.uk/ruby.svg
 category: Development
 tags: development ruby

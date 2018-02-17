@@ -1,4 +1,4 @@
-<article class="post" itemscope itemtype="http://schema.org/BlogPosting" role="article">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   <div class="article-item">
     <header class="post-header">
       <h3 class="post-title" itemprop="name"><a href="{{ post.url }}" itemprop="url">{{ post.title }}</a></h3>
@@ -7,7 +7,7 @@
       <p>{{ post.content | strip_html | truncatewords: 50 }}</p>
     </section>
     <footer class="post-meta">
-      <time datetime="{{ post.date | date_to_long_string }}">{{ post.date | date_to_long_string }}</time>
+      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_long_string }}</time>
       <section class="category">
         {% if post.category %}
         <div class="tag post-tag post-tag-{{ post.category | downcase }}">

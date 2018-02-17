@@ -2,8 +2,6 @@
 layout: post
 title: Tricks of the Trade - PCB Fabrication
 description: Low cost PCB and stencil printing.
-author: Tomas Basham
-comments: true
 category: Electronics
 tags: electronics pcb technology
 ---

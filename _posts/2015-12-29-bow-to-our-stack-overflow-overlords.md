@@ -2,8 +2,6 @@
 layout: post
 title: Bow to our Stack Overflow Overlords
 description: The pretentious nature of the largest programming Q&A monster.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development
 ---

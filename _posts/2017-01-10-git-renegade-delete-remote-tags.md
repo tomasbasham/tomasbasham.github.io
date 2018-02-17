@@ -2,8 +2,6 @@
 layout: post
 title: Git Renegade - Delete Remote Tags
 description: How to delete remote tags from a git repository.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development git github
 ---

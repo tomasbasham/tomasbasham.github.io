@@ -2,8 +2,6 @@
 layout: post
 title: Creating P2P Connections with WebSockets
 description: Creating persistent connections between web peers using sockets.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development javascript p2p websockets
 ---

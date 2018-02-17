@@ -2,8 +2,6 @@
 layout: post
 title: Protocol Buffers and Optional Fields
 description: Using well-known types to differentiate missing vs default values with protobuf.
-author: Tomas Basham
-comments: true
 category: Development
 tags: development grpc protobuf
 ---

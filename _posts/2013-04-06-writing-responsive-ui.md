@@ -2,8 +2,6 @@
 layout: post
 title: Writing Responsive UI
 description: The basics of responsive web UI and how to implement it.
-author: Tomas Basham
-comments: true
 category: Development
 tags: css design development html
 ---

@@ -2,8 +2,6 @@
 layout: post
 title: Netflix and Chill - Part 2
 description: Building your own Netflix and chill button tutorial series continuing with the code.
-author: Tomas Basham
-comments: true
 category: Product Design
 tags: development netflix technology
 ---
