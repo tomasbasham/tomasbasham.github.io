@@ -149,7 +149,7 @@ application:
 
 {% highlight dockerfile %}
 FROM ruby:2.4.2-alpine
-LABEL com.tomasbasham.maintainer "Tomas Basham <me@tomasbasham.co.uk>" \
+LABEL com.tomasbasham.maintainer "Tomas Basham <tomasbasham@gmail.com>" \
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -187,7 +187,7 @@ CMD ["puma", "-C", "config/puma.rb"]
 
 {% highlight docker %}
 FROM ruby:2.4.2-alpine
-LABEL com.tomasbasham.maintainer "Tomas Basham <me@tomasbasham.co.uk>" \
+LABEL com.tomasbasham.maintainer "Tomas Basham <tomasbasham@gmail.com>" \
 {% endhighlight %}
 
 The first couple of instructions define the base image and the maintainer of

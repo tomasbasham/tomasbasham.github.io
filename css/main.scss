@@ -15,24 +15,12 @@
 // 9.  Nest and name media queries
 // 10. Shame last - all those quick fixes. tut, tut, tut
 
-// Functions
-// @import 'functions';
-
-// Mixins
-@import 'mixins/responsive';
-
-// Variables
-@import 'variables';
-
-// Modules
-// @import 'modules/buttons';
-
-// Partials
-// @import 'partials/blocks';
-
-// Shame
-
 @import 'base';
+@import 'syntax-highlighting';
+
+// Import mixins
+@import 'mixins/respond-to';
+
 @import 'bourbon/bourbon';
 @import 'neat/neat';
 
@@ -625,7 +613,7 @@ a {
       border-top: 1px solid #dddddd;
     }
 
-    .isLeft {
+    .is-left {
       box-sizing: border-box;
       float: left;
       width: 47%;
@@ -690,7 +678,7 @@ a {
       }
     }
 
-    .isRight {
+    .is-right {
       box-sizing: border-box;
       float: right;
       width: 47%;
@@ -894,8 +882,7 @@ a {
       display: none;
     }
 
-    background: url('https://cdn.tomasbasham.co.uk/desk.svg');
-    //background: url('//s3-media4.ak.yelpcdn.com/assets/2/www/img/e41bc8917803/structural/happy_footer.png');
+    background: url('https://cdn.tomasbasham.dev/covers/desk.svg');
     background-repeat: no-repeat;
     background-position: center bottom;
     height: 266px;
@@ -990,18 +977,6 @@ a {
   }
 }
 
-.social-link-google-plus {
-  background-color: #df4a32;
-
-  &:before, &:after {
-    content: '\f0d5';
-  }
-
-  &:hover {
-    background-color: #be3f2b;
-  }
-}
-
 .social-link-linkedin {
   background-color: #127bb6;
 
@@ -1011,6 +986,18 @@ a {
 
   &:hover {
     background-color: #096e97;
+  }
+}
+
+.social-link-pinterest {
+  background-color: #df4a32;
+
+  &:before, &:after {
+    content: '\f0d2';
+  }
+
+  &:hover {
+    background-color: #be3f2b;
   }
 }
 

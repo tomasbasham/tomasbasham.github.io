@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 sitemap:
   priority: 1
   changefreq: 'weekly'
@@ -12,15 +12,15 @@ sitemap:
 
 <header class="blog-header">
   {% if site.github.owner_gravatar_url %}
-  <a class="blog-logo" href="{{ site.url }}" style="background-image: url('{{ site.github.owner_gravatar_url }}')">{{ site.title }}</a>
+  <a class="blog-logo" href="{{ "/" | prepend: site.baseurl }}" style="background-image: url('{{ site.github.owner_gravatar_url }}')">{{ site.title }}</a>
   {% endif %}
 
   <h1 class="blog-title">{{ site.title }}</h1>
   <h2 class="blog-description">A Personal Technology Jekyll Blog and Portfolio</h2>
   <div class="custom-links">
-    <a href="/">Blog</a>
+    <a href="{{ "/" | prepend: site.baseurl }}">Blog</a>
     &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="/about">About</a>
+    <a href="{{ "/about" | prepend: site.baseurl }}">About</a>
     &nbsp;&nbsp;·&nbsp;&nbsp;
     <a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a>
   </div>

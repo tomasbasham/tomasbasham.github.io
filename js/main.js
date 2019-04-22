@@ -5,7 +5,7 @@ requirejs.config({
   paths: {
     app: '../app',
     domReady: '//cdnjs.cloudflare.com/ajax/libs/require-domReady/2.0.1/domReady.min',
-    jquery: '//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min'
+    jquery: '//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min'
   },
 
   // Remember: only use shim config for non-AMD scripts, scripts that do not

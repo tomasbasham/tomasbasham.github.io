@@ -11,7 +11,7 @@
             <a href="https://www.docker.com/">docker</a>
           </li>
           <li class="menu-item">
-            <a href="https://www.whichledlight.com/">whichledlight</a>
+            <a href="https://www.bashamsburgers.com/">bashamsburgers</a>
           </li>
         </ul>
       </div>
@@ -19,17 +19,17 @@
         <h3>Links</h3>
         <ul class="menu-list">
           <li class="menu-item">
-            <a href="/">Blog</a>
+            <a href="{{ "/" | prepend: site.baseurl }}">Blog</a>
           </li>
           <li class="menu-item">
-            <a href="/about">About</a>
+            <a href="{{ "/about" | prepend: site.baseurl }}">About</a>
           </li>
           <li class="menu-item">
             <a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a>
           </li>
           <ul class="menu-list">
             <li class="menu-item">
-              <a href="/archive">Archive</a>
+              <a href="{{ "/archive" | prepend: site.baseurl }}">Archive</a>
             </li>
           </ul>
         </ul>
@@ -37,11 +37,18 @@
       <div class="footer-menu">
         <h3>Become a Friend</h3>
         <ul class="menu-list">
-          {% for account in site.sharing.accounts %}
           <li class="menu-item">
-            <a href="{{ account.url }}">{{ account.name }}</a>
+            <a href="https://github.com/tomasbasham">GitHub</a>
           </li>
-          {% endfor %}
+          <li class="menu-item">
+            <a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a>
+          </li>
+          <li class="menu-item">
+            <a href="https://twitter.com/tomasbasham">Twitter</a>
+          </li>
+          <li class="menu-item">
+            <a href="{{ "/feed.xml" | prepend: site.baseurl }}">RSS</a>
+          </li>
         </ul>
       </div>
     </div>

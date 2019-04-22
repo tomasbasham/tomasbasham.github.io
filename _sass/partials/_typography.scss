@@ -1,0 +1,42 @@
+// Basic composable typographic elements.
+%link {
+  color: $link-font-color;
+  outline: none;
+  text-decoration: none;
+  transition: color $base-duration $base-timing;
+
+  &:visited {
+    color: $link-visited-color;
+  }
+
+  &:active, &:focus, &:hover, &:visited:hover {
+    color: $link-hover-color;
+    text-decoration: underline;
+  }
+}
+
+%h1, %h2, %h3, %h4, %h5, %h6 { color: $heading-font-color; font-family: $heading-font-family; font-size: $heading-font-size; font-weight: $heading-font-weight; }
+%h1, %h2, %h3, %h4 { line-height: $heading-line-height; margin: $heading-margin; }
+%h1 { font-size: 4.0rem; }
+%h2 { font-size: 3.0rem; }
+%h3 { font-size: 2.5rem; }
+%h4 { font-size: 1.8rem; }
+%h5 { font-size: 1.3rem; }
+%h6 { font-size: 1.0rem; }
+
+%text { font-family: $base-font-family; }
+%mute { font-family: $mono-font-family; }
+
+%quiet { color: $quiet-font-color; font-weight: $quiet-font-weight; }
+%loud  { color: $loud-font-color; }
+
+%large { font-size: $large-font-size; }
+%small { font-size: $small-font-size; }
+
+%italic { font-style: italic; }
+%bold   { @extend %loud; font-weight: $bold-font-weight; }
+
+%block-margins { @extend %text; margin: $text-margin; }
+
+%unordered-list { list-style-type: none; }
+%ordered-list   { list-style: decimal; }

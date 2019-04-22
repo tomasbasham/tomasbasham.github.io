@@ -1,0 +1,7 @@
+// Truncate a string, appending an ellipsis to the end.
+@mixin truncate($truncation-boundary) {
+  max-width: $truncation-boundary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

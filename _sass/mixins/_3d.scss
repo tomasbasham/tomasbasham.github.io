@@ -1,0 +1,5 @@
+// Apply a red and cyan shadow to any element givin a 3D effect when viewd
+// through glasses.
+@mixin {
+  text-shadow: -0.06em 0 red, 0.06em 0 cyan;
+}

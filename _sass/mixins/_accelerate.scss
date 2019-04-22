@@ -1,0 +1,7 @@
+// Trigger hardware acceleration for 3D animations.
+@mixin accelerate($backface: true, $perspective: 1000) {
+  @if $backface {
+    @include backface-visibility(hidden);
+  }
+  @include perspective($perspective);
+}

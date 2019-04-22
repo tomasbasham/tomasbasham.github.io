@@ -1,0 +1,7 @@
+// Allows to horizontally center a block relative to its parent, no matter its
+// size.
+@mixin centerer-horizontally {
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+}

@@ -1,0 +1,5 @@
+// Adjust both the font size and the line-height.
+@mixin adjust-font-size-to($font-size) {
+  font-size: rem($font-size);
+  line-height: ceil($font-size / $base-line-height) * ($base-line-height / $font-size);
+}

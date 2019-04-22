@@ -2,7 +2,7 @@
 layout: post
 title: Brexit Jeopardises a Developing LED Market at Warp Speed
 description: Has Britain leaving the EU delayed energy efficiency initiatives within the UK?
-image: https://cdn.tomasbasham.co.uk/warp-speed.jpg
+image: https://cdn.tomasbasham.dev/covers/warp-speed.jpg
 category: Technology
 tags: led technology
 ---

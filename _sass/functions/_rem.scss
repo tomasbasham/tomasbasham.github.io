@@ -1,0 +1,42 @@
+//
+// Convert pixel units into root em units. Assumes $base-font-size is the base
+// font size of the HTML document.
+//
+// If the target is already in rem units then this function is a no-op and
+// returns the parameter passed.
+//
+//   padding: rem(10px)
+//   padding: rem(10px 15px)
+//   padding: rem(10px 15px !default)
+//   padding: rem(1rem)
+//
+@function rem($target) {
+  @if type-of($target) == 'number' {
+    @if unit($target) == 'rem' {
+      @return $target;
+    }
+
+    @return $target / $base-font-size * 1rem;
+  } @else {
+    @return rem-shorthand($target);
+  }
+}
+
+@function rem-shorthand($target) {
+  $rem-values: ();
+  @each $value in $target {
+    @if $value == 0 or type-of($value) != 'number' {
+      $rem-values: append($rem-values, $value);
+    } @else {
+
+      // If the value is already rem, do nothing.
+      @if unit($value) == 'rem' {
+        @return $value;
+      }
+
+      $rem-values: append($rem-values, $value / $base-font-size * 1rem);
+    }
+  }
+
+  @return $rem-values;
+}

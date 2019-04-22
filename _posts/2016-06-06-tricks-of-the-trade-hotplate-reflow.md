@@ -38,7 +38,7 @@ process, as the PCB will be very hot, and transfer it onto a piece of wood or
 metal so not to set it down on anything prone to burning or melting.
 
 ![PCB Fabrication
-Reflow](https://cdn.tomasbasham.co.uk/pcb-fabrication-reflow.jpg)
+Reflow](https://cdn.tomasbasham.dev/posts/pcb-fabrication/pcb-fabrication-reflow.jpg)
 
 This process can be quick; only a couple minutes for the board to reflow
 completely. The downside is it requires constant attention, and unless you are

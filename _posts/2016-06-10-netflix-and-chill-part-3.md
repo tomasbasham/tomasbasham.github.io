@@ -84,7 +84,7 @@ I first attempted soldering each of the LEDs to their respective resistors,
 transistors and wires essentially making many little circuits that I could
 piece together.
 
-![Netflix Switch Wires](https://cdn.tomasbasham.co.uk/netflix-switch-wires.jpg)
+![Netflix Switch Wires](https://cdn.tomasbasham.dev/posts/netflix-and-chill/netflix-switch-wires.jpg)
 
 Quickly realising this was far too fiddly I instead opted to create my own PCB
 for the lighting array that comprises of the 5 indicator lights and the LED

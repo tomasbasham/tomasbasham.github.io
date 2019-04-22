@@ -1,6 +1,3 @@
 <!-- data-main attribute tells require.js to load js/main.js after require.js loads. -->
 <script data-main="{{ "/js/main" | prepend: site.baseurl }}" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
-
-{% for script in layout.head %}
-{% include {{ script }} %}
-{% endfor %}
+<script id="dsq-count-scr" src="//{{ site.comments.disqus_shortname }}.disqus.com/count.js" async></script>

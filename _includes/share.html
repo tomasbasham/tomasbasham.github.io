@@ -1,7 +1,17 @@
 <ul class="social-links">
-  {% for social in site.sharing.share %}
+  {% assign page_title = page.title | cgi_escape %}
+  {% assign page_link = site.url | append: page.id %}
+
   <li class="social-link-tile">
-    <a class="social-link social-link-{{ social.icon }}" href="{{ social.share_url }}{{ social.share_title }}{{ page.title | cgi_escape }}{{ social.share_link }}{{ site.url }}{{ page.id }}" data-provider-name="{{ social.icon }}"></a>
+    <a class="social-link social-link-facebook" href="https://www.facebook.com/sharer.php?t={{ page_title }}&u={{ page_link }}" data-provider-name="facebook"></a>
   </li>
-  {% endfor %}
+  <li class="social-link-tile">
+    <a class="social-link social-link-linkedin" href="https://www.linkedin.com/shareArticle?title={{ page_title }}&mini=true&url={{ page_link }}" data-provider-name="linkedin"></a>
+  </li>
+  <li class="social-link-tile">
+    <a class="social-link social-link-pinterest" href="https://pinterest.com/pin/create/button?description={{ page_title }}&media={{ page.image }}&url={{ page_link }}" data-provider-name="pinterest"></a>
+  </li>
+  <li class="social-link-tile">
+    <a class="social-link social-link-twitter" href="https://www.twitter.com/share?text={{ page_title }}&url={{ page_link }}" data-provider-name="twitter"></a>
+  </li>
 </ul>

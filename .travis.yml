@@ -1,20 +1,20 @@
 ---
 language: ruby
 rvm:
-  - "2.3.0"
+- "2.3.0"
 
 sudo: false
 
 env:
   global:
-    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 
 before_install:
-  - gem install bundler -v 1.13.6
+- gem install bundler -v 1.13.6
 
 script:
-  - bundle exec jekyll build
-  - bundle exec htmlproofer ./_site --allow-hash-href --check-favicon --check-html --disable-external
+- bundle exec jekyll build
+- bundle exec htmlproofer ./_site --allow-hash-href --check-favicon --check-html --disable-external
 
 notifications:
   email: false

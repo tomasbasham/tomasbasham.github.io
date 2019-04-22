@@ -2,7 +2,7 @@
 layout: post
 title: Netflix and Chill
 description: Building your own Netflix and chill button tutorial series starting with the electronics.
-image: https://cdn.tomasbasham.co.uk/netflix.jpg
+image: https://cdn.tomasbasham.dev/covers/netflix.jpg
 category: Product Design
 tags: electronics netflix technology
 ---
@@ -69,14 +69,14 @@ listed as the emitter, base and collector. The emitter is the pin that goes to
 ground; the base the pin that receives a signal from the Particle Photon; and
 the collector the pin that draws from the power supply.
 
-![Netflix Switch Schematic](https://cdn.tomasbasham.co.uk/netflix-switch-schematic.png)
+![Netflix Switch Schematic](https://cdn.tomasbasham.dev/posts/netflix-and-chill/netflix-switch-schematic.png)
 
 Everything on this schematic goes to a common ground. This will be the pin
 marked GND (next to pin D7) on the Photon. LED6 here is the LED Backlight and
 D1 is the IR LED. If you prefer I have also drawn a breadboard layout detailing
 precisely where I placed my components and wiring.
 
-![Netflix Switch Layout](https://cdn.tomasbasham.co.uk/netflix-switch-layout.png)
+![Netflix Switch Layout](https://cdn.tomasbasham.dev/posts/netflix-and-chill/netflix-switch-layout.png)
 
 You may be able to see that I tend to use a fairly common colour coded
 convention when wiring. The red cables are power, black are ground and yellow
@@ -88,7 +88,7 @@ power line on the breadboard. This enables the Photon to share the power from
 the USB when prototyping. Later we'll use this same pin to power the Photon,
 LED backlight and IR LED without the use of the USB.
 
-![Netflix Switch Electronics](https://cdn.tomasbasham.co.uk/netflix-switch-electronics.jpg)
+![Netflix Switch Electronics](https://cdn.tomasbasham.dev/posts/netflix-and-chill/netflix-switch-electronics.jpg)
 
 ### Conclusion
 

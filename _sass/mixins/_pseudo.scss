@@ -1,0 +1,6 @@
+// Allows content and position of a pseudo element selector.
+@mixin pseudo($content: '', $display: block, $position: absolute) {
+  content: $content;
+  display: $display;
+  position: $position;
+}

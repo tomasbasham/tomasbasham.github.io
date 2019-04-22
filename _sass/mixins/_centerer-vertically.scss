@@ -1,0 +1,7 @@
+// Allows to vertically center a block relative to its parent, no matter its
+// size.
+@mixin centerer-vertically {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}

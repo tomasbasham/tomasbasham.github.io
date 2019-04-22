@@ -50,7 +50,7 @@ each container. From this it can be seen how packets would have to traverse
 through the virtual bridge to provide connectivity between containers on the
 same node.
 
-![Docker Model](https://cdn.tomasbasham.co.uk/docker.png)
+![Docker Model](https://cdn.tomasbasham.dev/posts/kubernetes-networking/docker.png)
 
 ### The Kubernetes (IP per Pod) Model
 
@@ -150,7 +150,7 @@ forwarding across a set of backends. Despite its name `kube-proxy` is **not** a
 proxy - once upon a time it was a proxy, now it is a controller. In fact it
 does not touch the packets traversing the Kubernetes managed network.
 
-![Kubernetes Model](https://cdn.tomasbasham.co.uk/kubernetes.png)
+![Kubernetes Model](https://cdn.tomasbasham.dev/posts/kubernetes-networking/kubernetes.png)
 
 To demonstrate this I have created a Service that creates a persistent endpoint
 for a single Pod. The `kubectl` command prints out the Services details.

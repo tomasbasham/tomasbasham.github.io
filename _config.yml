@@ -18,39 +18,6 @@ plugins:
   - jekyll-sitemap
   - jemoji
 
-# Site settings
-title: Tomas Basham's Blog
-description: Tomas Basham's Personal Technology Jekyll Blog and Development Portfolio
-author: tomasbasham
-lang: en_GB
-url: https://tomasbasham.co.uk
-cover: https://cdn.tomasbasham.co.uk/cover.jpg
-
-# Build settings
-markdown: kramdown
-highlighter: rouge
-
-# Pagination settings
-paginate: 8
-paginate_path: "/page:num/"
-
-# The site's twitter handle
-twitter:
-  username: tomasbahsam
-
-# The site's github data
-github:
-  owner_email: me@tomasbasham.co.uk
-
-# Disqus settings
-comments:
-  disqus_shortname: tomasbasham
-
-# Analytics settings
-analytics:
-  google_tracking_id: UA-51944071-1
-
-# Set blog post defaults
 defaults:
   - scope:
       path: "" # an empty string here means all files in the project
@@ -61,49 +28,48 @@ defaults:
       type: "BlogPosting"
       comments: true
 
+# Site settings
+title: Tomas Basham's Blog
+description: Tomas Basham's Personal Technology Jekyll Blog and Development Portfolio
+author: tomasbasham
+lang: en_GB
+url: https://tomasbasham.dev
+cover: https://cdn.tomasbasham.dev/covers/remote.jpg
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Pagination settings
+paginate: 8
+paginate_path: "/page:num/"
+
+# Sass settings
+sass:
+  style: compressed
+  load_paths:
+    - vendor
+
+# Analytics settings
+analytics:
+  google_tracking_id: UA-51944071-1
+
+# Disqus settings
+comments:
+  disqus_shortname: tomasbasham
+
+# GitHub settings
+github:
+  owner_email: tomasbasham@gmail.com
+
+# Twitter settings
+twitter:
+  username: tomasbahsam
+
+# Social profiles
 social:
   name: Tomas Basham
   links:
     - https://twitter.com/tomasbasham
     - https://github.com/tomasbasham
     - https://www.linkedin.com/in/tomas-basham-06244646
-
-# Social icons and sharing options
-sharing:
-  share:
-    - icon: facebook
-      share_url: https://www.facebook.com/sharer.php
-      share_title: "?t="
-      share_link: "&amp;u="
-
-    - icon: google-plus
-      share_url: https://plus.google.com/share
-      share_title: "?t="
-      share_link: "&amp;url="
-
-    - icon: linkedin
-      share_url: https://www.linkedin.com/shareArticle
-      share_title: "?title="
-      share_link: "&amp;mini=true&amp;url="
-
-    - icon: twitter
-      share_url: https://twitter.com/share
-      share_title: "?text="
-      share_link: "&amp;url="
-
-  accounts:
-    - name: GitHub
-      url: https://github.com/tomasbasham
-      desc:	Fork me on github
-
-    - name: Linkedin
-      url: https://www.linkedin.com/in/tomas-basham-06244646
-      desc: Connect with me linkedin
-
-    - name: Twitter
-      url: https://twitter.com/tomasbasham
-      desc: Follow me on twitter
-
-    - name: RSS
-      url: https://tomasbasham.co.uk/feed.xml
-      desc: Subscribe
