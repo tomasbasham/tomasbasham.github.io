@@ -1,0 +1,12 @@
+---
+name: auto-merge
+on:
+  pull_request_target:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  auto-merge:
+    uses: tomasbasham/shared-workflows/.github/workflows/auto-merge.yaml@v1
+    with:
+      auto-merge-semver-minor: true
