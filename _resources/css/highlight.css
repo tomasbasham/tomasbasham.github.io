@@ -1,0 +1,157 @@
+/**
+ * Syntax highlighting (Rouge, GitHub palette).
+ *
+ * Each colour is a light-dark() pair: the light side is the original GitHub
+ * light palette, the dark side is its GitHub dark counterpart. The block
+ * background and base colour come from Avanti's --code-bg-color and
+ * --code-color so one override in style.css restyles every code block.
+ *
+ * Three light-side colours are darker than GitHub's (keyword, function and
+ * comment) so that every token meets WCAG AA (4.5:1) on the site's code
+ * background.
+ */
+.highlight {
+  margin-bottom: 1.875rem;
+  color: var(--code-color);
+  background-color: var(--code-bg-color);
+}
+
+.highlight table td {
+  padding: 5px;
+}
+
+.highlight table pre {
+  margin: 0;
+}
+
+.highlight .w {
+  color: var(--code-color);
+  background-color: var(--code-bg-color);
+}
+
+.highlight .k,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt,
+.highlight .kv {
+  color: light-dark(#c4202c, #ff7b72);
+}
+
+.highlight .gr {
+  color: var(--code-bg-color);
+}
+
+.highlight .gd {
+  color: light-dark(#82071e, #ffa198);
+  background-color: light-dark(#ffebe9, #490202);
+}
+
+.highlight .nb,
+.highlight .nc,
+.highlight .no,
+.highlight .nn {
+  color: light-dark(#953800, #ffa657);
+}
+
+.highlight .sr,
+.highlight .na,
+.highlight .nt {
+  color: light-dark(#116329, #7ee787);
+}
+
+.highlight .gi {
+  color: light-dark(#116329, #7ee787);
+  background-color: light-dark(#dafbe1, #033a16);
+}
+
+.highlight .ges {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.highlight .kc,
+.highlight .l,
+.highlight .ld,
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .il,
+.highlight .mo,
+.highlight .mx,
+.highlight .sb,
+.highlight .bp,
+.highlight .ne,
+.highlight .nl,
+.highlight .py,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .vm,
+.highlight .o,
+.highlight .ow {
+  color: light-dark(#0550ae, #79c0ff);
+}
+
+.highlight .gh,
+.highlight .gu {
+  color: light-dark(#0550ae, #79c0ff);
+  font-weight: bold;
+}
+
+.highlight .s,
+.highlight .sa,
+.highlight .sc,
+.highlight .dl,
+.highlight .sd,
+.highlight .s2,
+.highlight .se,
+.highlight .sh,
+.highlight .sx,
+.highlight .s1,
+.highlight .ss {
+  color: light-dark(#0a3069, #a5d6ff);
+}
+
+.highlight .nd,
+.highlight .nf,
+.highlight .fm {
+  color: light-dark(#7240cf, #d2a8ff);
+}
+
+.highlight .err {
+  color: var(--code-bg-color);
+  background-color: light-dark(#82071e, #ffa198);
+}
+
+.highlight .c,
+.highlight .ch,
+.highlight .cd,
+.highlight .cm,
+.highlight .cp,
+.highlight .cpf,
+.highlight .c1,
+.highlight .cs,
+.highlight .gl,
+.highlight .gt {
+  color: light-dark(#59636e, #8b949e);
+}
+
+.highlight .ni,
+.highlight .si {
+  color: var(--code-color);
+}
+
+.highlight .ge {
+  color: var(--code-color);
+  font-style: italic;
+}
+
+.highlight .gs {
+  color: var(--code-color);
+  font-weight: bold;
+}
