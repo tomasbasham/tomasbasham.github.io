@@ -1,6 +1,7 @@
 import Alpine from 'alpinejs';
 
 import DarkModeStore from '@/stores/dark-mode';
+import DeskParallaxComponent from '@/components/desk-parallax';
 
 // Register application state with Alpine. State is used to store data that
 // is shared across components and is some cases essential for the application
@@ -8,6 +9,8 @@ import DarkModeStore from '@/stores/dark-mode';
 // the web push notifications, which is essential for the application to
 // function correctly.
 Alpine.store('darkMode', DarkModeStore);
+
+Alpine.data('deskParallax', DeskParallaxComponent);
 
 Alpine.start();
 
