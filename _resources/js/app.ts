@@ -23,4 +23,10 @@ Alpine.start();
 // Make Alpine available globally available for a better developer experience.
 window.Alpine = Alpine;
 
+import * as serviceWorker from '@/service-worker';
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+serviceWorker.register();
+
 initSmoothScrolling();
