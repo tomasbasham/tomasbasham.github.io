@@ -1,0 +1,20 @@
+{% comment %}
+  One layer of the desk scene. Used by desk-header.html.
+  Params: layer (an entry of site.data.desk.layers), stage (site.data.desk.stage).
+{% endcomment %}
+{% capture pos %}left: {{ include.layer.x | times: 100.0 | divided_by: include.stage.width | round: 3 }}%; top: {{ include.layer.y | times: 100.0 | divided_by: include.stage.height | round: 3 }}%; width: {{ include.layer.w | times: 100.0 | divided_by: include.stage.width | round: 3 }}%; height: {{ include.layer.h | times: 100.0 | divided_by: include.stage.height | round: 3 }}%;{% endcapture %}
+{% if include.layer.night %}
+  {% capture art %}<span class="desk__inside"><img class="desk__art desk__art--day" src="{{ '/images/desk/' | append: include.layer.art | append: '-day.' | append: include.stage.ext | prepend: site.baseurl }}" alt="" width="{{ include.layer.w }}" height="{{ include.layer.h }}" decoding="async"><img class="desk__art desk__art--night" src="{{ '/images/desk/' | append: include.layer.art | append: '-night.' | append: include.stage.ext | prepend: site.baseurl }}" alt="" width="{{ include.layer.w }}" height="{{ include.layer.h }}" decoding="async"></span>{% endcapture %}
+{% else %}
+  {% capture art %}<span class="desk__inside"><img class="desk__art desk__art--shared" src="{{ '/images/desk/' | append: include.layer.art | append: '.' | append: include.stage.ext | prepend: site.baseurl }}" alt="" width="{{ include.layer.w }}" height="{{ include.layer.h }}" decoding="async"></span>{% endcapture %}
+{% endif %}
+
+{% if include.layer.kind == "link" and include.layer.url != blank %}
+  <div class="desk__item desk__item--link" style="{{ pos }} --depth: {{ include.layer.depth | default: 0 }};">
+    <a class="desk__hit" href="{{ include.layer.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ include.layer.label }} (opens in a new tab)"></a>
+    {{ art }}
+    <span class="desk__label" aria-hidden="true">{{ include.layer.label }}</span>
+  </div>
+{% else %}
+  <div class="desk__item" aria-hidden="true" style="{{ pos }} --depth: {{ include.layer.depth | default: 0 }};">{{ art }}</div>
+{% endif %}

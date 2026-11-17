@@ -1,0 +1,35 @@
+{% comment %}
+  Floating desk header.
+
+  Usage:   {% include desk-header.html %}
+  Data:    _data/desk.yml
+  Theming: reads the --night custom property set by _resources/css/style.css,
+           which the theme toggle (_includes/theme-toggle.html) drives through
+           the Alpine `darkMode` store.
+  Motion:  the Alpine `deskParallax` component (_resources/js/components) sets
+           --px and --py on .desk from the pointer or device tilt. CSS turns
+           that into a camera orbit around the layers, which sit at different
+           distances (`depth` in the data file), so they shift and skew in 3D.
+  Layout:  wide screens get hover effects and clickable desk items; narrow
+           screens get the same scene, not clickable, with a menu underneath.
+{% endcomment %}
+{% assign stage = site.data.desk.stage %}
+<div class="desk" x-data="deskParallax">
+  <div class="desk__stage" style="aspect-ratio: {{ stage.width }} / {{ stage.height }};">
+    {% comment %} Fixtures on the wall stay put; only the layers in the scene turn. {% endcomment %}
+    {% for layer in site.data.desk.layers %}{% if layer.fixed %}{% include desk-layer.html layer=layer stage=stage %}{% endif %}{% endfor %}
+    <div class="desk__scene">
+      {% for layer in site.data.desk.layers %}{% unless layer.fixed %}{% include desk-layer.html layer=layer stage=stage %}{% endunless %}{% endfor %}
+    </div>
+  </div>
+
+  <nav class="desk__menu" aria-label="Social profiles">
+    <ul>
+      {% for layer in site.data.desk.layers %}
+        {% if layer.kind == "link" and layer.url != blank %}
+          <li><a href="{{ layer.url }}" target="_blank" rel="noopener noreferrer">{{ layer.label }}<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+</div>

@@ -1,0 +1,78 @@
+# Layered "desk" header.
+#
+# There is no wall: the scene floats on the page background. It is a
+# fixed-ratio stage of layers placed by pixel coordinates on the design stage
+# below (the include converts these to percentages, so the scene scales
+# fluidly).
+#
+# Artwork lives in /images/desk/:
+#   - a layer with `night: true` uses <art>-day.<ext> and <art>-night.<ext>
+#     and cross-fades between them (the window, and the lamp, which is lit at
+#     night; its canvas is larger than the lamp so the glow fits inside it);
+#   - any other layer uses a single <art>.<ext>, which CSS darkens at night.
+#
+# To use your own artwork: replace the files, keep each layer's pixel size in
+# step with `w`/`h`, and adjust x/y here.
+#
+# depth:
+#   How far from the viewer the layer stands in the parallax. Higher is nearer.
+#   Layers at the same depth move together; the spread between them decides how
+#   much they slide against each other and how much each is skewed when the
+#   scene turns. The scene pivots on depth 3 (see --z-origin in
+#   desk-header.css); lower is behind it, higher is in front. 0 is the far wall.
+#
+# fixed:
+#   true leaves the layer out of the turning scene, so it does not move at all.
+#   Use it for things fixed to the wall behind the desk, such as the window.
+#
+# kind:
+#   decor - not interactive.
+#   link  - opens `url` in a new tab on wide screens. On narrow screens the
+#           scene is not clickable and the same links appear in a menu below.
+stage:
+  width: 918
+  height: 400
+  ext: svg
+
+layers:
+  - { art: window, kind: decor, night: true, fixed: true, x: 70, y: 8, w: 200, h: 170 }
+  - { art: desk, kind: decor, x: 0, y: 300, w: 918, h: 100, depth: 2.5 }
+  - { art: plant, kind: decor, x: 80, y: 242, w: 80, h: 100, depth: 4 }
+  - { art: lamp, kind: decor, night: true, x: 128, y: 168, w: 220, h: 190, depth: 4.5 }
+  - art: laptop
+    depth: 5
+    kind: link
+    label: GitHub
+    url: https://github.com/tomasbasham
+    x: 305
+    y: 234
+    w: 230
+    h: 108
+  - { art: mug, kind: decor, x: 565, y: 284, w: 52, h: 58, depth: 6 }
+  - art: card
+    depth: 6.5
+    kind: link
+    label: LinkedIn
+    url: https://www.linkedin.com/in/tomas-basham-06244646
+    x: 640
+    y: 262
+    w: 76
+    h: 80
+  - art: camera
+    depth: 7
+    kind: link
+    label: Instagram
+    url: https://www.instagram.com/tomasbasham
+    x: 735
+    y: 284
+    w: 92
+    h: 58
+  - art: phone
+    depth: 7.5
+    kind: link
+    label: Bluesky
+    url: https://bsky.app/profile/tomasbasham.dev
+    x: 836
+    y: 256
+    w: 52
+    h: 86

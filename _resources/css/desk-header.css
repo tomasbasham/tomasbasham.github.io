@@ -1,0 +1,249 @@
+/**
+ * Floating desk header.
+ *
+ * Reads --night (0 or 1) from theme.css. Only the window changes image between
+ * day and night; the desk and every item are single images that are darkened
+ * with a filter, so the scene dims rather than being redrawn.
+ *
+ * The scene has no background. It sits on the page, so the page background is
+ * what changes colour.
+ *
+ * Deliberately unlayered. This is site CSS, and the legacy stylesheets it
+ * coexists with (normalize.css from the CDN, css/main.css) are unlayered too.
+ * Unlayered rules beat every layered rule whatever their specificity, so a
+ * layered `.desk__menu { display: none }` loses to normalize's `nav { display:
+ * block }`. Unlayered, specificity decides and the class wins.
+ */
+.desk {
+  margin-inline: auto;
+  max-width: 918px;
+  position: relative;
+  width: 100%;
+}
+
+/*
+ * Parallax. The scene is a small diorama: every layer is a flat card standing
+ * at its own distance from the viewer, and the pointer (or the tilt of the
+ * phone) swings the camera around it. deskParallax (a script) only writes --px
+ * and --py, each -1 to 1, on .desk; everything below is CSS.
+ *
+ * Because the cards are really placed in 3D, the browser does the rest:
+ * nearer cards slide further than distant ones, and each card is foreshortened
+ * and skewed as the angle changes, as if seen from a different side. Nothing
+ * is faked per layer.
+ *
+ *   --persp       camera distance, in % of the stage width. Smaller is more
+ *                 dramatic.
+ *   --yaw/--pitch the most the scene turns, in degrees, at full pointer travel.
+ *   --z-step      distance between layers per point of `depth`, in % of width.
+ *   --z-origin    the `depth` that sits on the plane the scene turns around.
+ *
+ * Each layer is scaled by (persp - z) / persp, which cancels the enlargement
+ * perspective gives a near card, so at rest the scene is identical to a flat
+ * one. The stage is the container, so cqw is the stage width.
+ */
+.desk {
+  --persp: 110;
+  --yaw: 2deg;
+  --pitch: 1.25deg;
+  --z-step: 1.6;
+  --z-origin: 3;
+  container-type: inline-size;
+}
+
+.desk__stage {
+  perspective: calc(var(--persp) * 1cqw);
+  position: relative;
+  width: 100%;
+}
+
+.desk__scene {
+  inset: 0;
+  position: absolute;
+  transform: rotateX(calc(var(--py, 0) * var(--pitch))) rotateY(calc(var(--px, 0) * var(--yaw) * -1));
+  transform-origin: 50% 70%;
+  transform-style: preserve-3d;
+}
+
+.desk__item {
+  --z: calc((var(--depth, 0) - var(--z-origin)) * var(--z-step));
+
+  display: block;
+  position: absolute;
+  transform: translateZ(calc(var(--z) * 1cqw)) scale(calc(1 - var(--z) / var(--persp)));
+  transform-origin: 50% 100%;
+}
+
+/* Fixtures outside the scene (see `fixed` in desk.yml) are not moved at all. */
+.desk__stage>.desk__item {
+  transform: none;
+}
+
+/**
+ * The transparent link that covers a desk item. It sits before the art in the
+ * DOM so keyboard focus can style the art with a sibling selector.
+ */
+.desk__hit {
+  cursor: pointer;
+  inset: 0;
+  position: absolute;
+  z-index: 2;
+}
+
+.desk__hit:focus-visible {
+  outline: none;
+}
+
+/* The wrapper lifts on hover so the hit area never moves under the cursor. */
+.desk__inside {
+  display: block;
+  height: 100%;
+  position: relative;
+  transition: transform 0.2s ease-out;
+  width: 100%;
+}
+
+.desk__art {
+  display: block;
+  height: 100%;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  user-select: none;
+  width: 100%;
+}
+
+/* The window cross-fades between its day and night images. */
+.desk__art--day,
+.desk__art--night {
+  transition: opacity var(--transition-duration) ease-out;
+}
+
+.desk__art--day {
+  opacity: calc(1 - var(--night, 0));
+}
+
+.desk__art--night {
+  opacity: var(--night, 0);
+}
+
+/* Everything else dims a little at night. */
+.desk__art--shared {
+  filter: brightness(calc(1 - 0.32 * var(--night, 0))) saturate(calc(1 - 0.18 * var(--night, 0)));
+  transition: filter var(--transition-duration) ease-out;
+}
+
+.desk__label {
+  background: #fff;
+  border-radius: 4px;
+  bottom: 100%;
+  box-shadow: 0 0 4px rgb(0 0 0 / 50%);
+  color: #2f2a35;
+  font-size: 1rem;
+  left: 50%;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  opacity: 0;
+  padding: 4px 14px;
+  pointer-events: none;
+  position: absolute;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/**
+ * Narrow screens: the scene is a scaled-down picture. Nothing in it is
+ * clickable (the menu below carries the links), so the overlay links are
+ * removed from layout, tab order and the accessibility tree.
+ */
+.desk__menu {
+  display: none;
+}
+
+@media (max-width: 899px) {
+
+  .desk__hit,
+  .desk__label {
+    display: none;
+  }
+
+  .desk__menu {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .desk__menu ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .desk__menu li+li::before {
+    content: "\00b7";
+    opacity: 0.5;
+    padding: 0 0.75rem;
+  }
+
+  .desk__menu a {
+    color: inherit;
+    font-size: 0.9375rem;
+    opacity: 0.75;
+    text-decoration: none;
+  }
+
+  .desk__menu a:hover,
+  .desk__menu a:focus-visible {
+    opacity: 1;
+    text-decoration: underline;
+  }
+}
+
+/**
+ * Wide screens only: outline, lift and label. Keyboard focus gets the same
+ * treatment as hover.
+ */
+@media (min-width: 900px) {
+  .desk__hit:focus-visible~.desk__inside {
+    filter: drop-shadow(2px 2px 0 #fff) drop-shadow(-2px -2px 0 #fff) drop-shadow(-2px 2px 0 #fff) drop-shadow(2px -2px 0 #fff);
+    transform: translateY(-5px);
+  }
+
+  .desk__hit:focus-visible~.desk__label {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (min-width: 900px) and (hover: hover) {
+  .desk__item--link:hover .desk__inside {
+    filter: drop-shadow(2px 2px 0 #fff) drop-shadow(-2px -2px 0 #fff) drop-shadow(-2px 2px 0 #fff) drop-shadow(2px -2px 0 #fff);
+    transform: translateY(-5px);
+  }
+
+  .desk__item--link:hover .desk__label {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .desk__scene {
+    transform: none;
+  }
+
+  .desk__art--day,
+  .desk__art--night,
+  .desk__art--shared,
+  .desk__inside,
+  .desk__label {
+    transition: none;
+  }
+}
