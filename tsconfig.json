@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "_resources/js",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    },
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2020"
+  },
+  "include": [
+    "_resources/js/**/*"
+  ]
+}
