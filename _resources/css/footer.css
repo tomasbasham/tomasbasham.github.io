@@ -1,0 +1,79 @@
+/**
+ * Site footer. Its columns use Avanti's grid and container; only the column
+ * count and width are set here.
+ */
+
+.site-footer {
+  background-color: var(--surface-color);
+  border-top: 1px solid var(--border-color);
+  margin-top: 4rem;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  transition: background-color var(--transition-duration) ease-out,
+    border-top var(--transition-duration) ease-out,
+    color var(--transition-duration) ease-out;
+
+  >:first-child {
+    margin-top: 2rem;
+  }
+}
+
+.footer-links {
+  margin: 1rem 0;
+}
+
+.footer-container {
+  max-width: 640px;
+}
+
+.footer-grid {
+  --grid-column-count: 1;
+  --grid-gap: 1rem;
+}
+
+@media (--md) {
+  .footer-grid {
+    --grid-column-count: 3;
+  }
+
+  .footer-menu {
+    text-align: left;
+  }
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-item {
+  line-height: 1.5rem;
+}
+
+.footer-landscape {
+  background: url('https://cdn.tomasbasham.dev/covers/desk.svg') no-repeat center bottom;
+  height: 266px;
+  margin: 30px auto;
+}
+
+@media (max-width: 767.98px) {
+  .footer-landscape {
+    display: none;
+  }
+}
+
+.footer-legal {
+  padding-bottom: 2rem;
+}
+
+.footer-legal p,
+.footer-legal a {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0 auto;
+}
+
+.footer-legal a {
+  font-weight: bold;
+}
