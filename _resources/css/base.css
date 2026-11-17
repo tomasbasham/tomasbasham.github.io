@@ -1,0 +1,115 @@
+/**
+ * Element defaults for the site. Colours come from Avanti's theme tokens, so
+ * nothing here knows about light or dark.
+ */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'liga', 'dlig';
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  /* TODO: needs it's own colour */
+  color: var(--body-color);
+}
+
+[hidden] {
+  display: none;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+img {
+  border-style: none;
+  max-width: 100%;
+}
+
+main {
+  display: block;
+}
+
+.center {
+  text-align: center;
+}
+
+.clearfix::after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+/* Code */
+
+pre,
+code {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.9375rem;
+}
+
+code {
+  hyphens: manual;
+  padding: 1px 5px;
+}
+
+pre {
+  margin: 0 0 1.875rem;
+}
+
+pre>code {
+  display: block;
+  overflow-x: auto;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.highlighter-rouge+.highlighter-rouge .highlight {
+  background-color: transparent;
+  color: var(--code-color);
+}
+
+/* Tables */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid var(--border-color);
+  padding: 4px;
+}
+
+td:first-child {
+  font-weight: bold;
+}

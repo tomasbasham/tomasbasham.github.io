@@ -1,0 +1,13 @@
+@import "avanti";
+
+@import "./base.css";
+@import "./theme.css";
+
+/**
+ * x-cloak is used to hide elements until Alpine.js is ready to show them.
+ * This is useful for preventing a flash of unstyled content (FOUC).
+ */
+[x-cloak] {
+  /* display: none !important; */
+  visibility: hidden !important;
+}

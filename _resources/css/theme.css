@@ -1,0 +1,137 @@
+/**
+ * Site theme.
+ *
+ * Avanti owns the mechanism (see its base/_theme.css): it follows the system
+ * colour scheme and honours `data-theme="light|dark"` on <html>. This file only
+ * supplies this site's colours, unlayered so they beat Avanti's layered
+ * defaults, and bridges the result to the desk illustration.
+ *
+ * The visitor's choice (system, light or dark) lives in the Alpine `darkMode`
+ * store and is remembered in localStorage; theme-init.html applies it before
+ * first paint and theme-toggle.html keeps `data-theme` in step afterwards.
+ */
+
+:root {
+  --body-bg-color-light: #f8f3ec;
+  --body-bg-color-dark: #18255a;
+  --body-color-light: #333;
+  --body-color-dark: #d7dbe6;
+
+  --text-muted-color-light: #66615a;
+  --text-muted-color-dark: #c8cfe6;
+
+  --border-color-light: #e2d9c9;
+  --border-color-dark: #2d3768;
+
+  --link-color-light: #333;
+  --link-color-dark: #d7dbe6;
+
+  --surface-color-light: #f0e9dd;
+  --surface-color-dark: #1a2248;
+
+  --code-bg-color-light: #f1eadf;
+  --code-bg-color-dark: #0a0f29;
+
+  --accent-color-light: #3f8f52;
+  --accent-color-dark: #6fc380;
+  --accent-color: light-dark(var(--accent-color-light), var(--accent-color-dark));
+
+  --font-sans: 'Open Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Libertinus Serif', 'Linux Libertine', Georgia, serif;
+  --body-font-family: var(--font-sans);
+  --body-font-size: 1rem;
+}
+
+/*
+ * --night (0 or 1) is read by desk-header.css to cross-fade the window and dim
+ * the desk. light-dark() accepts only colours, so the flag needs explicit
+ * rules that mirror the three ways a scheme is chosen: the system, or a forced
+ * data-theme. Keep them in step with Avanti's contract.
+ */
+:root {
+  --night: 0;
+}
+
+:root[data-theme="dark"] {
+  --night: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --night: 1;
+  }
+}
+
+body {
+  transition: background-color var(--transition-duration) ease-out, color var(--transition-duration) ease-out;
+}
+
+/**
+ * On the home page the control floats at the top right. On every other page it
+ * sits in the navigation bar (site-nav.html) and is not positioned at all.
+ */
+.theme-toggle {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  z-index: 99;
+}
+
+/*
+ * Navigation bar (site-nav.html). A solid bar in a deep colour of its own, so
+ * it reads as a separate surface rather than as part of the page: dark green
+ * on the cream page, a lighter navy edge on the night one. The overlay look on
+ * hero pages comes from Avanti's .navbar-overlay, which these tokens must not
+ * override, hence the :not().
+ */
+:root {
+  --site-nav-bg: light-dark(#233229, #2c3c81);
+  --site-nav-color: light-dark(#f3eee4, #eef0fa);
+  --site-nav-link-color: light-dark(#cfd8cc, #c3cbea);
+  --site-nav-border-color: light-dark(#233229, #3d4d9c);
+}
+
+.site-nav {
+  --navbar-menu-bg-color: var(--site-nav-bg);
+  --navbar-menu-color: var(--site-nav-color);
+  --navbar-menu-link-color: var(--site-nav-link-color);
+}
+
+.site-nav:not(.navbar-overlay),
+.no-js .site-nav {
+  --navbar-bg-color: var(--site-nav-bg);
+  --navbar-color: var(--site-nav-color);
+  --navbar-link-color: var(--site-nav-link-color);
+  --navbar-link-hover-color: var(--site-nav-color);
+  --navbar-border-color: var(--site-nav-border-color);
+  --navbar-shadow: 0 2px 12px rgb(0 0 0 / 18%);
+}
+
+/* The bar lines up with the article column below it (.content in blog.css). */
+.site-nav .container {
+  box-sizing: border-box;
+  max-width: 780px;
+  padding-inline: 2ch;
+}
+
+/* On a hero page the image runs to the top of the window, behind the bar, so
+   the bar takes no room of its own. */
+.site-nav--hero {
+  margin-block-end: calc(var(--navbar-height) * -1);
+}
+
+.site-nav .theme-toggle {
+  position: static;
+}
+
+/* Without JavaScript the control cannot work, so hide it. The layout's
+   blocking script swaps no-js for js. */
+.no-js .theme-toggle {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
+}
