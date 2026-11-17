@@ -1,0 +1,14 @@
+---
+name: policy
+on:
+  pull_request_target:
+  push:
+    branches:
+    # Run on merge queue branches for branch protection compatibility.
+    - gh-readonly-queue/**
+    - master
+permissions:
+  contents: read
+jobs:
+  quality-checks:
+    uses: tomasbasham/shared-workflows/.github/workflows/policy.yaml@v1

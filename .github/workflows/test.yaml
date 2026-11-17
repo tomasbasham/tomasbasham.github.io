@@ -1,0 +1,18 @@
+---
+name: test
+on:
+  pull_request_target:
+  push:
+    branches:
+    # Run on merge queue branches for branch protection compatibility.
+    - gh-readonly-queue/**
+    - master
+permissions:
+  contents: read
+jobs:
+  test:
+    uses: tomasbasham/shared-workflows/.github/workflows/test-ruby.yaml@v1
+    with:
+      test-command: |
+        bundle exec jekyll build
+        bundle exec spec
