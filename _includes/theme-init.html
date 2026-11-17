@@ -1,0 +1,23 @@
+{% comment %}
+  Applies a remembered light/dark choice before the first paint.
+
+  Usage:   {% include theme-init.html %}   (in <head>, before the stylesheets)
+  Why:     the store only runs once Alpine boots, which is after the page has
+           painted. Without this, a visitor who chose light on a dark system
+           would see a flash of dark first.
+  Note:    'system' (or nothing stored) needs no attribute: Avanti follows
+           prefers-color-scheme by default. The key must match THEME_STORAGE_KEY
+           in _resources/js/stores/dark-mode.ts.
+{% endcomment %}
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
