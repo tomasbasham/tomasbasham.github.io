@@ -1,0 +1,8 @@
+---
+layout: none
+---
+# http://www.robotstxt.org
+User-agent: *
+Disallow:
+Content-Signal: search=yes, ai-input=yes
+Sitemap: {{ site.url }}/sitemap.xml
