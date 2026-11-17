@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    {% include theme-init.html %}
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{% vite_asset_path /node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-400-normal.woff2 %}"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="{% vite_asset_path /node_modules/@fontsource-variable/open-sans/files/open-sans-latin-wght-normal.woff2 %}"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    {% vite_style_tag css/style.css %}
+    {% if content contains 'class="katex' %}
+    {% vite_style_tag css/katex.css %}
+    {% endif %}
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    {% vite_preload_tag js/app.ts %}
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    {% feed_meta %}
+    {% seo title=false %}
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ '/images/favicon-48x48.png' | prepend: site.baseurl }}"/>
+    <link rel="icon" type="image/svg+xml" href="{{ '/images/favicon.svg' | prepend: site.baseurl }}"/>
+    <link rel="icon" href="{{ '/images/favicon.ico' | prepend: site.baseurl }}"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/images/apple-touch-icon.png' | prepend: site.baseurl }}"/>
+    <link rel="mask-icon" href="{{ '/images/safari-pinned-tab.svg' | prepend: site.baseurl }}" color="#5bbad5"/>
+
+    <link rel="manifest" href="{{ '/site.webmanifest/' | prepend: site.baseurl }}"/>
+    <meta name="theme-color" content="#ffffff">
+
+    {% if site.google_analytics_id %}
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics_id }}"></script>
+    {% endif %}
+  </head>
+  <body>
+    {% if page.intro %}
+    {% include theme-toggle.html %}
+    {% else %}
+    {% include site-nav.html %}
+    {% endif %}
+    {{ content }}
+    {% include footer.html %}
+    {% vite_script_tag js/app.ts %}
+  </body>
+</html>
