@@ -1,0 +1,29 @@
+/**
+ * Printing: always light, and without anything that only works on a screen.
+ */
+
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  .post-content {
+    padding-top: 0;
+  }
+
+  .article-image {
+    break-after: avoid;
+  }
+
+  .author-image,
+  .bottom-teaser,
+  .desk,
+  .pagination,
+  .post-image-image,
+  .post-reading,
+  .site-footer,
+  .site-nav,
+  .theme-toggle {
+    display: none;
+  }
+}
