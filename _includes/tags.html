@@ -1,0 +1,15 @@
+{% comment %}
+  Displays the tags for a post, if any.
+
+  Usage:   {% include tags.html %}
+{% endcomment %}
+<section class="tags">
+  {% if page.tags %}
+  {% for tag in page.tags %}
+  <div class="tag post-tag post-tag-{{ tag | downcase }}">
+    <a class="link" href="/tag/{{ tag | slugify }}" title="Go to {{ tag }}" aria-label="Go to {{ tag }}">{{ tag }}</a>
+  </div>
+  {% endfor %}
+  {% endif %}
+</section>
+

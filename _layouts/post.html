@@ -1,0 +1,52 @@
+---
+layout: application
+---
+<main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    {% assign author = site.data.authors[page.author] %}
+    {% if page.image %}
+    <div class="article-image">
+      <div class="post-image-image" style="background-image: url({% if page.image %}{{ page.image }}{% endif %})">
+        Article Image
+      </div>
+      <div class="post-meta">
+        <h1 class="post-title">{{ page.title }}</h1>
+        <div class="cleafix post-meta-text">
+          <div class="author-image" style="background-image: url({{ site.github.owner_gravatar_url }})">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">{{ author.name }}</h4>
+          on
+          <time datetime="{{ page.date | date: "%F %R" }}">{{ page.date | date_to_string }}</time>
+        </div>
+        <div class="post-reading">
+          <span class="post-reading-time">{{ page.content | reading_time }}</span>
+        </div>
+        <div style="text-align:center">
+          <a href="#topofpage" class="topofpage"><i class="fa fa-angle-down"></i></a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">{{ page.title }}</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url({{ site.github.owner_gravatar_url }})">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">{{ author.name }}</h4>
+          on
+          <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_string }}</time>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <section class="post-content">
+      {% unless page.image %}
+      <div class="post-reading">
+        <span class="post-reading-time">{{ page.content | reading_time }}</span>
+      </div>
+      {% endunless %}
+      <a name="topofpage"></a>
+      {{content}}
+    </section>
+    {% include supplemental.html %}
+  </article>
+</main>
