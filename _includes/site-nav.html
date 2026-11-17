@@ -1,0 +1,50 @@
+{% comment %}
+  Navigation bar for every page except the home page.
+
+  The home page has the desk (desk-header.html), whose links are the same
+  list of profiles shown here: layers of kind `link` in _data/desk.yml. This
+  is the compact version of those controls for the other pages, with a way
+  back home and the colour theme control.
+
+  Wide screens show the links and the theme control in the bar. Narrow screens
+  show a menu button instead, which opens them in a drawer (Avanti's .navbar,
+  built on the HTML popover attribute, so it works without JavaScript).
+
+  Pages with a hero image (`image` in the front matter) start with the bar
+  translucent over the image, so it neither hides the picture nor stands out
+  from it. The siteNav component (_resources/js/components/site-nav.ts) makes it
+  solid again once the image has scrolled away; without JavaScript it is solid
+  from the start (see style.css).
+
+  Usage:   {% include site-nav.html %}   (once, at the top of <body>)
+  Data:    _data/desk.yml
+  Styling: Avanti's .navbar; colours and the hero tweaks are in style.css.
+{% endcomment %}
+<header
+  class="navbar navbar-sticky site-nav{% if page.image %} navbar-overlay site-nav--hero{% endif %}"
+  {% if page.image %}x-data="siteNav" x-cloak{% endif %}
+>
+  <div class="container">
+    <a class="navbar-brand" href="{{ '/' | prepend: site.baseurl }}">{{ site.title }}</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          {% for layer in site.data.desk.layers %}
+            {% if layer.kind == "link" and layer.url != blank %}
+              <li><a href="{{ layer.url }}" target="_blank" rel="noopener noreferrer">{{ layer.label }}<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        {% include theme-toggle.html %}
+      </div>
+    </div>
+  </div>
+</header>

@@ -2,6 +2,7 @@ import Alpine from 'alpinejs';
 
 import DarkModeStore from '@/stores/dark-mode';
 import DeskParallaxComponent from '@/components/desk-parallax';
+import SiteNavComponent from '@/components/site-nav';
 
 // Register application state with Alpine. State is used to store data that
 // is shared across components and is some cases essential for the application
@@ -11,6 +12,7 @@ import DeskParallaxComponent from '@/components/desk-parallax';
 Alpine.store('darkMode', DarkModeStore);
 
 Alpine.data('deskParallax', DeskParallaxComponent);
+Alpine.data('siteNav', SiteNavComponent);
 
 Alpine.start();
 
