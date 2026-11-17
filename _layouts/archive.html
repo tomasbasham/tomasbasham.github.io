@@ -1,0 +1,22 @@
+---
+layout: application
+---
+<main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">{{ page.title }}</h1>
+      </div>
+    </div>
+    <section class="post-content">
+      <ul class="clearfix frame">
+        {% for post in page.posts %}
+          <li>
+            <span class="post-date">{{ post.date | date: "%b %-d, %Y" }}</span>
+            <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </article>
+</main>
