@@ -1,0 +1,11 @@
+/*
+ * KaTeX styles, for the pages that contain maths. The layout links this file
+ * only when the rendered article has KaTeX markup (see application.html), so
+ * every other page is spared the CSS and the fonts.
+ *
+ * The version must match the `katex` gem that renders the maths on the server
+ * (Gemfile.lock); keep the `katex` dependency in package.json at that version.
+ * Vite emits the fonts under assets/; the PostCSS step in vite.config.ts
+ * strips the legacy formats so only WOFF2 is shipped.
+ */
+@import "katex/dist/katex.css";
