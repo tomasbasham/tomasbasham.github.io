@@ -1,0 +1,15 @@
+require:
+- rubocop-jekyll
+- rubocop-rspec
+
+AllCops:
+  NewCops: enable
+
+Jekyll/NoPAllowed:
+  Enabled: true
+
+Jekyll/NoPutsAllowed:
+  Enabled: true
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
