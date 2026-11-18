@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Building New Features from Existing Data | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Building New Features from Existing Data" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Investigation into fraud at Enron, continuing with feature engineering" />
+<meta property="og:description" content="Investigation into fraud at Enron, continuing with feature engineering" />
+<link rel="canonical" href="https://tomasbasham.dev/machine%20learning/building-new-features-from-existig-data" />
+<meta property="og:url" content="https://tomasbasham.dev/machine%20learning/building-new-features-from-existig-data" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-04T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building New Features from Existing Data" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2019-01-04T00:00:00+00:00","datePublished":"2019-01-04T00:00:00+00:00","description":"Investigation into fraud at Enron, continuing with feature engineering","headline":"Building New Features from Existing Data","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/machine%20learning/building-new-features-from-existig-data"},"url":"https://tomasbasham.dev/machine%20learning/building-new-features-from-existig-data"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Building New Features from Existing Data</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2019-01-04T00:00:00+00:00">04 Jan 2019</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 9 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>The next step in this experiment is to create new features from the existing
+data in the Enron dataset. I’ll do this in an attempt to tease out any latent
+information within combinations of features that may improve performance.</p>
+
+<p>Using my intuition and reasoning about the background of the Enron scandal I
+have created 6 new features across the payment, stock and email data I have at
+hand. The payment features implemented are concerned with the fraction of
+financial compensation awarded as a fraction of the total payment received by
+each Enron employee. Needless to say that it is quite typical that employees at
+any organisation can be incentivised by three common types of compensation:
+salary, bonus and long term incentives (e.g. reward for long service). Therefore
+is stands to reason that perhaps those persons of interest involved in the Enron
+scandal were receiving large bonuses or being rewarded huge long service
+incentives in an attempt to hide fraudulent behaviour. More specifically I have
+created 3 new features:</p>
+
+<ul>
+  <li>salary as a fraction of total payment</li>
+  <li>bonus as a fraction of total payment</li>
+  <li>long term incentive as a fraction of total payment</li>
+</ul>
+
+<p>It is important to note that here I’ve also replaced any infinite values that
+may have resulted from the calculation with 0. This is quite likely to happen
+since many values in the financial data were given a value of 0 during the data
+cleaning stage of this experiment.</p>
+
+<p>Below I have plotted the salary as a fraction of total payment against bonus as
+a fraction of total payment to gauge if there are any patterns to be found.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">[</span><span class="sh">'</span><span class="s">fraction_salary</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">salary</span> <span class="o">/</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">total_payments</span>
+<span class="n">enron_data</span><span class="p">[</span><span class="sh">'</span><span class="s">fraction_bonus</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">bonus</span> <span class="o">/</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">total_payments</span>
+<span class="n">enron_data</span><span class="p">[</span><span class="sh">'</span><span class="s">fraction_long_term_incentive</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">long_term_incentive</span> <span class="o">/</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">total_payments</span>
+
+<span class="c1"># Replace any infinate or missing values.
+</span><span class="n">enron_data</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">replace</span><span class="p">([</span><span class="n">np</span><span class="p">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="p">.</span><span class="n">inf</span><span class="p">],</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="n">enron_data</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">enron_data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="sh">'</span><span class="s">fraction_salary</span><span class="sh">'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="sh">'</span><span class="s">fraction_bonus</span><span class="sh">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">))</span> <span class="o">+</span> \
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mf">40.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/enron-machine-learning/salary-bonus-total-payments.png" alt="Salary v Bonus Over Total Payments" /><figcaption>Salary v Bonus Over Total Payments</figcaption>
+</figure>
+
+<p>Intuitively I’d expect many of the persons of interest involved in the Enron
+scandal to have large contributions to their total payment from either a bonus
+or from some other means. In the scatter plot above you can see that many of the
+persons of interest receive a low salary in respect to their overall total
+payment but tend towards receiving a higher bonus. That is with exception to a
+small handful of Enron employees. Suspiciously there are a few data points that
+indicate a bonus much larger than the total payment they received. I thought
+this to be an error in the data, but having gone back to the FindLaw report it
+is clear that the total payment reported for some employees was significantly
+reduced due to deferred income.</p>
+
+<p>Similarly I have plotted the salary as a fraction of total payment against long
+term incentive as a fraction of total payment.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">ggplot</span><span class="p">(</span><span class="n">enron_data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="sh">'</span><span class="s">fraction_salary</span><span class="sh">'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="sh">'</span><span class="s">fraction_long_term_incentive</span><span class="sh">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">))</span> <span class="o">+</span> \
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mf">40.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/enron-machine-learning/salary-long-term-investment-total-payments.png" alt="Salary v Long Term Investment Over Total Payments" /><figcaption>Salary v Long Term Investment Over Total Payments</figcaption>
+</figure>
+
+<p>Apart from the two glaring obvious persons of interest that have long term
+incentives much larger than their total payment, there does not appear to be any
+conclusive trend in this data. However I shall keep this feature in case it
+proves useful to the classifiers. If I find this to not be the case this feature
+will likely be removed in the feature selection part of the experiment.</p>
+
+<p>Next I’ll create a new stock value feature that, not too dissimilar to the new
+payment features, will represent exercised stock options as a fraction of the
+total stock value for each Enron employee. The rationale behind this new feature
+is that employees involved in the scandal may have been given huge amounts of
+stock that could be later sold.</p>
+
+<p>I did not have any other feature that I though appropriate to plot this against
+so I’ll just leave this feature for the classifiers to judge it’s usefulness
+whilst performing feature selection.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">[</span><span class="sh">'</span><span class="s">fraction_exercised_stock_options</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">exercised_stock_options</span> <span class="o">/</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">total_stock_value</span>
+
+<span class="c1"># Replace any infinate or missing values.
+</span><span class="n">enron_data</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">replace</span><span class="p">([</span><span class="n">np</span><span class="p">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="p">.</span><span class="n">inf</span><span class="p">],</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="n">enron_data</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Last, I created new email features that attempt to tease out the frequency at
+which persons of interest were in contact (via email) with each other as a
+proportion to the total number of message they either sent or received. The
+reason I find these features to be of interest is because it seems likely for
+this scandal to have gone unnoticed for so long that key individuals were
+privately sending messages to coordinate fraudulent activity. More specifically
+I have created 2 new features:</p>
+
+<ul>
+  <li>messages sent to a person of interest as a fraction of total messages sent</li>
+  <li>messaged received from a person of interest as a fraction of total messaged
+received</li>
+</ul>
+
+<p>I have plotted these two features against each other to find any trends.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">[</span><span class="sh">'</span><span class="s">fraction_from_poi_to_this_person</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">from_poi_to_this_person</span> <span class="o">/</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">to_messages</span>
+<span class="n">enron_data</span><span class="p">[</span><span class="sh">'</span><span class="s">fraction_from_this_person_to_poi</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">from_this_person_to_poi</span> <span class="o">/</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">from_messages</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">enron_data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="sh">'</span><span class="s">fraction_from_poi_to_this_person</span><span class="sh">'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="sh">'</span><span class="s">fraction_from_this_person_to_poi</span><span class="sh">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">))</span> <span class="o">+</span> \
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mf">40.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/enron-machine-learning/from-poi-to-poi-total_messages.png" alt="From POI v To POI Over Total Messages" /><figcaption>From POI v To POI Over Total Messages</figcaption>
+</figure>
+
+<p>Intuitively I would have imagined persons of interest to sit somewhere towards
+the top right of the graph whilst the other employees would be scattered about
+as they innocently get on with their jobs. However the scatter plot does not
+contain any discernible pattern that I can see. What is apparent from this plot
+is that Enron employees tended to send more email messages to persons on
+interest than receive them.</p>
+
+<p>However all is not lost as there are a few data points in this plot worth
+exploring. An interesting data point is the Enron employee that has not be
+flagged as a person of interest but has only ever sent email messages to other
+persons of interest. Lets find out who this is.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">.</span><span class="nf">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sh">'</span><span class="s">fraction_from_this_person_to_poi</span><span class="sh">'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> \
+  <span class="p">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="sh">'</span><span class="s">fraction_from_this_person_to_poi</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">from_messages</span><span class="sh">'</span><span class="p">]]</span> \
+  <span class="p">.</span><span class="nf">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>fraction_from_this_person_to_poi</th>
+        <th>from_messages</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>HUMPHREY GENE E</td>
+        <td>1.00</td>
+        <td>17.00</td>
+      </tr>
+      <tr>
+        <td>SHERRICK JEFFREY B</td>
+        <td>0.72</td>
+        <td>25.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>Whilst I could not find much on the internet that would identify the role Gene
+Humphrey had at Enron I was able to discover to whom he was sending the
+messages:</p>
+
+<ul>
+  <li>Kenneth Lay</li>
+  <li>Jeffrey Skilling</li>
+</ul>
+
+<p>Considering he only sent 17 messages it is not too hard to believe why this
+metric is so high.</p>
+
+<p>Jeffrey Sherrick in another interesting data point who sent email messages
+primarily to Kenneth Lay. However this is justified by the fact he was the
+President of Enron Global Exploration &amp; Production Inc. and therefore part of
+the corporate leadership and central management at Enron.</p>
+
+<p>The last data point I want to explore is the employee that has clearly received
+the most emails from persons of interest as a fraction of the total number of
+emails received. Lets find out who this is.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">.</span><span class="nf">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sh">'</span><span class="s">fraction_from_poi_to_this_person</span><span class="sh">'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> \
+  <span class="p">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="sh">'</span><span class="s">fraction_from_poi_to_this_person</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">fraction_from_this_person_to_poi</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">to_messages</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">from_messages</span><span class="sh">'</span><span class="p">]]</span> \
+  <span class="p">.</span><span class="nf">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>fraction_from_poi_to_this_person</th>
+        <th>fraction_from_this_person_to_poi</th>
+        <th>to_messages</th>
+        <th>from_messages</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>DONAHUE JR JEFFREY M</td>
+        <td>0.22</td>
+        <td>0.50</td>
+        <td>865.00</td>
+        <td>22.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>Jeffrey Donahue held a number of senior corporate development roles whilst at
+Enron and it is evident from the above table that 50% of the messages he sent
+were to a person of interest (which is only 11 messages). Additionally he
+received 190 messages from persons of interest, making up 22% of the messages he
+received overall. Taking a look at his email data I can see that he both sent
+messages to and received messages from the following persons of interest:</p>
+
+<ul>
+  <li>David Delainey</li>
+  <li>Kenneth Lay</li>
+  <li>Jeffrey Skilling</li>
+</ul>
+
+<p>So although neither Gene Humphrey, Jeffrey Sherrick nor Jeffrey Donahue are
+themselves persons of interest it is fascinating to discover that they were all
+in contact with the same few employees of the company involved in the scandal.</p>
+
+<p>As before I will extract a dictionary from the dataframe we’ve been using
+throughout this investigation, now including the new engineered features, and
+reorient the data. In addition I will now be using the <code class="language-plaintext highlighter-rouge">test_classifiers</code> method
+I implemented earlier to more comprehensively evaluate a list of classifiers
+sequentially, and will continue to take this approach from this point in the
+experiment.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">engineered_features</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="sh">'</span><span class="s">fraction_salary</span><span class="sh">'</span><span class="p">,</span>
+  <span class="sh">'</span><span class="s">fraction_bonus</span><span class="sh">'</span><span class="p">,</span>
+  <span class="sh">'</span><span class="s">fraction_long_term_incentive</span><span class="sh">'</span><span class="p">,</span>
+  <span class="sh">'</span><span class="s">fraction_exercised_stock_options</span><span class="sh">'</span><span class="p">,</span>
+  <span class="sh">'</span><span class="s">fraction_from_poi_to_this_person</span><span class="sh">'</span><span class="p">,</span>
+  <span class="sh">'</span><span class="s">fraction_from_this_person_to_poi</span><span class="sh">'</span>
+<span class="p">]</span>
+
+<span class="c1"># Append the engineered features to our list of original features.
+</span><span class="n">extended_features_list</span> <span class="o">=</span> <span class="n">features_list</span> <span class="o">+</span> <span class="n">engineered_features</span>
+
+<span class="c1"># Extract the data from the dataframe, including the engineered features.
+</span><span class="n">my_extended_dataset</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="sh">'</span><span class="s">index</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Create a list of classifiers to evaluate.
+</span><span class="n">clfs</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">Naive Bayes</span><span class="sh">'</span><span class="p">,</span> <span class="nc">GaussianNB</span><span class="p">()),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">SVM</span><span class="sh">'</span><span class="p">,</span> <span class="nc">LinearSVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">)),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">Random Forest</span><span class="sh">'</span><span class="p">,</span> <span class="nc">RandomForestClassifier</span><span class="p">()),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">AdaBoost</span><span class="sh">'</span><span class="p">,</span> <span class="nc">AdaBoostClassifier</span><span class="p">())</span>
+<span class="p">]</span>
+
+<span class="nf">test_classifiers</span><span class="p">(</span><span class="n">clfs</span><span class="p">,</span> <span class="n">my_extended_dataset</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>=====&gt; Running Naive Bayes
+
+=====&gt; Running SVM
+
+=====&gt; Running Random Forest
+
+=====&gt; Running AdaBoost
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>accuracy</th>
+        <th>precision</th>
+        <th>recall</th>
+        <th>f1</th>
+        <th>f2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AdaBoost</td>
+        <td>0.87</td>
+        <td>0.56</td>
+        <td>0.47</td>
+        <td>0.52</td>
+        <td>0.49</td>
+      </tr>
+      <tr>
+        <td>Random Forest</td>
+        <td>0.88</td>
+        <td>0.68</td>
+        <td>0.30</td>
+        <td>0.42</td>
+        <td>0.34</td>
+      </tr>
+      <tr>
+        <td>Naive Bayes</td>
+        <td>0.76</td>
+        <td>0.25</td>
+        <td>0.36</td>
+        <td>0.30</td>
+        <td>0.33</td>
+      </tr>
+      <tr>
+        <td>SVM</td>
+        <td>0.73</td>
+        <td>0.22</td>
+        <td>0.36</td>
+        <td>0.27</td>
+        <td>0.32</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>The above table shows that overall adding these 4 new features has not had a
+significant impact on the performance of each classifier, with exception to the
+<code class="language-plaintext highlighter-rouge">RandomForestClassifier</code> that has an improved F1 score of 41% (an 8% increase).
+This is due to both an increase in the precision and recall of this particular
+classifier. This I admit is a little disappointing as I had hoped some latent
+patterns to be discovered in these new features that would show a greater
+performance across all the classifiers. However I will keep all of these
+features until later feature selection deems them as having no significant
+effect.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-data">
+    <a class="link" href="/tag/data" title="Go to data" aria-label="Go to data">data</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-engineering">
+    <a class="link" href="/tag/engineering" title="Go to engineering" aria-label="Go to engineering">engineering</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-enron">
+    <a class="link" href="/tag/enron" title="Go to enron" aria-label="Go to enron">enron</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-feature">
+    <a class="link" href="/tag/feature" title="Go to feature" aria-label="Go to feature">feature</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-mathematics">
+    <a class="link" href="/tag/mathematics" title="Go to mathematics" aria-label="Go to mathematics">mathematics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-statistics">
+    <a class="link" href="/tag/statistics" title="Go to statistics" aria-label="Go to statistics">statistics</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

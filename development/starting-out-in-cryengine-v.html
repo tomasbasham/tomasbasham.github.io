@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Starting out in CryEngine V | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Starting out in CryEngine V" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="My experiences starting out in game development with CryEngine V." />
+<meta property="og:description" content="My experiences starting out in game development with CryEngine V." />
+<link rel="canonical" href="https://tomasbasham.dev/development/starting-out-in-cryengine-v" />
+<meta property="og:url" content="https://tomasbasham.dev/development/starting-out-in-cryengine-v" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-10-26T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Starting out in CryEngine V" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2016-10-26T00:00:00+01:00","datePublished":"2016-10-26T00:00:00+01:00","description":"My experiences starting out in game development with CryEngine V.","headline":"Starting out in CryEngine V","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/starting-out-in-cryengine-v"},"url":"https://tomasbasham.dev/development/starting-out-in-cryengine-v"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Starting out in CryEngine V</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2016-10-26T00:00:00+01:00">26 Oct 2016</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 8 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>It is an irrefutable fact that CryEngine is a fantastic game engine. This is
+made evident be the AAA titles that are being released. As a developer I have
+been keen to get in on this action and create my own stunning landscapes with a
+captivating storyline. However upon being faced with a blank canvas I really do
+feel like the David to this game engine Goliath.</p>
+
+<p>This article clearly is not going to be an in depth discussion about how
+professionals use this engine and how to implement the next Crysis, however in
+this article you will learn the answers I had to some very basic question when
+starting out.</p>
+
+<h3 id="what-is-cryengine-v">What is CryEngine V?</h3>
+
+<p>CryEngine V is the fifth major iteration of the CryEngine game engine developed
+by the German company <a href="http://www.crytek.com/">Crytek</a>. Since the release of the
+original engine in 2002 it has been used for all their titles and has been
+continually updated to support newer technologies, hardware and platforms. This
+brings us all the way to CryEngine V, released on 22 March 2016, to support a
+new licensing model allowing the engine to be used for free.</p>
+
+<p>The implementation of a launcher, which is used to download the engine, is a
+much needed improvement. In the past when stating a game project a new copy of
+the engine would need to be downloaded and the game built around the engine
+source code. From talking to other game developers who used CryEngine back in
+these archaic days they said that they preferred that way of working. Although
+Crytek are not the first to do this I personally disagree with the other
+developers and am glad Crytek have taken this approach.</p>
+
+<h3 id="how-does-it-differ-from-ue4-or-other-engines">How does it differ from UE4 or other engines?</h3>
+
+<p>Before settling with CryEngine V I also ventured into UnrealEngine 4 (UE4) and
+Unity. Although all of these game engines offer similar features there were some
+key points that made CryEngine V stand out to me:</p>
+
+<ul>
+  <li>100% Royalty free. Unlike UE4 and Unity which require you to pay royalties
+when you hit the big time, CryEngine is completely royalty free,</li>
+  <li>Real time sandbox editing. Both UE4 and Unity have this functionality, but it
+felt more solid in CryEngine,</li>
+  <li>Single key press to jump straight into the game. This is facilitated without
+loading the game engine as it is already running within the editor,</li>
+  <li>A lot of boilerplate is already done for you. A new project will start with an
+ocean, a small platform, a skybox and Time of Day (TOD) feature with
+daylight/nighttime transition. This was not something I found in UE4,</li>
+  <li>An impressive sample level which I feel is more accessible than those on UE4
+or Unity. For instance it runs on my mid spec Windows Desktop whereas the UE4
+Infiltrator demo has no hope in hell of running on my machine.</li>
+</ul>
+
+<h3 id="what-cryengine-is-not">What CryEngine is not</h3>
+
+<p>So far I have been singing CryEngine praises, but like most things it is not
+perfect. In particular:</p>
+
+<ul>
+  <li>It is not as user friendly as other engines, although it is vastly more so
+than in previous versions,</li>
+  <li>It currently has little support and scattered documentation,</li>
+  <li>I found there to be a partially elitist community (at least those I spoke to
+on Slack), whilst the forums are most helpful,</li>
+  <li>It’s asset store is lacking in… well, assets. I assume this will improve
+over time. CryEngine (with launcher and store) is very new so the community
+has yet to release many assets.</li>
+</ul>
+
+<h3 id="the-missing-answers">The Missing Answers</h3>
+
+<p>Now with an introduction to the game engine I present the questions that I had
+when starting to use CryEngine V.</p>
+
+<h3 id="1-how-to-launch-the-code-editor-and-the-game">1. How to Launch the Code, Editor and the Game?</h3>
+
+<p>I believe it is important to note that Visual Studio (or MonoDevelop for C#)
+should be launched using the <code class="language-plaintext highlighter-rouge">Code_CPP.bat</code> file (Code_CS.bat for C#) created
+after bootstrapping a new game project. This script creates a series of
+environment variables that presumably enable Visual Studio to successfully build
+the game.</p>
+
+<p>Similarly launching the sandbox editor should be done via the <code class="language-plaintext highlighter-rouge">Editor.bat</code> file
+or from the CryEngine Launcher.</p>
+
+<p><strong>Update</strong>: Now CryEngine 5.2 has been released the above has been updated.
+Instead a working installation of CMake (3.6+) is required to generate a Visual
+Studio (or MonoDevelop for C#) project file that can be opened through explorer,
+whilst the editor and game are launched through the <code class="language-plaintext highlighter-rouge">.cryproject</code> file.</p>
+
+<h3 id="2-how-are-the-config-files-loaded">2. How are the Config Files Loaded?</h3>
+
+<p>There are a couple of configuration files scattered around the engine and
+individual projects. These are loaded in a particular order as discussed below:</p>
+
+<p><code class="language-plaintext highlighter-rouge">system.cfg</code> is the first config file loaded by the engine and found in the
+engine root. I tend not to touch this file and pretend it does not exist. Unless
+I know I want a certain configuration for every game I plan to create it will
+suffice to put my game configs elsewhere. The exception to this is the audio
+middleware. It was recommended that I switch middleware in here.</p>
+
+<p><code class="language-plaintext highlighter-rouge">editor.cfg</code> is loaded next and also found in the engine root. Presumably this
+config applies only to the editor. As with <code class="language-plaintext highlighter-rouge">system.cfg</code>, unless I know I want a
+certain configuration for every game I wont edit this file.</p>
+
+<p><code class="language-plaintext highlighter-rouge">game.cfg</code> is loaded next. This is the configuration file for the specific
+project.</p>
+
+<p><strong>Update</strong>: Prior to version 5.2 <code class="language-plaintext highlighter-rouge">project.cfg</code> is the loaded last. This file
+seemed superflous to me as <code class="language-plaintext highlighter-rouge">game.cfg</code> would do the job. It would appear it has
+been removed.</p>
+
+<p><strong>Upadte</strong>: Having updated to version 5.3 it appears that <code class="language-plaintext highlighter-rouge">system.cfg</code> has been
+removed so I was unable to continue using this file to host my audio middleware
+configurations. Instead I have moved it over to <code class="language-plaintext highlighter-rouge">game.cfg</code>. This has made a
+little more sense to me considering how the new plugin system is supposed to
+help separate engine logic from specific game code. Putting my configurations
+variables here keeps all my game specific values in one place.</p>
+
+<p>The various configuration variables and console commands are documented on the
+CryEngine website and prefixed with the initials of it parent subcomponent of
+the engine. For example the <code class="language-plaintext highlighter-rouge">s_</code> prefix is for the sound engine subcomponent. A
+full list of the available configuration variables can be found
+<a href="http://docs.cryengine.com/display/CRYAUTOGEN/Home">here</a>.</p>
+
+<h3 id="3-what-is-the-resource-compiler">3. What is the Resource Compiler?</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">MakeAssets.bat</code> invokes the the resource compiler (rc.exe) that optimises
+assets for the specific platform. Some useful resources referencing the resource
+compiler can be found on the CryEngine website. Ones of note are:
+<a href="http://docs.cryengine.com/display/SDKDOC2/Using+the+Resource+Compiler">using the resource compiler</a>
+and
+<a href="http://docs.cryengine.com/display/CEPROG/Compiling+Assets+for+Multiple+Platforms">compiling assets for multiple platforms</a>.</p>
+
+<p>Furthermore <code class="language-plaintext highlighter-rouge">MakeAssets.bat</code> contains syntax such as <code class="language-plaintext highlighter-rouge">%~dp0</code>. This is a Windows
+shell command that expands the full path to the file (including the drive letter
+drive). More on this can be found in <a href="http://stackoverflow.com/a/5034119">this</a>
+StackOverflow answer.</p>
+
+<p><strong>Update</strong>: In version 5.2 of the engine this feature seems to be broken since
+the project.cfg file was removed. I questioned this on the forums to only have
+it confirmed. Hopefully this will be fixed ASAP.</p>
+
+<p><strong>Update</strong>: In version 5.3 <code class="language-plaintext highlighter-rouge">MakeAssets.bat</code> has been removed from the game
+templates. I can only assume it is now handled entirely within the
+<a href="http://docs.cryengine.com/display/CEPROG/CMake">CMake system</a>.</p>
+
+<h3 id="4-how-to-implement-wwise-sound-engine">4. How to implement Wwise sound engine?</h3>
+
+<p>When I start a project I like to setup and integrate all the other 3rd party
+software I intend to use first. So to begin I wanted to switch the audio
+middleware that the engine uses. By default this is SDL Mixer. In order for the
+engine to interact with different audio middleware it implements an Audio
+Translation Layer (ATL) which is an abstraction interface between CryEngine and
+other audio middlewares i.e. Wwise.</p>
+
+<p>I wont be going through the setup of Wwise in this article as it is covered well
+<a href="http://docs.cryengine.com/display/CEMANUAL/Setting+up+Wwise+for+CRYENGINE">here</a>
+but the two important console commands I used are:</p>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s_DrawAudioDebug</span> <span class="m">1</span>  &lt;-- <span class="n">Display</span> <span class="n">debug</span> <span class="n">information</span> <span class="n">about</span> <span class="n">ATL</span> <span class="n">middleware</span>.
+<span class="n">s_AudioImplName</span> <span class="n">CryAudioImplWwise</span>  &lt;-- <span class="n">Switch</span> <span class="n">to</span> <span class="n">the</span> <span class="n">Wwise</span> <span class="n">audio</span> <span class="n">middleware</span>. <span class="n">Other</span> <span class="n">options</span> <span class="n">include</span> <span class="n">CryAudioImplFmod</span> (<span class="n">for</span> <span class="n">fmod</span> <span class="n">studio</span>) <span class="n">and</span> <span class="n">CryAudioImplSDLMixer</span> (<span class="n">for</span> <span class="n">sdl</span> <span class="n">mixer</span>).
+</code></pre></div></div>
+
+<p>I also set these in my <code class="language-plaintext highlighter-rouge">system.cfg</code> file as mentioned earlier. Now every time I
+create a new project, or launch a current project the correct audio middleware
+is selected.</p>
+
+<p><strong>Update</strong>: As of version 5.3 I have transitioned this configuration to
+<code class="language-plaintext highlighter-rouge">game.cfg</code> as <code class="language-plaintext highlighter-rouge">system.cfg</code> has been removed (at least according to my editor log
+file which is unable to find it).</p>
+
+<h3 id="5-how-is-the-c-sample-project-structured">5. How is the C++ Sample Project Structured?</h3>
+
+<p>I lean toward using C++ when I can. It seems to have been the industry standard
+for many years so there must be something about it that lends itself well to
+games. Alternatively it was just the only decent language available at the time
+and has just stuck. Regardless, the C++ project the launcher generates includes
+a little boilerplate that is not well documented and I simply am unsure what it
+all does, whether it is necessary and whether I can remove it without breaking
+everything.</p>
+
+<p>I’m cautious that this is an example of
+<a href="https://en.wikipedia.org/wiki/Functional_fixedness">functional fixedness</a>, a
+bias limiting me to using the engine only in the way it has traditionally been
+used. So I intend to figure out what were the intentions of having included
+these particular boilerplate features, yet not implement others? Beyond this I
+intend to find what each bit does.</p>
+
+<h3 id="6-what-is-included-in-the-assets-folder">6. What is Included in the Assets Folder?</h3>
+
+<p>The Assets folder contains <code class="language-plaintext highlighter-rouge">Textures.pak</code>. What is the difference between this
+and the <code class="language-plaintext highlighter-rouge">terraintexture.pak</code> within <code class="language-plaintext highlighter-rouge">Assets/levels/example</code>? I assume
+<code class="language-plaintext highlighter-rouge">Textures.pak</code> are global textures whereas <code class="language-plaintext highlighter-rouge">terraintexture.pak</code> contains
+textures pertaining to a particular levels landscape including height maps,
+normal maps etc…</p>
+
+<h3 id="moving-forward">Moving Forward</h3>
+
+<p>I am clearly still no expert here, with some questions still unanswered. I fully
+intend to keep this article up to date whilst I discover more answers to my
+questions, perhaps adding further questions as they develop.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-cryengine">
+    <a class="link" href="/tag/cryengine" title="Go to cryengine" aria-label="Go to cryengine">cryengine</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-development">
+    <a class="link" href="/tag/development" title="Go to development" aria-label="Go to development">development</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-engine">
+    <a class="link" href="/tag/engine" title="Go to engine" aria-label="Go to engine">engine</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-game">
+    <a class="link" href="/tag/game" title="Go to game" aria-label="Go to game">game</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-technology">
+    <a class="link" href="/tag/technology" title="Go to technology" aria-label="Go to technology">technology</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

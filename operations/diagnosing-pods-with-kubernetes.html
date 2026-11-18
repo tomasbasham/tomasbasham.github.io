@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Diagnosing Pods with Kubernetes | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Diagnosing Pods with Kubernetes" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Using the power of Kubernetes labels and selectors to diagnose problematic pods." />
+<meta property="og:description" content="Using the power of Kubernetes labels and selectors to diagnose problematic pods." />
+<link rel="canonical" href="https://tomasbasham.dev/operations/diagnosing-pods-with-kubernetes" />
+<meta property="og:url" content="https://tomasbasham.dev/operations/diagnosing-pods-with-kubernetes" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-01-22T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Diagnosing Pods with Kubernetes" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2018-01-22T00:00:00+00:00","datePublished":"2018-01-22T00:00:00+00:00","description":"Using the power of Kubernetes labels and selectors to diagnose problematic pods.","headline":"Diagnosing Pods with Kubernetes","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/operations/diagnosing-pods-with-kubernetes"},"url":"https://tomasbasham.dev/operations/diagnosing-pods-with-kubernetes"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Diagnosing Pods with Kubernetes</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2018-01-22T00:00:00+00:00">22 Jan 2018</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 3 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>Labels are the mechanism in Kubernetes through which system objects may be
+given an organisation structure. A label is a key-value pair with well defined
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set">restrictions</a>
+concerning length and value used as an identifier and mapped onto system
+objects making them more meaningful within the system as a whole.</p>
+
+<p>Whilst labels (and selectors) underpin how Pods are managed within a Deployment
+they can be used in other ways more conducive to the diagnosis of the
+containers that make up Pods.</p>
+
+<p>When there is a problematic Pod running within a cluster it may not be
+desirable to destroy it without first understanding what went wrong. Instead
+the Pod should be removed from the load balancer and inspected whilst no longer
+serving traffic.</p>
+
+<p>This can be accomplished through the use of labels and selectors within a
+Kubernetes manifest files describing a Deployment. In particular a label such
+as <code class="language-plaintext highlighter-rouge">serving: true</code> may indicate to Kubernetes that a Pod should be placed
+within the load balancer and should be serving traffic.</p>
+
+<p><strong>Note</strong>: The <code class="language-plaintext highlighter-rouge">-L</code> option in the following command specifies the <code class="language-plaintext highlighter-rouge">serving</code>
+label should be included in the table output by <code class="language-plaintext highlighter-rouge">kubectl</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp get pods <span class="nt">-L</span> serving
+NAME                     READY     STATUS    RESTARTS   AGE       SERVING
+api-441436789-7qzv0      2/2       Running   0          3d        <span class="nb">true
+</span>api-441436789-dwg2q      2/2       Running   0          3d        <span class="nb">true
+</span>client-760894609-ggw1b   1/1       Running   0          3d        <span class="nb">true
+</span>client-760894609-s8blr   1/1       Running   0          3d        <span class="nb">true
+
+</span>kubectl <span class="nt">-n</span> myapp describe service/api
+Name:                     api
+Namespace:                myapp
+Labels:                   &lt;none&gt;
+Annotations:              cloud.google.com/load-balancer-type<span class="o">=</span>internal
+                          kubectl.kubernetes.io/last-applied-configuration<span class="o">={</span><span class="s2">"apiVersion"</span>:<span class="s2">"v1"</span>,<span class="s2">"kind"</span>:<span class="s2">"Service"</span>,<span class="s2">"metadata"</span>:<span class="o">{</span><span class="s2">"annotations"</span>:<span class="o">{</span><span class="s2">"cloud.google.com/load-balancer-type"</span>:<span class="s2">"internal"</span><span class="o">}</span>,<span class="s2">"name"</span>:<span class="s2">"api"</span>,<span class="s2">"namespace"</span>:<span class="s2">"myapp"</span><span class="o">}</span>,<span class="s2">"spec..."</span>
+Selector:                 <span class="nv">app</span><span class="o">=</span>myapp,serving<span class="o">=</span><span class="nb">true</span>,tier<span class="o">=</span>api
+Type:                     LoadBalancer
+IP:                       10.7.241.228
+LoadBalancer Ingress:     10.132.0.6
+Port:                     http2  80/TCP
+TargetPort:               %!d<span class="o">(</span><span class="nv">string</span><span class="o">=</span>esp-port<span class="o">)</span>/TCP
+NodePort:                 http2  31364/TCP
+Endpoints:                10.4.2.19:9000,10.4.2.21:9000
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   &lt;none&gt;
+</code></pre></div></div>
+
+<p>For instance lets say the Pod named <code class="language-plaintext highlighter-rouge">api-441436789-7qzv0</code> is returning an
+increased number of <code class="language-plaintext highlighter-rouge">404</code> responses which has been identified as abnormal
+behaviour. This Pod is a prime candidate for inspection, but doing so whilst it
+is still serving traffic (and thus many <code class="language-plaintext highlighter-rouge">404</code> errors) is undesirable. Replacing
+the Pod with a fresh one may solve the problem temporarily, but finding the
+root cause of the issue should be the goal. Therefore to remove this Pod from
+the load balancer it’s labels must be edited in place.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp label pods/api-441436789-7qzv0 <span class="nt">--overwrite</span> <span class="nv">serving</span><span class="o">=</span><span class="nb">false</span>
+</code></pre></div></div>
+
+<p>The Replication Controller backing the Deployment will spin up a new Pod to
+replace the one taken from the load balancer whilst the problematic Pod will
+remain active for inspection but will not be available to serve traffic.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp get pods <span class="nt">-L</span> serving
+NAME                     READY     STATUS    RESTARTS   AGE       SERVING
+api-441436789-7qzv0      2/2       Running   0          3d        <span class="nb">false
+</span>api-441436789-dwg2q      2/2       Running   0          3d        <span class="nb">true
+</span>api-441436789-lh8ht      2/2       Running   0          8s        <span class="nb">true
+</span>client-760894609-ggw1b   1/1       Running   0          3d        <span class="nb">true
+</span>client-760894609-s8blr   1/1       Running   0          3d        <span class="nb">true
+
+</span>kubectl <span class="nt">-n</span> myapp describe service/api
+Name:                     api
+Namespace:                myapp
+Labels:                   &lt;none&gt;
+Annotations:              cloud.google.com/load-balancer-type<span class="o">=</span>internal
+                          kubectl.kubernetes.io/last-applied-configuration<span class="o">={</span><span class="s2">"apiVersion"</span>:<span class="s2">"v3"</span>,<span class="s2">"kind"</span>:<span class="s2">"Service"</span>,<span class="s2">"metadata"</span>:<span class="o">{</span><span class="s2">"annotations"</span>:<span class="o">{</span><span class="s2">"cloud.google.com/load-balancer-type"</span>:<span class="s2">"internal"</span><span class="o">}</span>,<span class="s2">"name"</span>:<span class="s2">"api"</span>,<span class="s2">"namespace"</span>:<span class="s2">"myapp"</span><span class="o">}</span>,<span class="s2">"spec..."</span>
+Selector:                 <span class="nv">app</span><span class="o">=</span>myapp,serving<span class="o">=</span><span class="nb">true</span>,tier<span class="o">=</span>api
+Type:                     LoadBalancer
+IP:                       10.7.241.228
+LoadBalancer Ingress:     10.132.0.6
+Port:                     http2  80/TCP
+TargetPort:               %!d<span class="o">(</span><span class="nv">string</span><span class="o">=</span>esp-port<span class="o">)</span>/TCP
+NodePort:                 http2  31364/TCP
+Endpoints:                10.4.2.21:9000,10.4.2.24:9000
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   &lt;none&gt;
+</code></pre></div></div>
+
+<p><strong>Note</strong>: In the above snippet the endpoints that back the service have changed
+to reflect the replacement of the problematic Pod.</p>
+
+<p>Now an interactive terminal session can be made with a container running in the
+Pod without affecting traffic.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp <span class="nb">exec</span> <span class="nt">-it</span> api-441436789-7qzv0 <span class="nt">-c</span> api /bin/bash
+</code></pre></div></div>
+
+<p>When the problem has been diagnosed and possibly fixed the Pod can be returned
+to the load balancer or more likely just destroyed.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-docker">
+    <a class="link" href="/tag/docker" title="Go to docker" aria-label="Go to docker">docker</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-kubernetes">
+    <a class="link" href="/tag/kubernetes" title="Go to kubernetes" aria-label="Go to kubernetes">kubernetes</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

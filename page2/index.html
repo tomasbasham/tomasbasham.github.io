@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Tomas Basham’s Blog" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Tomas Basham’s Technology Blog and Development Portfolio" />
+<meta property="og:description" content="Tomas Basham’s Technology Blog and Development Portfolio" />
+<link rel="canonical" href="https://tomasbasham.dev/page2/" />
+<meta property="og:url" content="https://tomasbasham.dev/page2/" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="website" />
+<link rel="prev" href="https://tomasbasham.dev/" />
+<link rel="next" href="https://tomasbasham.dev/page3/" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Tomas Basham’s Blog" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Tomas Basham’s Technology Blog and Development Portfolio","headline":"Tomas Basham’s Blog","url":"https://tomasbasham.dev/page2/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+    
+    <section class="intro">
+  
+
+<div class="desk" x-data="deskParallax">
+  <div class="desk__stage" style="aspect-ratio: 918 / 400;">
+    
+    
+
+
+
+
+  <div class="desk__item" aria-hidden="true" style="left: 7.625%; top: 2.0%; width: 21.786%; height: 42.5%; --depth: 0;"><span class="desk__inside"><img class="desk__art desk__art--day" src="/images/desk/window-day.svg" alt="" width="200" height="170" decoding="async"><img class="desk__art desk__art--night" src="/images/desk/window-night.svg" alt="" width="200" height="170" decoding="async"></span></div>
+
+
+    <div class="desk__scene">
+      
+
+
+
+
+  <div class="desk__item" aria-hidden="true" style="left: 0.0%; top: 75.0%; width: 100.0%; height: 25.0%; --depth: 2.5;"><span class="desk__inside"><img class="desk__art desk__art--shared" src="/images/desk/desk.svg" alt="" width="918" height="100" decoding="async"></span></div>
+
+
+
+
+
+
+  <div class="desk__item" aria-hidden="true" style="left: 8.715%; top: 60.5%; width: 8.715%; height: 25.0%; --depth: 4;"><span class="desk__inside"><img class="desk__art desk__art--shared" src="/images/desk/plant.svg" alt="" width="80" height="100" decoding="async"></span></div>
+
+
+
+
+
+
+  <div class="desk__item" aria-hidden="true" style="left: 13.943%; top: 42.0%; width: 23.965%; height: 47.5%; --depth: 4.5;"><span class="desk__inside"><img class="desk__art desk__art--day" src="/images/desk/lamp-day.svg" alt="" width="220" height="190" decoding="async"><img class="desk__art desk__art--night" src="/images/desk/lamp-night.svg" alt="" width="220" height="190" decoding="async"></span></div>
+
+
+
+
+
+
+  <div class="desk__item desk__item--link" style="left: 33.224%; top: 58.5%; width: 25.054%; height: 27.0%; --depth: 5;">
+    <a class="desk__hit" href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"></a>
+    <span class="desk__inside"><img class="desk__art desk__art--shared" src="/images/desk/laptop.svg" alt="" width="230" height="108" decoding="async"></span>
+    <span class="desk__label" aria-hidden="true">GitHub</span>
+  </div>
+
+
+
+
+
+
+  <div class="desk__item" aria-hidden="true" style="left: 61.547%; top: 71.0%; width: 5.664%; height: 14.5%; --depth: 6;"><span class="desk__inside"><img class="desk__art desk__art--shared" src="/images/desk/mug.svg" alt="" width="52" height="58" decoding="async"></span></div>
+
+
+
+
+
+
+  <div class="desk__item desk__item--link" style="left: 69.717%; top: 65.5%; width: 8.279%; height: 20.0%; --depth: 6.5;">
+    <a class="desk__hit" href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"></a>
+    <span class="desk__inside"><img class="desk__art desk__art--shared" src="/images/desk/card.svg" alt="" width="76" height="80" decoding="async"></span>
+    <span class="desk__label" aria-hidden="true">LinkedIn</span>
+  </div>
+
+
+
+
+
+
+  <div class="desk__item desk__item--link" style="left: 80.065%; top: 71.0%; width: 10.022%; height: 14.5%; --depth: 7;">
+    <a class="desk__hit" href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer" aria-label="Instagram (opens in a new tab)"></a>
+    <span class="desk__inside"><img class="desk__art desk__art--shared" src="/images/desk/camera.svg" alt="" width="92" height="58" decoding="async"></span>
+    <span class="desk__label" aria-hidden="true">Instagram</span>
+  </div>
+
+
+
+
+
+
+  <div class="desk__item desk__item--link" style="left: 91.068%; top: 64.0%; width: 5.664%; height: 21.5%; --depth: 7.5;">
+    <a class="desk__hit" href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer" aria-label="Bluesky (opens in a new tab)"></a>
+    <span class="desk__inside"><img class="desk__art desk__art--shared" src="/images/desk/phone.svg" alt="" width="52" height="86" decoding="async"></span>
+    <span class="desk__label" aria-hidden="true">Bluesky</span>
+  </div>
+
+
+    </div>
+  </div>
+
+  <nav class="desk__menu" aria-label="Social profiles">
+    <ul>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+        
+      
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+        
+      
+        
+          <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+        
+      
+    </ul>
+  </nav>
+</div>
+
+  <header class="intro__about">
+    <p class="intro__text">
+      I'm Tomas Basham, a software developer in London, working on backend
+      services and the infrastructure they run on. I write about Go, Rust, cloud
+      and operations, and in my spare time I bake sourdough, hunt for the best
+      burger in town and tinker with electronics and 3D printing.
+    </p>
+  </header>
+</section>
+
+<main class="content">
+  
+  <h5 class="index-headline featured">
+    <span>Featured</span>
+  </h5>
+
+  <div class="featured-posts post-list">
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/development/building-a-cloud-native-service" itemprop="url">Building a Cloud Native Service</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>Most modern software services attempt to provide a system that is available 100% of the time to millions of users around the world. However this provides many challenges in respect to reliability and scalability that are not easily solved with traditional software development and operational methodologies. In this article I...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2018-07-12T00:00:00+01:00">12 July 2018</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-development">
+          <a class="link" href="/category/development" title="Go to development" aria-label="Go to development">development</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/development/git-workflows-for-project-management" itemprop="url">Git Workflows for Project Management</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>This is how I use git either working as part of a team or individually. I use an amend/rebase mutable-history workflow where each idea is always represented by one commit. I never make checkpoint commits, and I only need to write git commit messages once per feature (and perhaps amend...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2013-04-06T00:00:00+01:00">06 April 2013</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-development">
+          <a class="link" href="/category/development" title="Go to development" aria-label="Go to development">development</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+  </div>
+  
+
+  <h5 class="index-headline normal">
+    <span>Articles</span>
+  </h5>
+
+  <div class="post-list clearfix">
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/development/the-css-conundrum" itemprop="url">The CSS Conundrum: Why Utility Classes Are Not The Answer</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>In the previous articles in this series, I’ve examined how modern web development has drifted from its foundational principles and advocated for a return to HyperText. Now it’s time to address another concerning trend: the proliferation of utility-first CSS frameworks, particularly TailwindCSS, and the practice of embedding styling directly within...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2025-05-03T00:00:00+01:00">03 May 2025</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-development">
+          <a class="link" href="/category/development" title="Go to development" aria-label="Go to development">development</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/development/hypertext-and-html" itemprop="url">HyperText and HTML: Why SPAs Are Dead</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>In the first article of this series, I established my position that modern web development has strayed from its roots, creating unnecessary complexity and artificial divisions. Now, I want to focus specifically on how our industry’s obsession with client-side rendering and single-page applications (SPAs) has undermined the very essence of...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2025-05-02T00:00:00+01:00">02 May 2025</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-development">
+          <a class="link" href="/category/development" title="Go to development" aria-label="Go to development">development</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/development/web-development-at-a-crossraods" itemprop="url">Web Development at a Crossroads: Returning to Fundamentals</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>In this series of articles, I’ll be challenging several sacred cows of modern web development. Not because I enjoy being contrarian, but because I believe our industry has veered dramatically off course—creating unnecessary complexity, establishing counterproductive team structures, and moving further from the foundational principles that made the web so...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2025-05-01T00:00:00+01:00">01 May 2025</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-development">
+          <a class="link" href="/category/development" title="Go to development" aria-label="Go to development">development</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/machine%20learning/dimensionality-reduction" itemprop="url">Dimensionality Reduction</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>Dimensionality reduction is a subtle form of feature selection deserving its own section of this notebook. Unlike feature selection discussed in the previous section the techniques used in dimensionality reduction derive brand new (latent) features from the existing dataset. These features are not directly measurable but describe a general trend...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2019-02-15T00:00:00+00:00">15 February 2019</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-machine learning">
+          <a class="link" href="/category/machine-learning" title="Go to machine learning" aria-label="Go to machine learning">machine learning</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/machine%20learning/selecting-the-right-features" itemprop="url">Selecting the Right Features</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>The features in our dataset have a significant influence over the performance of the predictive model we are able to create. Broadly speaking, in machine learning if you feed garbage into a classifier you should expect only garbage to come out. This becomes more important as the number of features...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2019-01-29T00:00:00+00:00">29 January 2019</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-machine learning">
+          <a class="link" href="/category/machine-learning" title="Go to machine learning" aria-label="Go to machine learning">machine learning</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/machine%20learning/feature-scaling" itemprop="url">Feature Scaling</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>In general, classifiers that exploit distances (i.e. Euclidean distance) or similarities between examples are sensitive to features taking on broad ranges of values. That is classifiers that have a co-dependency between dimensions are effected by feature scaling. For example if one feature takes on a range of values much greater...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2019-01-10T00:00:00+00:00">10 January 2019</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-machine learning">
+          <a class="link" href="/category/machine-learning" title="Go to machine learning" aria-label="Go to machine learning">machine learning</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/machine%20learning/building-new-features-from-existig-data" itemprop="url">Building New Features from Existing Data</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>The next step in this experiment is to create new features from the existing data in the Enron dataset. I’ll do this in an attempt to tease out any latent information within combinations of features that may improve performance. Using my intuition and reasoning about the background of the Enron...</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2019-01-04T00:00:00+00:00">04 January 2019</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-machine learning">
+          <a class="link" href="/category/machine-learning" title="Go to machine learning" aria-label="Go to machine learning">machine learning</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-item">
+    <header class="post-header">
+      <h3 class="post-title" itemprop="name"><a href="/machine%20learning/classifier-pre-assessment" itemprop="url">Classifier Pre-Assessment</a></h3>
+    </header>
+    <section class="post-excerpt" itemprop="description">
+      <p>In this section I am going to perform a preliminary assessment of 4 “out of the box” classifiers using their respective default parameters. I’m going to use the results of evaluating these classifiers as a baseline from which I may improve performance, or ultimately dismiss classifiers from being further evaluated....</p>
+    </section>
+    <footer class="post-meta">
+      <time datetime="2018-12-20T00:00:00+00:00">20 December 2018</time>
+      <section class="category">
+        
+        <div class="tag post-tag post-tag-machine learning">
+          <a class="link" href="/category/machine-learning" title="Go to machine learning" aria-label="Go to machine learning">machine learning</a>
+        </div>
+        
+      </section>
+    </footer>
+  </div>
+</article>
+
+    
+  </div>
+  <nav class="pagination">
+  
+  <a class="newer-posts" href="/">Newer Posts</a>
+  
+
+  
+  <a class="older-posts" href="/page3">Older Posts</a>
+  
+</nav>
+
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

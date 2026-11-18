@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Structuring Terraform Ownership in Layers | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Structuring Terraform Ownership in Layers" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Infrastructure teams tend to discover the same problem at different points in their growth. Someone adds a resource to the wrong workspace, a plan runs against the wrong state file, and suddenly you are staring at a proposed deletion of something critical. The instinct is to consolidate — one workspace, one state file, one place where everything lives. That instinct is wrong." />
+<meta property="og:description" content="Infrastructure teams tend to discover the same problem at different points in their growth. Someone adds a resource to the wrong workspace, a plan runs against the wrong state file, and suddenly you are staring at a proposed deletion of something critical. The instinct is to consolidate — one workspace, one state file, one place where everything lives. That instinct is wrong." />
+<link rel="canonical" href="https://tomasbasham.dev/infrastructure/structuring-terraform-ownership-layers" />
+<meta property="og:url" content="https://tomasbasham.dev/infrastructure/structuring-terraform-ownership-layers" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-04-30T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Structuring Terraform Ownership in Layers" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2026-04-30T00:00:00+01:00","datePublished":"2026-04-30T00:00:00+01:00","description":"Infrastructure teams tend to discover the same problem at different points in their growth. Someone adds a resource to the wrong workspace, a plan runs against the wrong state file, and suddenly you are staring at a proposed deletion of something critical. The instinct is to consolidate — one workspace, one state file, one place where everything lives. That instinct is wrong.","headline":"Structuring Terraform Ownership in Layers","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/infrastructure/structuring-terraform-ownership-layers"},"url":"https://tomasbasham.dev/infrastructure/structuring-terraform-ownership-layers"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Structuring Terraform Ownership in Layers</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2026-04-30T00:00:00+01:00">30 Apr 2026</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 8 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>Infrastructure teams tend to discover the same problem at different points in
+their growth. Someone adds a resource to the wrong workspace, a plan runs
+against the wrong state file, and suddenly you are staring at a proposed
+deletion of something critical. The instinct is to consolidate — one workspace,
+one state file, one place where everything lives. That instinct is wrong.</p>
+
+<p>The right model comes from asking a different question entirely: who should be
+allowed to change this?</p>
+
+<h3 id="infrastructure-is-not-flat">Infrastructure is not flat</h3>
+
+<p>Cloud infrastructure has a natural hierarchy. Some resources are foundational —
+the identity pools, the folder structure, the organisation policies that govern
+what is even possible within your environment. Others are shared services: a
+Kubernetes cluster, a database, a message queue that multiple teams depend
+upon. Others still are workload-specific, tightly coupled to a single
+application and owned entirely by the team that builds it.</p>
+
+<p>Treating all of these as equivalent, managed from the same workspace with the
+same credentials, collapses a meaningful distinction. It also maximises blast
+radius. When a workspace can touch everything, a mistake anywhere can affect
+everything.</p>
+
+<p>The layered model addresses this by decomposing Terraform configuration into
+four tiers, each with its own workspace, its own service account, and its own
+permission boundary.</p>
+
+<h3 id="the-four-tiers">The four tiers</h3>
+
+<p><strong>Organisation</strong> is the root. It owns the trust infrastructure that all
+subsequent automation depends upon: the Workload Identity Pools that allow CI/CD
+pipelines to authenticate without long-lived keys, the folder hierarchy that
+structures the environment, and the organisation-wide policies that define what
+is permissible across every project beneath them. Custom IAM roles that other
+layers will later reference are also defined here.</p>
+
+<p>What the Organisation workspace does not own is general service account
+management. It establishes the rules of the game. Everything else belongs to a
+layer above it.</p>
+
+<p><strong>Governance</strong> owns the containers. In GCP, a project is a hard isolation
+boundary — a separate IAM namespace, a separate quota domain, a separate unit of
+billing. Creating a project is an administrative act that precedes everything
+else, and it lives in the Governance workspace. This layer also creates the
+service accounts and IAM principals that Platform and Delivery teams will later
+assume when provisioning resources or running workloads.</p>
+
+<p>The separation of project administration from project tenancy is one of the more
+important principles in this model. The team deploying an application should not
+also hold the ability to modify the IAM bindings that govern access to the
+project it runs in.</p>
+
+<p>In AWS, the equivalent isolation boundary is an account rather than a
+project. The Governance workspace would own account vending through AWS
+Organizations and the IAM roles that downstream workloads assume via
+cross-account trust. The concept is identical; only the resource types differ.</p>
+
+<p><strong>Platform</strong> owns shared services. Kubernetes clusters, networking, DNS zones,
+shared image repositories — the infrastructure that Delivery teams depend upon
+but should not be able to modify directly. Changes here require platform team
+involvement. Application teams are consumers, not owners.</p>
+
+<p><strong>Delivery</strong> is where software reaches customers. Application services,
+deployment configuration, workload-specific storage — these live in Delivery
+workspaces, owned and operated by the teams that build the products. They
+operate with autonomy within their layer because the layers below have already
+established the boundaries within which that autonomy is safe.</p>
+
+<h3 id="data-sources-as-contracts">Data sources as contracts</h3>
+
+<p>Shared Terraform state is a coupling mechanism. A workspace that can read
+another workspace’s state file can read everything in it, and often ends up
+depending on implementation details that were never intended as a public
+interface.</p>
+
+<p>The better pattern is the <code class="language-plaintext highlighter-rouge">data</code> source. Rather than sharing state, a lower
+layer promises to maintain a resource with a known name. An upper layer looks
+that resource up.</p>
+
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Delivery workspace — references a DNS zone it does not own</span>
+<span class="nx">data</span> <span class="s2">"google_dns_managed_zone"</span> <span class="s2">"private"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="s2">"services-private"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_dns_record_set"</span> <span class="s2">"app"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="o">=</span> <span class="s2">"my-service.${data.google_dns_managed_zone.private.dns_name}"</span>
+  <span class="nx">managed_zone</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">google_dns_managed_zone</span><span class="p">.</span><span class="nx">private</span><span class="p">.</span><span class="nx">name</span>
+  <span class="nx">type</span>         <span class="o">=</span> <span class="s2">"A"</span>
+  <span class="nx">ttl</span>          <span class="o">=</span> <span class="mi">300</span>
+  <span class="nx">rrdatas</span>      <span class="o">=</span> <span class="p">[</span><span class="nx">google_compute_address</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">address</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The Delivery workspace’s service account holds
+<code class="language-plaintext highlighter-rouge">roles/dns.resourceRecordSetsOwner</code> — enough to manage records within the zone,
+but not to create, delete, or reconfigure it. The <code class="language-plaintext highlighter-rouge">data</code> source lookup requires
+only <code class="language-plaintext highlighter-rouge">roles/dns.reader</code>. The zone is the Platform team’s contract to maintain;
+the records within it are the Delivery team’s concern.</p>
+
+<p>The same applies to service accounts. A Delivery workspace that needs to assign
+an identity to a workload does not create that identity — it looks it up.</p>
+
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Delivery workspace — uses an identity it does not manage</span>
+<span class="nx">data</span> <span class="s2">"google_service_account"</span> <span class="s2">"app"</span> <span class="p">{</span>
+  <span class="nx">account_id</span> <span class="o">=</span> <span class="s2">"my-application"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_cloud_run_v2_service"</span> <span class="s2">"app"</span> <span class="p">{</span>
+  <span class="nx">name</span>     <span class="o">=</span> <span class="s2">"my-application"</span>
+  <span class="nx">location</span> <span class="o">=</span> <span class="s2">"europe-west2"</span>
+
+  <span class="nx">template</span> <span class="p">{</span>
+    <span class="nx">service_account</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">google_service_account</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">email</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The service account was provisioned in the Governance workspace. The Delivery
+workspace can reference it and assign it to a workload. It cannot modify the
+account’s permissions or create accounts alongside it.</p>
+
+<h3 id="iam-follows-the-same-shape">IAM follows the same shape</h3>
+
+<p>The layered model maps directly onto the roles held by each workspace’s service
+account.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Workspace</th>
+      <th>Owns</th>
+      <th>Example roles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Organisation</td>
+      <td>WIPs, folder structure, org policies, custom roles</td>
+      <td><code class="language-plaintext highlighter-rouge">roles/iam.organizationRoleAdmin</code>, <code class="language-plaintext highlighter-rouge">roles/orgpolicy.policyAdmin</code></td>
+    </tr>
+    <tr>
+      <td>Governance</td>
+      <td>Projects, billing, service accounts, IAM principals</td>
+      <td><code class="language-plaintext highlighter-rouge">roles/resourcemanager.projectCreator</code>, <code class="language-plaintext highlighter-rouge">roles/iam.serviceAccountAdmin</code></td>
+    </tr>
+    <tr>
+      <td>Platform</td>
+      <td>Kubernetes clusters, DNS zones, shared networking</td>
+      <td><code class="language-plaintext highlighter-rouge">roles/container.admin</code>, <code class="language-plaintext highlighter-rouge">roles/dns.admin</code>, <code class="language-plaintext highlighter-rouge">roles/compute.networkAdmin</code></td>
+    </tr>
+    <tr>
+      <td>Delivery</td>
+      <td>Application services, workload-specific records and buckets</td>
+      <td><code class="language-plaintext highlighter-rouge">roles/run.admin</code>, <code class="language-plaintext highlighter-rouge">roles/dns.resourceRecordSetsOwner</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Within any given layer, per-concern service accounts are preferable to
+team-level shared accounts. A single <code class="language-plaintext highlighter-rouge">platform-sa</code> with broad permissions
+creates invisible contention — in GCP, quota attribution operates per service
+account, and a shared account makes that attribution opaque. Scoped accounts
+like <code class="language-plaintext highlighter-rouge">artifact-registry-administrator-sa</code> also limit the damage if a credential
+is compromised.</p>
+
+<h3 id="keyless-authentication-completes-the-picture">Keyless authentication completes the picture</h3>
+
+<p>Scoped service accounts are the right unit of identity, but long-lived keys
+undermine the model regardless of how carefully you scope them. A static key
+grants persistent access. The natural complement to layered workspaces is
+Workload Identity Federation — short-lived OIDC credentials that a CI/CD
+pipeline assumes for the duration of a job and cannot hold beyond it.</p>
+
+<p>In GCP, a dedicated identity project managed by the Organisation workspace hosts
+Workload Identity Pools for Terraform Cloud and GitHub Actions alike.</p>
+
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Organisation workspace — establishes the federation trust</span>
+<span class="nx">resource</span> <span class="s2">"google_iam_workload_identity_pool"</span> <span class="s2">"tfc"</span> <span class="p">{</span>
+  <span class="nx">workload_identity_pool_id</span> <span class="o">=</span> <span class="s2">"terraform-cloud"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_iam_workload_identity_pool_provider"</span> <span class="s2">"tfc"</span> <span class="p">{</span>
+  <span class="nx">workload_identity_pool_id</span>          <span class="o">=</span> <span class="nx">google_iam_workload_identity_pool</span><span class="p">.</span><span class="nx">tfc</span><span class="p">.</span><span class="nx">workload_identity_pool_id</span>
+  <span class="nx">workload_identity_pool_provider_id</span> <span class="o">=</span> <span class="s2">"tfc-provider"</span>
+
+  <span class="nx">oidc</span> <span class="p">{</span>
+    <span class="nx">issuer_uri</span> <span class="o">=</span> <span class="s2">"https://app.terraform.io"</span>
+  <span class="p">}</span>
+
+  <span class="nx">attribute_mapping</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"google.subject"</span>                   <span class="p">=</span> <span class="s2">"assertion.sub"</span>
+    <span class="s2">"attribute.terraform_workspace_id"</span> <span class="p">=</span> <span class="s2">"assertion.terraform_workspace_id"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Workspace-specific attribute conditions on IAM bindings ensure that each
+Terraform Cloud workspace can only assume its designated service account. The
+Delivery workspace cannot escalate to Governance credentials. The trust boundary
+is enforced at the identity layer, not by convention.</p>
+
+<p>One nuance: for elevated workspaces — Organisation and Governance — retaining
+service account impersonation rather than direct WIF principal binding preserves
+<code class="language-plaintext highlighter-rouge">iam.serviceAccounts.actAs</code> as an explicit control point and produces cleaner
+audit trails. For lower-privilege workspaces, direct binding is simpler. A
+hybrid approach is sensible; the choice of where to draw that line is a function
+of your audit requirements.</p>
+
+<h3 id="blast-radius-is-the-real-metric">Blast radius is the real metric</h3>
+
+<p>The value of this model is not architectural elegance. It is bounded failure.</p>
+
+<p>When something goes wrong in a Delivery workspace, the damage is contained to
+that workspace’s resources. A misconfigured <code class="language-plaintext highlighter-rouge">count</code> expression cannot delete a
+VPC. A <code class="language-plaintext highlighter-rouge">terraform destroy</code> run against the wrong directory cannot revoke the IAM
+bindings the entire platform depends upon. The blast radius of a change is
+determined by what the executing credential can touch — not by what you intended
+to change.</p>
+
+<p>This is why the boundaries matter across repositories too, not just within
+Terraform workspaces. A workspace that combines Kubernetes configuration with
+general configuration management has a larger blast radius than two workspaces
+that each do one thing. The discipline of separation is not overhead. It is the
+mechanism by which a mistake stays local.</p>
+
+<h3 id="this-scales-down-as-well-as-up">This scales down as well as up</h3>
+
+<p>It is easy to read a four-tier model and conclude it only makes sense with a
+dedicated platform team and significant organisational complexity. That
+conclusion is wrong.</p>
+
+<p>A team of two engineers benefits from the separation. When you are working on a
+delivery task, the confidence that <code class="language-plaintext highlighter-rouge">terraform apply</code> cannot inadvertently
+destroy shared infrastructure is not a luxury — it is what lets you move at
+speed without anxiety. The layers are not bureaucracy. They are the thing that
+makes autonomy safe.</p>
+
+<p>The practical starting point for a small team is two workspaces: one combining
+Organisation and Governance concerns with elevated permissions, and one
+combining Platform and Delivery resources that reference the foundation via
+<code class="language-plaintext highlighter-rouge">data</code> sources. The four-tier model is the natural destination as the
+infrastructure and team grow. It does not need to be the starting point.</p>
+
+<h3 id="the-underlying-principle">The underlying principle</h3>
+
+<p>The layered model is principle of least privilege applied to infrastructure
+tooling. Every workspace holds exactly the access it needs to do its job.</p>
+
+<p>A misconfigured plan in a workspace with too-broad permissions can cause damage
+that takes hours to unpick. The same misconfiguration in a tightly-scoped
+workspace fails immediately, with a permissions error that tells you exactly
+what went wrong.</p>
+
+<p>Noisy, local failures are the goal.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-terraform">
+    <a class="link" href="/tag/terraform" title="Go to terraform" aria-label="Go to terraform">terraform</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-infrastructure-as-code">
+    <a class="link" href="/tag/infrastructure-as-code" title="Go to infrastructure-as-code" aria-label="Go to infrastructure-as-code">infrastructure-as-code</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-ownership">
+    <a class="link" href="/tag/ownership" title="Go to ownership" aria-label="Go to ownership">ownership</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-security">
+    <a class="link" href="/tag/security" title="Go to security" aria-label="Go to security">security</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-best-practices">
+    <a class="link" href="/tag/best-practices" title="Go to best-practices" aria-label="Go to best-practices">best-practices</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

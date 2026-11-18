@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Tricks of the Trade - Hotplate Reflow | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Tricks of the Trade - Hotplate Reflow" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Simple at-home solution to surface mount reflow." />
+<meta property="og:description" content="Simple at-home solution to surface mount reflow." />
+<link rel="canonical" href="https://tomasbasham.dev/electronics/tricks-of-the-trade-hotplate-reflow" />
+<meta property="og:url" content="https://tomasbasham.dev/electronics/tricks-of-the-trade-hotplate-reflow" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-06-06T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Tricks of the Trade - Hotplate Reflow" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2016-06-06T00:00:00+01:00","datePublished":"2016-06-06T00:00:00+01:00","description":"Simple at-home solution to surface mount reflow.","headline":"Tricks of the Trade - Hotplate Reflow","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/electronics/tricks-of-the-trade-hotplate-reflow"},"url":"https://tomasbasham.dev/electronics/tricks-of-the-trade-hotplate-reflow"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Tricks of the Trade - Hotplate Reflow</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2016-06-06T00:00:00+01:00">06 Jun 2016</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 3 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>I previous covered
+<a href="/electronics/2016/05/23/tricks-of-the-trade-pcb-fabrication.html">PCB fabrication</a>
+and how to apply solder paste using a stencil. Now we’re ready to secure our
+components.</p>
+
+<p>In this article, you will learn how to perform surface mount reflow using
+inexpensive tools easily purchased on Amazon. From now on I assume you have
+ready a PCB and have applied your solder paste and components.</p>
+
+<h3 id="the-hotplate-method">The Hotplate Method</h3>
+
+<p>The method I describe in this article to perform surface mount reflow is also
+(in my opinion) the most simple and a personal favourite. It involves an
+inexpensive
+<a href="https://www.amazon.co.uk/gp/product/B00A4DE35G/ref=oh_aui_detailpage_o03_s00?ie=UTF8&amp;psc=1">electric hotplate</a>
+that can be purchased for just little over £10. Typically these hotplates will
+not evenly heat up across the entire element, unless you are planning on
+spending a fortune. This is an important cavet that needs to be addressed as it
+is imperative that all components on your PCB are heated to roughly the same
+temperature simultaneously. I overcome this issue by using a small block of
+copper that I purchased online. Placing this on top of the hotplate and then
+your PCB on top of that should ensure a much more even heat distribution.</p>
+
+<p>When you are content with the placement of your solder paste and components turn
+on the hotplate, wait and watch until everything has flowed, then wait a little
+longer until most of the flux has burned off. Usually a medium temperature is
+more than sufficient to get the paste flowing.</p>
+
+<p>You’ll want to remove the PCB with tweezers or needle-nose pliers after this
+process, as the PCB will be very hot, and transfer it onto a piece of wood or
+metal so not to set it down on anything prone to burning or melting.</p>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/pcb-fabrication/pcb-fabrication-reflow.jpg" alt="PCB Fabrication Reflow" /><figcaption>PCB before and after hotplate reflow</figcaption>
+</figure>
+
+<p>This process can be quick; only a couple minutes for the board to reflow
+completely. The downside is it requires constant attention, and unless you are
+doing something else to preheat the boards, you’re not putting them through
+anywhere near the proper temperature profile. This may result in the development
+of stress fractures as the board cool, or the flux won’t burn off completely.
+Other long term issues may crop up in higher volumes, but for one or two boards
+this process is fine.</p>
+
+<p>Please <strong>do not</strong> use the hotplate for food after using it to reflow PCBs. Both
+the lead and flux are toxic. If you use this method consider writing on the
+hotplate indicating it’s usage.</p>
+
+<h3 id="temperature-profile">Temperature Profile</h3>
+
+<p>It is important to consider the reflow temperature profile that should be
+followed, especially using this method of reflow since it requires careful
+eyeballing. Don’t worry about being too strict with this as in small batches
+hotplate reflowing can be rather forgiving but dont expect perfect results every
+time.</p>
+
+<p>The reflow stages include the following steps:</p>
+
+<ul>
+  <li><strong>Preheat</strong>: Warm up the board from room temperature to 20°C below the melting
+point of your particular solder paste (likely around 150°C).</li>
+  <li><strong>Soak</strong>: Let it hang out below the melting temperature for a minute or two.
+This dries out the board and gets everything to an even temperature. If parts
+are hotter than others, then the solder won’t flow evenly and tombstones are
+likely.</li>
+  <li><strong>Ramp</strong>: Bring it up to around 20°C above the reflow temperature of your
+solder paste and let it hang out until all the solder has flowed and the flux
+has mostly burned off. This should take about a minute.</li>
+  <li><strong>Cooldown</strong>: Once it has peaked and everything has flowed and the flux has
+burned off, cool it down fairly rapidly but not too fast. If you hear crackles
+as the board cools, it’s cooling too fast and tiny stress fractures are
+happening. These fractures have the potential to break joints or even the
+components themselves. This should take about a minute.</li>
+</ul>
+
+<p>Try to match that and you’ll be fine.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-electronics">
+    <a class="link" href="/tag/electronics" title="Go to electronics" aria-label="Go to electronics">electronics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-pcb">
+    <a class="link" href="/tag/pcb" title="Go to pcb" aria-label="Go to pcb">pcb</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-technology">
+    <a class="link" href="/tag/technology" title="Go to technology" aria-label="Go to technology">technology</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

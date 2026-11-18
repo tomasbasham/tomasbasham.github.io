@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Throughout this series, I’ve challenged several technical trends in modern web development—from JavaScript-heavy SPAs to utility-first CSS and the abandonment of progressive enhancement. But these technical approaches don’t exist in isolation; they both shape and are shaped by how we organise our teams." />
+<meta property="og:description" content="Throughout this series, I’ve challenged several technical trends in modern web development—from JavaScript-heavy SPAs to utility-first CSS and the abandonment of progressive enhancement. But these technical approaches don’t exist in isolation; they both shape and are shaped by how we organise our teams." />
+<link rel="canonical" href="https://tomasbasham.dev/development/building-truely-cross-functional-teams" />
+<meta property="og:url" content="https://tomasbasham.dev/development/building-truely-cross-functional-teams" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-05T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2025-05-05T00:00:00+01:00","datePublished":"2025-05-05T00:00:00+01:00","description":"Throughout this series, I’ve challenged several technical trends in modern web development—from JavaScript-heavy SPAs to utility-first CSS and the abandonment of progressive enhancement. But these technical approaches don’t exist in isolation; they both shape and are shaped by how we organise our teams.","headline":"Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/building-truely-cross-functional-teams"},"url":"https://tomasbasham.dev/development/building-truely-cross-functional-teams"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2025-05-05T00:00:00+01:00">05 May 2025</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 7 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>Throughout this series, I’ve challenged several technical trends in modern web
+development—from JavaScript-heavy SPAs to utility-first CSS and the abandonment
+of progressive enhancement. But these technical approaches don’t exist in
+isolation; they both shape and are shaped by how we organise our teams.</p>
+
+<p>In this final article, I want to examine the artificial divide between frontend
+and backend development and propose a more cohesive model for building web
+applications.</p>
+
+<h2 id="the-problem-with-specialisation">The Problem with Specialisation</h2>
+
+<p>The separation of web development into “frontend” and “backend” specialisations
+has become so entrenched that we rarely question it. Job listings, team
+structures, and even professional identities revolve around this distinction.</p>
+
+<p>But this divide isn’t as natural or necessary as we might think.</p>
+
+<h3 id="historical-context">Historical Context</h3>
+
+<p>The frontend/backend specialisation emerged for legitimate reasons:</p>
+
+<ol>
+  <li>Early browsers had significant inconsistencies, requiring dedicated expertise</li>
+  <li>CSS and JavaScript were less standardised and more quirky</li>
+  <li>Backend systems often involved complex database and server-side logic</li>
+  <li>The full stack was smaller and more manageable for individual developers</li>
+</ol>
+
+<p>As web applications grew more complex, specialisation seemed logical. Frontend
+developers focused on increasingly sophisticated browser experiences, while
+backend developers concentrated on APIs, databases, and business logic.</p>
+
+<p>But what began as a practical division of labour has calcified into
+organisational silos with significant consequences.</p>
+
+<h2 id="the-cost-of-the-divide">The Cost of the Divide</h2>
+
+<h3 id="communication-overhead">Communication Overhead</h3>
+
+<p>When frontend and backend teams are separate, communication becomes a
+bottleneck:</p>
+
+<ol>
+  <li>
+    <p><strong>API Contract Negotiations</strong>: Significant time is spent defining,
+documenting, and discussing interfaces between systems</p>
+  </li>
+  <li>
+    <p><strong>Misaligned Mental Models</strong>: Different teams develop different
+understandings of the domain</p>
+  </li>
+  <li>
+    <p><strong>Handoff Friction</strong>: Features must be passed between teams, creating delays</p>
+  </li>
+  <li>
+    <p><strong>Blame Culture</strong>: When issues arise, teams often point fingers rather than
+collaboratively solving problems</p>
+  </li>
+</ol>
+
+<p>I’ve observed teams spending more time in meetings discussing APIs than it would
+have taken to simply build the feature in a collaborative fashion.</p>
+
+<h3 id="misaligned-incentives">Misaligned Incentives</h3>
+
+<p>Frontend and backend teams often optimise for different, sometimes conflicting
+goals:</p>
+
+<ol>
+  <li>
+    <p><strong>Frontend teams</strong> prioritise user experience, design fidelity, and
+interaction polish</p>
+  </li>
+  <li>
+    <p><strong>Backend teams</strong> prioritise system reliability, data integrity, and
+performance</p>
+  </li>
+</ol>
+
+<p>These are all valid concerns, but when separated into different teams with
+different reporting structures and different performance metrics, they become
+competing rather than complementary priorities.</p>
+
+<h3 id="the-expertise-fallacy">The Expertise Fallacy</h3>
+
+<p>Perhaps the most pernicious effect of this divide is the notion that developers
+can’t or shouldn’t have expertise across the stack. This creates:</p>
+
+<ol>
+  <li>
+    <p><strong>Artificial Skill Ceilings</strong>: Developers are discouraged from learning
+beyond their specialisation</p>
+  </li>
+  <li>
+    <p><strong>Reduced Autonomy</strong>: Individual developers can’t complete features
+end-to-end</p>
+  </li>
+  <li>
+    <p><strong>Career Pigeonholing</strong>: Professionals become locked into narrower career
+paths</p>
+  </li>
+  <li>
+    <p><strong>Knowledge Silos</strong>: Critical context is lost between teams</p>
+  </li>
+</ol>
+
+<p>The reality is that most web development concepts are learnable by competent
+engineers given time and opportunity. The technologies may differ, but the
+underlying principles of good software design transcend the frontend/backend
+boundary.</p>
+
+<h2 id="the-cross-functional-alternative">The Cross-Functional Alternative</h2>
+
+<p>A truly cross-functional team isn’t just a collection of specialists who happen
+to sit together. It’s a group of developers with overlapping skills who
+collaborate across the entire stack.</p>
+
+<h3 id="characteristics-of-cross-functional-teams">Characteristics of Cross-Functional Teams</h3>
+
+<ol>
+  <li>
+    <p><strong>Shared Responsibility</strong>: The team collectively owns features from concept
+to production</p>
+  </li>
+  <li>
+    <p><strong>T-Shaped Skills</strong>: Each member has both depth in certain areas and breadth
+across others</p>
+  </li>
+  <li>
+    <p><strong>Fluid Specialisation</strong>: Specialists exist but aren’t confined to their
+speciality</p>
+  </li>
+  <li>
+    <p><strong>Domain Cohesion</strong>: The team is organised around business domains, not
+technical layers</p>
+  </li>
+  <li>
+    <p><strong>End-to-End Ownership</strong>: Team members can implement complete features</p>
+  </li>
+</ol>
+
+<p>This model doesn’t eliminate specialisation—it contextualises it. Some team
+members may indeed gravitate toward frontend or backend work, but they do so
+within a culture that values and supports breadth.</p>
+
+<h3 id="technical-enablers">Technical Enablers</h3>
+
+<p>The technical approaches I’ve advocated throughout this series directly support
+cross-functional teamwork:</p>
+
+<ol>
+  <li>
+    <p><strong>Server-Rendered HTML with HTMX</strong>: Reduces the gap between frontend and
+backend development</p>
+  </li>
+  <li>
+    <p><strong>Traditional CSS Approaches</strong>: Allow styling patterns to be owned by the
+team rather than individuals</p>
+  </li>
+  <li>
+    <p><strong>Progressive Enhancement</strong>: Creates natural layering that clarifies team
+responsibilities</p>
+  </li>
+  <li>
+    <p><strong>Domain-Driven Design</strong>: Provides shared language and models across the
+stack</p>
+  </li>
+</ol>
+
+<p>When the technology stack is simpler and more cohesive, team structure can
+follow suit.</p>
+
+<h2 id="making-the-shift">Making the Shift</h2>
+
+<p>Moving from specialised teams to cross-functional ones isn’t simply an
+organisational change—it requires shifts in culture, hiring, and technical
+practices.</p>
+
+<h3 id="cultural-change">Cultural Change</h3>
+
+<ol>
+  <li>
+    <p><strong>Value Breadth</strong>: Recognise and reward developers who develop cross-stack
+capabilities</p>
+  </li>
+  <li>
+    <p><strong>Encourage Pairing</strong>: Create opportunities for frontend and backend
+specialists to work together</p>
+  </li>
+  <li>
+    <p><strong>Normalise Learning</strong>: Allocate time specifically for developers to expand
+their skills</p>
+  </li>
+  <li>
+    <p><strong>Celebrate Full-Feature Delivery</strong>: Highlight when individuals ship features
+end-to-end</p>
+  </li>
+</ol>
+
+<h3 id="hiring-and-career-development">Hiring and Career Development</h3>
+
+<ol>
+  <li>
+    <p><strong>Hire for Learning Aptitude</strong>: Look for candidates who demonstrate curiosity
+and adaptability</p>
+  </li>
+  <li>
+    <p><strong>Create Growth Paths</strong>: Develop career ladders that value both depth and
+breadth</p>
+  </li>
+  <li>
+    <p><strong>Rotate Responsibilities</strong>: Give developers experience across different
+parts of the stack</p>
+  </li>
+  <li>
+    <p><strong>Mentorship Programs</strong>: Connect specialists with developers looking to
+expand their skills</p>
+  </li>
+</ol>
+
+<h3 id="technical-practices">Technical Practices</h3>
+
+<ol>
+  <li>
+    <p><strong>Simplify the Stack</strong>: Choose technologies that reduce the gap between
+frontend and backend</p>
+  </li>
+  <li>
+    <p><strong>Unified Code Reviews</strong>: Have all team members review code across the stack</p>
+  </li>
+  <li>
+    <p><strong>Shared Ownership</strong>: Rotate code maintenance across the team to build
+familiarity</p>
+  </li>
+  <li>
+    <p><strong>Domain-First Architecture</strong>: Organise code around business concepts rather
+than technical layers</p>
+  </li>
+</ol>
+
+<h2 id="common-objections">Common Objections</h2>
+
+<h3 id="specialists-are-more-efficient">“Specialists are more efficient”</h3>
+
+<p>This is true for narrowly defined tasks but ignores the significant overhead of
+coordination between specialists. A slightly less efficient developer who can
+implement a feature end-to-end often delivers more value than two highly
+specialised developers who must coordinate.</p>
+
+<p>Moreover, specialists often optimise for concerns that matter primarily to other
+specialists, not users. Frontend specialists might obsess over component
+architecture while backend specialists fixate on database normalisation—both
+important concerns, but potentially over-optimised in isolation.</p>
+
+<h3 id="we-cant-find-full-stack-developers">“We can’t find full-stack developers”</h3>
+
+<p>This becomes a self-fulfilling prophecy. By defining roles narrowly and creating
+specialised teams, we discourage developers from building cross-stack skills.</p>
+
+<p>Rather than searching for unicorns, we should be growing them—hiring for
+potential and creating environments where developers can expand their
+capabilities.</p>
+
+<h3 id="some-people-just-want-to-specialise">“Some people just want to specialise”</h3>
+
+<p>Absolutely, and there’s room for deep specialists in cross-functional teams. The
+key difference is that these specialists operate within a culture that connects
+their work to the broader product rather than isolating it.</p>
+
+<p>A CSS expert on a cross-functional team still understands how styling decisions
+affect the overall application architecture and can collaborate effectively with
+those working on other layers.</p>
+
+<h2 id="case-study-from-silos-to-cross-functionality">Case Study: From Silos to Cross-Functionality</h2>
+
+<p>Let me share an example from my own experience transitioning a company from
+siloed teams to cross-functional ones.</p>
+
+<h3 id="before-the-handoff-model">Before: The Handoff Model</h3>
+
+<p>The company had distinct frontend and backend teams:</p>
+
+<ul>
+  <li><strong>Backend Team</strong>: 5 developers building APIs and services in Java</li>
+  <li><strong>Frontend Team</strong>: 4 developers building React SPAs</li>
+  <li><strong>Process</strong>: Backend would build APIs, document them, then “hand off” to
+Frontend</li>
+</ul>
+
+<p>This resulted in:</p>
+
+<ol>
+  <li>Long feature development cycles</li>
+  <li>Misaligned expectations between teams</li>
+  <li>APIs that needed constant revision to meet frontend needs</li>
+  <li>“Not my problem” attitudes when issues crossed boundaries</li>
+</ol>
+
+<h3 id="after-domain-teams">After: Domain Teams</h3>
+
+<p>We reorganised into three cross-functional teams aligned with business domains:</p>
+
+<ul>
+  <li><strong>Customer Team</strong>: Responsible for user-facing features</li>
+  <li><strong>Admin Team</strong>: Responsible for internal tools</li>
+  <li><strong>Platform Team</strong>: Responsible for shared infrastructure</li>
+</ul>
+
+<p>Each team included developers with varying skill levels across frontend and
+backend technologies.</p>
+
+<p>The results were dramatic:</p>
+
+<ol>
+  <li>Feature delivery times decreased by approximately 30%</li>
+  <li>API designs improved because they were built with direct knowledge of their
+use cases</li>
+  <li>Code quality improved as developers gained context across the stack</li>
+  <li>Team members reported higher job satisfaction</li>
+</ol>
+
+<p>The transition wasn’t without challenges. Some specialists initially resisted
+stepping outside their comfort zones, and we had to invest in training and
+mentorship. But the long-term benefits far outweighed these temporary
+difficulties.</p>
+
+<h2 id="the-t-shaped-developer">The T-Shaped Developer</h2>
+
+<p>The ideal team member in this model isn’t someone who knows everything about
+everything—that’s unrealistic. Instead, we aim to develop “T-shaped” developers
+who have:</p>
+
+<ul>
+  <li>Deep expertise in one or more areas (the vertical bar of the T)</li>
+  <li>Working knowledge across the stack (the horizontal bar of the T)</li>
+</ul>
+
+<p>This model acknowledges specialisation whilst encouraging breadth. A
+frontend-focused developer might have deep React expertise but also understand
+SQL queries and server-side templates. A backend-focused developer might excel
+at database design but also understand CSS fundamentals and accessibility
+concerns.</p>
+
+<p>The key is that these developers can collaborate effectively because they share
+enough common ground to understand each other’s work.</p>
+
+<h2 id="conclusion-technical-and-organisational-alignment">Conclusion: Technical and Organisational Alignment</h2>
+
+<p>Throughout this series, I’ve advocated for technical approaches that simplify
+web development: returning to HyperText principles, questioning utility-first
+CSS, embracing progressive enhancement, and reducing unnecessary JavaScript.</p>
+
+<p>These technical choices directly enable organisational improvements by reducing
+the gap between frontend and backend development. When the full stack is more
+approachable, developers can more easily work across it.</p>
+
+<p>This isn’t just theory—I’ve seen firsthand how simplifying technical approaches
+can transform team dynamics and productivity.</p>
+
+<p>By challenging both the technical and organisational orthodoxies of modern web
+development, we can build teams that are:</p>
+
+<ol>
+  <li>More efficient, with reduced handoff overhead</li>
+  <li>More innovative, with richer cross-pollination of ideas</li>
+  <li>More resilient, with broader distribution of knowledge</li>
+  <li>More satisfying to work in, with greater autonomy and ownership</li>
+</ol>
+
+<p>The artificial divide between frontend and backend has served its purpose, but
+it’s time to move beyond it. The future belongs to cohesive teams building
+cohesive products using cohesive technologies.</p>
+
+<p>Thank you for following this series. I hope it has challenged your thinking
+about modern web development and inspired you to question prevailing practices,
+both technical and organisational. The web remains an extraordinarily powerful
+platform when we work with its grain rather than against it, and when we
+organise our teams to reflect its inherently connected nature.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-development">
+    <a class="link" href="/tag/development" title="Go to development" aria-label="Go to development">development</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-teams">
+    <a class="link" href="/tag/teams" title="Go to teams" aria-label="Go to teams">teams</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-cross-functional">
+    <a class="link" href="/tag/cross-functional" title="Go to cross-functional" aria-label="Go to cross-functional">cross-functional</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

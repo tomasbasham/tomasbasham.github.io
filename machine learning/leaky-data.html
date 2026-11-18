@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Leaky Data | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Leaky Data" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Why is data leakage a concern when implementing predictive models and how it can be avoided." />
+<meta property="og:description" content="Why is data leakage a concern when implementing predictive models and how it can be avoided." />
+<link rel="canonical" href="https://tomasbasham.dev/machine%20learning/leaky-data" />
+<meta property="og:url" content="https://tomasbasham.dev/machine%20learning/leaky-data" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-10-25T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Leaky Data" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2018-10-25T00:00:00+01:00","datePublished":"2018-10-25T00:00:00+01:00","description":"Why is data leakage a concern when implementing predictive models and how it can be avoided.","headline":"Leaky Data","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/machine%20learning/leaky-data"},"url":"https://tomasbasham.dev/machine%20learning/leaky-data"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Leaky Data</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2018-10-25T00:00:00+01:00">25 Oct 2018</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 6 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>So far in this series of machine learning posts we have…</p>
+
+<p>Data leakage causes a predictive model to appear accurate on the validation data
+but perform poorly when trying to use the model to make further predictions on
+completely new data. It is a type of overfitting that can be difficult to track
+down.</p>
+
+<p>There are two main types of data leakage: Label leakage and validation leakage.</p>
+
+<h3 id="label-leakage">Label Leakage</h3>
+
+<p>Label leakage <sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup> occurs when a predictive model includes data that will not be
+available at prediction time. This is a subtle form of cheating caused by
+features that give a bias towards the target label. For example if trying to
+predict whether an Enron employee is a person of interest we were given a
+feature expressing whether they had been incarcerated, <code class="language-plaintext highlighter-rouge">is_incarcerated</code>, this
+could possibly be an extremely useful indicator as to whether the Enron employee
+was in fact a person of interest.</p>
+
+<p>In this example an employee will be incarcerated after they are given the status
+“person of interest”. So the raw dataset shows a strong correlation between the
+two features. But <code class="language-plaintext highlighter-rouge">is_incarcerated</code> will frequently be changed <strong>after</strong> the
+value for <code class="language-plaintext highlighter-rouge">poi</code> is determined.</p>
+
+<p>The predictive model will show that a value of <code class="language-plaintext highlighter-rouge">False</code> for <code class="language-plaintext highlighter-rouge">is_incarcerated</code>
+indicates that an employee is not a person of interest. Since the validation
+data comes from the same source as the testing data this pattern will continue
+and the model will perform very well. However the same model will perform poorly
+when used on new data not containing the <code class="language-plaintext highlighter-rouge">is_incarcerated</code> feature. It is
+generally recommended that to prevent this type of data leakage, any variables
+updated (or created) after the target label is realised should be excluded from
+the dataset.</p>
+
+<p>There is no single solution that universally solves label leakage. It requires
+knowledge about your data, case-specific inspection and common sense.</p>
+
+<p>However, in most cases of label leakage there exists 1 or more features having a
+high statistical correlation to the target label. So two tactics to keep in
+mind:</p>
+
+<ol>
+  <li>To screen for possible target leakage, look for columns that are
+statistically correlated to your target.</li>
+  <li>If you build a model and find it extremely accurate, you likely have a
+leakage problem.</li>
+</ol>
+
+<p>We can check for correlated values in our dataset by computing a pairwise
+correlation of columns, excluding NA/null values. Specifically we’re interested
+in features that have a high correlation to the target label, <code class="language-plaintext highlighter-rouge">poi</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">.</span><span class="nf">corr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>salary</th>
+        <th>to_messages</th>
+        <th>deferral_payments</th>
+        <th>total_payments</th>
+        <th>exercised_stock_options</th>
+        <th>bonus</th>
+        <th>restricted_stock</th>
+        <th>shared_receipt_with_poi</th>
+        <th>restricted_stock_deferred</th>
+        <th>total_stock_value</th>
+        <th>expenses</th>
+        <th>loan_advances</th>
+        <th>from_messages</th>
+        <th>other</th>
+        <th>from_this_person_to_poi</th>
+        <th>poi</th>
+        <th>director_fees</th>
+        <th>deferred_income</th>
+        <th>long_term_incentive</th>
+        <th>from_poi_to_this_person</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>salary</td>
+        <td>1.00</td>
+        <td>0.00</td>
+        <td>0.96</td>
+        <td>0.96</td>
+        <td>0.99</td>
+        <td>0.99</td>
+        <td>0.99</td>
+        <td>0.01</td>
+        <td>-0.91</td>
+        <td>0.99</td>
+        <td>0.99</td>
+        <td>0.74</td>
+        <td>-0.01</td>
+        <td>0.96</td>
+        <td>-0.01</td>
+        <td>-0.00</td>
+        <td>0.96</td>
+        <td>-0.97</td>
+        <td>0.99</td>
+        <td>0.00</td>
+      </tr>
+      <tr>
+        <td>to_messages</td>
+        <td>0.00</td>
+        <td>1.00</td>
+        <td>-0.00</td>
+        <td>0.03</td>
+        <td>-0.01</td>
+        <td>0.04</td>
+        <td>0.00</td>
+        <td>0.86</td>
+        <td>0.04</td>
+        <td>-0.01</td>
+        <td>-0.01</td>
+        <td>0.05</td>
+        <td>0.50</td>
+        <td>0.00</td>
+        <td>0.59</td>
+        <td>0.12</td>
+        <td>-0.05</td>
+        <td>0.00</td>
+        <td>-0.00</td>
+        <td>0.56</td>
+      </tr>
+      <tr>
+        <td>deferral_payments</td>
+        <td>0.96</td>
+        <td>-0.00</td>
+        <td>1.00</td>
+        <td>0.92</td>
+        <td>0.95</td>
+        <td>0.96</td>
+        <td>0.95</td>
+        <td>0.02</td>
+        <td>-0.88</td>
+        <td>0.95</td>
+        <td>0.96</td>
+        <td>0.69</td>
+        <td>-0.01</td>
+        <td>0.95</td>
+        <td>-0.02</td>
+        <td>-0.04</td>
+        <td>0.93</td>
+        <td>-0.97</td>
+        <td>0.95</td>
+        <td>0.03</td>
+      </tr>
+      <tr>
+        <td>total_payments</td>
+        <td>0.96</td>
+        <td>0.03</td>
+        <td>0.92</td>
+        <td>1.00</td>
+        <td>0.96</td>
+        <td>0.96</td>
+        <td>0.97</td>
+        <td>0.05</td>
+        <td>-0.86</td>
+        <td>0.97</td>
+        <td>0.95</td>
+        <td>0.90</td>
+        <td>-0.02</td>
+        <td>0.98</td>
+        <td>-0.00</td>
+        <td>0.05</td>
+        <td>0.91</td>
+        <td>-0.92</td>
+        <td>0.96</td>
+        <td>0.04</td>
+      </tr>
+      <tr>
+        <td>exercised_stock_options</td>
+        <td>0.99</td>
+        <td>-0.01</td>
+        <td>0.95</td>
+        <td>0.96</td>
+        <td>1.00</td>
+        <td>0.98</td>
+        <td>0.99</td>
+        <td>-0.00</td>
+        <td>-0.92</td>
+        <td>1.00</td>
+        <td>0.98</td>
+        <td>0.77</td>
+        <td>-0.03</td>
+        <td>0.97</td>
+        <td>-0.02</td>
+        <td>0.04</td>
+        <td>0.95</td>
+        <td>-0.96</td>
+        <td>0.98</td>
+        <td>-0.00</td>
+      </tr>
+      <tr>
+        <td>bonus</td>
+        <td>0.99</td>
+        <td>0.04</td>
+        <td>0.96</td>
+        <td>0.96</td>
+        <td>0.98</td>
+        <td>1.00</td>
+        <td>0.98</td>
+        <td>0.06</td>
+        <td>-0.90</td>
+        <td>0.99</td>
+        <td>0.99</td>
+        <td>0.75</td>
+        <td>0.01</td>
+        <td>0.96</td>
+        <td>0.04</td>
+        <td>0.02</td>
+        <td>0.95</td>
+        <td>-0.97</td>
+        <td>0.99</td>
+        <td>0.06</td>
+      </tr>
+      <tr>
+        <td>restricted_stock</td>
+        <td>0.99</td>
+        <td>0.00</td>
+        <td>0.95</td>
+        <td>0.97</td>
+        <td>0.99</td>
+        <td>0.98</td>
+        <td>1.00</td>
+        <td>0.00</td>
+        <td>-0.91</td>
+        <td>0.99</td>
+        <td>0.98</td>
+        <td>0.78</td>
+        <td>-0.02</td>
+        <td>0.97</td>
+        <td>-0.01</td>
+        <td>0.01</td>
+        <td>0.95</td>
+        <td>-0.96</td>
+        <td>0.98</td>
+        <td>-0.01</td>
+      </tr>
+      <tr>
+        <td>shared_receipt_with_poi</td>
+        <td>0.01</td>
+        <td>0.86</td>
+        <td>0.02</td>
+        <td>0.05</td>
+        <td>-0.00</td>
+        <td>0.06</td>
+        <td>0.00</td>
+        <td>1.00</td>
+        <td>0.05</td>
+        <td>-0.00</td>
+        <td>-0.00</td>
+        <td>0.07</td>
+        <td>0.26</td>
+        <td>0.02</td>
+        <td>0.50</td>
+        <td>0.30</td>
+        <td>-0.06</td>
+        <td>-0.03</td>
+        <td>0.01</td>
+        <td>0.68</td>
+      </tr>
+      <tr>
+        <td>restricted_stock_deferred</td>
+        <td>-0.91</td>
+        <td>0.04</td>
+        <td>-0.88</td>
+        <td>-0.86</td>
+        <td>-0.92</td>
+        <td>-0.90</td>
+        <td>-0.91</td>
+        <td>0.05</td>
+        <td>1.00</td>
+        <td>-0.91</td>
+        <td>-0.92</td>
+        <td>-0.65</td>
+        <td>0.02</td>
+        <td>-0.87</td>
+        <td>0.04</td>
+        <td>0.06</td>
+        <td>-0.88</td>
+        <td>0.89</td>
+        <td>-0.90</td>
+        <td>0.04</td>
+      </tr>
+      <tr>
+        <td>total_stock_value</td>
+        <td>0.99</td>
+        <td>-0.01</td>
+        <td>0.95</td>
+        <td>0.97</td>
+        <td>1.00</td>
+        <td>0.99</td>
+        <td>0.99</td>
+        <td>-0.00</td>
+        <td>-0.91</td>
+        <td>1.00</td>
+        <td>0.98</td>
+        <td>0.78</td>
+        <td>-0.02</td>
+        <td>0.97</td>
+        <td>-0.02</td>
+        <td>0.03</td>
+        <td>0.95</td>
+        <td>-0.96</td>
+        <td>0.98</td>
+        <td>-0.00</td>
+      </tr>
+      <tr>
+        <td>expenses</td>
+        <td>0.99</td>
+        <td>-0.01</td>
+        <td>0.96</td>
+        <td>0.95</td>
+        <td>0.98</td>
+        <td>0.99</td>
+        <td>0.98</td>
+        <td>-0.00</td>
+        <td>-0.92</td>
+        <td>0.98</td>
+        <td>1.00</td>
+        <td>0.72</td>
+        <td>-0.01</td>
+        <td>0.95</td>
+        <td>-0.01</td>
+        <td>-0.01</td>
+        <td>0.96</td>
+        <td>-0.96</td>
+        <td>0.98</td>
+        <td>-0.02</td>
+      </tr>
+      <tr>
+        <td>loan_advances</td>
+        <td>0.74</td>
+        <td>0.05</td>
+        <td>0.69</td>
+        <td>0.90</td>
+        <td>0.77</td>
+        <td>0.75</td>
+        <td>0.78</td>
+        <td>0.07</td>
+        <td>-0.65</td>
+        <td>0.78</td>
+        <td>0.72</td>
+        <td>1.00</td>
+        <td>-0.03</td>
+        <td>0.84</td>
+        <td>-0.03</td>
+        <td>0.13</td>
+        <td>0.69</td>
+        <td>-0.70</td>
+        <td>0.75</td>
+        <td>0.04</td>
+      </tr>
+      <tr>
+        <td>from_messages</td>
+        <td>-0.01</td>
+        <td>0.50</td>
+        <td>-0.01</td>
+        <td>-0.02</td>
+        <td>-0.03</td>
+        <td>0.01</td>
+        <td>-0.02</td>
+        <td>0.26</td>
+        <td>0.02</td>
+        <td>-0.02</td>
+        <td>-0.01</td>
+        <td>-0.03</td>
+        <td>1.00</td>
+        <td>-0.04</td>
+        <td>0.61</td>
+        <td>-0.04</td>
+        <td>-0.04</td>
+        <td>0.02</td>
+        <td>-0.01</td>
+        <td>0.22</td>
+      </tr>
+      <tr>
+        <td>other</td>
+        <td>0.96</td>
+        <td>0.00</td>
+        <td>0.95</td>
+        <td>0.98</td>
+        <td>0.97</td>
+        <td>0.96</td>
+        <td>0.97</td>
+        <td>0.02</td>
+        <td>-0.87</td>
+        <td>0.97</td>
+        <td>0.95</td>
+        <td>0.84</td>
+        <td>-0.04</td>
+        <td>1.00</td>
+        <td>-0.04</td>
+        <td>0.02</td>
+        <td>0.92</td>
+        <td>-0.94</td>
+        <td>0.97</td>
+        <td>0.02</td>
+      </tr>
+      <tr>
+        <td>from_this_person_to_poi</td>
+        <td>-0.01</td>
+        <td>0.59</td>
+        <td>-0.02</td>
+        <td>-0.00</td>
+        <td>-0.02</td>
+        <td>0.04</td>
+        <td>-0.01</td>
+        <td>0.50</td>
+        <td>0.04</td>
+        <td>-0.02</td>
+        <td>-0.01</td>
+        <td>-0.03</td>
+        <td>0.61</td>
+        <td>-0.04</td>
+        <td>1.00</td>
+        <td>0.13</td>
+        <td>-0.04</td>
+        <td>0.02</td>
+        <td>0.00</td>
+        <td>0.47</td>
+      </tr>
+      <tr>
+        <td>poi</td>
+        <td>-0.00</td>
+        <td>0.12</td>
+        <td>-0.04</td>
+        <td>0.05</td>
+        <td>0.04</td>
+        <td>0.02</td>
+        <td>0.01</td>
+        <td>0.30</td>
+        <td>0.06</td>
+        <td>0.03</td>
+        <td>-0.01</td>
+        <td>0.13</td>
+        <td>-0.04</td>
+        <td>0.02</td>
+        <td>0.13</td>
+        <td>1.00</td>
+        <td>-0.06</td>
+        <td>-0.04</td>
+        <td>0.01</td>
+        <td>0.21</td>
+      </tr>
+      <tr>
+        <td>director_fees</td>
+        <td>0.96</td>
+        <td>-0.05</td>
+        <td>0.93</td>
+        <td>0.91</td>
+        <td>0.95</td>
+        <td>0.95</td>
+        <td>0.95</td>
+        <td>-0.06</td>
+        <td>-0.88</td>
+        <td>0.95</td>
+        <td>0.96</td>
+        <td>0.69</td>
+        <td>-0.04</td>
+        <td>0.92</td>
+        <td>-0.04</td>
+        <td>-0.06</td>
+        <td>1.00</td>
+        <td>-0.93</td>
+        <td>0.95</td>
+        <td>-0.06</td>
+      </tr>
+      <tr>
+        <td>deferred_income</td>
+        <td>-0.97</td>
+        <td>0.00</td>
+        <td>-0.97</td>
+        <td>-0.92</td>
+        <td>-0.96</td>
+        <td>-0.97</td>
+        <td>-0.96</td>
+        <td>-0.03</td>
+        <td>0.89</td>
+        <td>-0.96</td>
+        <td>-0.96</td>
+        <td>-0.70</td>
+        <td>0.02</td>
+        <td>-0.94</td>
+        <td>0.02</td>
+        <td>-0.04</td>
+        <td>-0.93</td>
+        <td>1.00</td>
+        <td>-0.97</td>
+        <td>-0.02</td>
+      </tr>
+      <tr>
+        <td>long_term_incentive</td>
+        <td>0.99</td>
+        <td>-0.00</td>
+        <td>0.95</td>
+        <td>0.96</td>
+        <td>0.98</td>
+        <td>0.99</td>
+        <td>0.98</td>
+        <td>0.01</td>
+        <td>-0.90</td>
+        <td>0.98</td>
+        <td>0.98</td>
+        <td>0.75</td>
+        <td>-0.01</td>
+        <td>0.97</td>
+        <td>0.00</td>
+        <td>0.01</td>
+        <td>0.95</td>
+        <td>-0.97</td>
+        <td>1.00</td>
+        <td>0.01</td>
+      </tr>
+      <tr>
+        <td>from_poi_to_this_person</td>
+        <td>0.00</td>
+        <td>0.56</td>
+        <td>0.03</td>
+        <td>0.04</td>
+        <td>-0.00</td>
+        <td>0.06</td>
+        <td>-0.01</td>
+        <td>0.68</td>
+        <td>0.04</td>
+        <td>-0.00</td>
+        <td>-0.02</td>
+        <td>0.04</td>
+        <td>0.22</td>
+        <td>0.02</td>
+        <td>0.47</td>
+        <td>0.21</td>
+        <td>-0.06</td>
+        <td>-0.02</td>
+        <td>0.01</td>
+        <td>1.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>Perhaps not so surprisingly the email features that include emails to/from a poi
+have a slightly more significant correlation than other features. However quite
+interestingly <code class="language-plaintext highlighter-rouge">loan_advances</code> has the highest correlation of the financial
+features to the target label at <code class="language-plaintext highlighter-rouge">0.13</code>. This is not high enough to be of any
+concern so I’ll not be removing any features from the dataset.</p>
+
+<h3 id="validation-leakage">Validation Leakage</h3>
+
+<p>A completely different type of leak occurs when you aren’t careful
+distinguishing training data from validation data <sup id="fnref:2"><a href="#fn:2" class="footnote" rel="footnote" role="doc-noteref">2</a></sup>. For example, this
+happens if you run preprocessing (like fitting the Imputer for missing values)
+before calling
+<a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html"><code class="language-plaintext highlighter-rouge">sklearn.model_selection.train_test_split</code></a>.
+Validation is meant to be a measure of how the model does on data it hasn’t
+considered before. You can corrupt this process in subtle ways if the validation
+data affects the preprocessing behaviour. The end result is that your model will
+get very good validation scores, giving you great confidence, but perform poorly
+when deployed to make decisions.</p>
+
+<p>If your validation is based on a simple train-test split, exclude the validation
+data from any type of fitting, including the fitting of preprocessing steps.
+This is easier if you use
+<a href="http://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html"><code class="language-plaintext highlighter-rouge">sklearn.pipeline.Pipeline</code></a>.
+When using cross-validation, it’s even more critical that you use pipelines and
+do your preprocessing before each fold (more on this in a future post).</p>
+
+<p>However as mentioned in the previous post we have been forced to impute missing
+values making up our email features due to the internal implementation of the
+validation function provided by the Udacity course material. Perhaps in the
+future I will experiment with reimplementing this function, including the
+ability to accept a pipeline that may be used to impute values on each fold of
+the data.</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p><a href="http://doi.acm.org/10.1145/2020408.2020496">Leakage in Data Mining: Formulation, Detection, and Avoidance</a> <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p><a href="http://dx.doi.org/10.1093/llc/fqn019">Meaning and mining: the impact of implicit assumptions in data mining for the humanities</a> <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-correlation">
+    <a class="link" href="/tag/correlation" title="Go to correlation" aria-label="Go to correlation">correlation</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-data">
+    <a class="link" href="/tag/data" title="Go to data" aria-label="Go to data">data</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-enron">
+    <a class="link" href="/tag/enron" title="Go to enron" aria-label="Go to enron">enron</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-labels">
+    <a class="link" href="/tag/labels" title="Go to labels" aria-label="Go to labels">labels</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-leakage">
+    <a class="link" href="/tag/leakage" title="Go to leakage" aria-label="Go to leakage">leakage</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-mathematics">
+    <a class="link" href="/tag/mathematics" title="Go to mathematics" aria-label="Go to mathematics">mathematics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-pandas">
+    <a class="link" href="/tag/pandas" title="Go to pandas" aria-label="Go to pandas">pandas</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-python">
+    <a class="link" href="/tag/python" title="Go to python" aria-label="Go to python">python</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-statistics">
+    <a class="link" href="/tag/statistics" title="Go to statistics" aria-label="Go to statistics">statistics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-validation">
+    <a class="link" href="/tag/validation" title="Go to validation" aria-label="Go to validation">validation</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

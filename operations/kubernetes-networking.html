@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Kubernetes Networking | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Kubernetes Networking" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Looking under the hood of networking in Kubernetes." />
+<meta property="og:description" content="Looking under the hood of networking in Kubernetes." />
+<link rel="canonical" href="https://tomasbasham.dev/operations/kubernetes-networking" />
+<meta property="og:url" content="https://tomasbasham.dev/operations/kubernetes-networking" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-30T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kubernetes Networking" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2017-06-30T00:00:00+01:00","datePublished":"2017-06-30T00:00:00+01:00","description":"Looking under the hood of networking in Kubernetes.","headline":"Kubernetes Networking","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/operations/kubernetes-networking"},"url":"https://tomasbasham.dev/operations/kubernetes-networking"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Kubernetes Networking</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2017-06-30T00:00:00+01:00">30 Jun 2017</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 10 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>In the software development scene today, containerisation - and Docker in
+particular - is hard to ignore. However when an application needs to scale
+horizontally it falls upon container orchestration systems to handle the
+complex interconnections between distributed nodes and the containers that they
+manage.</p>
+
+<p>It is without doubt that Kubernetes has prevailed as the dominant container
+orchestration system, but the networking model that it implements is often
+difficult to understand. Before discussing how Kubernetes approaches networking
+it is worth understanding how the Docker networking model is implemented to
+acknowledge some of the issues.</p>
+
+<h3 id="the-docker-model">The Docker Model</h3>
+
+<p>The Docker networking model is somewhat flexible, offering support for multiple
+solutions through the use of network drivers. However in the default case
+Docker imposes a bridge networking model using a host-private networking
+scheme. Docker creates a virtual bridge, called <code class="language-plaintext highlighter-rouge">docker0</code>, in the root network
+namespace and allocates a subnet from one of the private address blocks defined
+in <a href="https://tools.ietf.org/html/rfc1918">RFC1918</a> (typically <code class="language-plaintext highlighter-rouge">172.16.0.0/12</code>)
+to that bridge. For each container managed by Docker a virtual network
+namespace is created to isolate the container from the host networking device.
+Each namespace is attached to the bridge through a virtual Ethernet device
+(<code class="language-plaintext highlighter-rouge">veth</code>) and mapped to appear as <code class="language-plaintext highlighter-rouge">eth0</code> from within the container. The virtual
+Ethernet device is then allocated an IP address from the address range assigned
+to the bridge.</p>
+
+<p>The result of this setup is that each container Docker manages can communicate
+with all other containers providing they are connected to the same virtual
+bridge. By extension since the bridge is configured behind the node’s own Ethernet
+device the containers must also be on the same machine. In addition because
+Docker is configured to use the same IP address range on every node it follows
+that containers across nodes may be assigned the same IP address. This makes
+containers unable to communicate with each other across nodes out-of-the-box.</p>
+
+<p>One way for containers across nodes to communicate it to carefully coordinate
+the allocation of ports on the node’s own IP address and then forward packets
+to the respective container. This can be rather errors prone and often lead to
+high contention.</p>
+
+<p>Below is a diagram depicting how Docker manages virtual network namespaces for
+each container. From this it can be seen how packets would have to traverse
+through the virtual bridge to provide connectivity between containers on the
+same node.</p>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/kubernetes-networking/docker.png" alt="Docker Model" /><figcaption>Docker Model</figcaption>
+</figure>
+
+<h3 id="the-kubernetes-ip-per-pod-model">The Kubernetes (IP per Pod) Model</h3>
+
+<p>The Kubernetes networking model does not differ much from the Docker model seen
+above. However Kubernetes demands a flattening of the IP address space,
+dictating that all containers (and their respective nodes) should be able to
+communicate with each other without the use of Network Address Translation
+(NAT). How this is achieved is of no concern to Kubernetes and may likely be
+implemented differently across infrastructure providers. For instance simple L2
+ARP lookups across a switching fabric could achieve this, or alternatively L3
+IP routing, or an overlay. Providing this demand is respected Kubernetes should
+be able to run across a network.</p>
+
+<p>Unlike the Docker model, Kubernetes assigns IP addresses at the Pod level,
+where by default a Pod is allocated a private IP address within the network
+namespace address range.</p>
+
+<p>Pods themselves provide an isolated, shared network namespace for their content
+(containers) meaning containers within a Pod can communicate by making a
+request to <code class="language-plaintext highlighter-rouge">localhost</code>. This consequently means that each container within a
+Pod must coordinate port usage. However it is typically considered best
+practice to isolate a single container within a single Pod so this issue tends
+to be moot. On the occasion there exists one or more containers with a hard
+dependency on each other they can be placed within a single Pod but should not
+likely need to contest for unallocated ports.</p>
+
+<p>To demonstrate this I have created a single Pod running 2 containers. The
+<code class="language-plaintext highlighter-rouge">kubectl</code> command prints out the Pods details.</p>
+
+<p><strong>Note</strong> The <code class="language-plaintext highlighter-rouge">-l</code> options in the following command specifies that only Pods
+with a <code class="language-plaintext highlighter-rouge">tier</code> label set to <code class="language-plaintext highlighter-rouge">api</code> should be selected for the output.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp get pods <span class="nt">-l</span> <span class="nv">tier</span><span class="o">=</span>api
+NAME                   READY     STATUS    RESTARTS   AGE
+api-4146221093-7pv1p   2/2       Running   0          1d
+
+kubectl <span class="nt">-n</span> myapp describe pod/api-4146221093-7pv1p
+Name:           api-1
+Namespace:      myapp
+Node:           gke-development-cluster-default-pool-9bf27fcd-vqvz/10.132.0.2
+Start Time:     Thu, 28 Jun 2017 08:59:10 +0100
+Labels:         <span class="nv">app</span><span class="o">=</span>myapp
+                pod-template-hash<span class="o">=</span>4146221093
+                <span class="nv">serving</span><span class="o">=</span><span class="nb">true
+                </span><span class="nv">tier</span><span class="o">=</span>api
+Annotations:    kubernetes.io/created-by<span class="o">={</span><span class="s2">"kind"</span>:<span class="s2">"SerializedReference"</span>,<span class="s2">"apiVersion"</span>:<span class="s2">"v1"</span>,<span class="s2">"reference"</span>:<span class="o">{</span><span class="s2">"kind"</span>:<span class="s2">"ReplicaSet"</span>,<span class="s2">"namespace"</span>:<span class="s2">"myapp"</span>,<span class="s2">"name"</span>:<span class="s2">"api-4146221093"</span>,<span class="s2">"uid"</span>:<span class="s2">"f305e98b-f19f-11e7-a706-42010a840036"</span>,<span class="s2">"apiV..."</span>
+Status:         Running
+IP:             10.4.2.19
+Created By:     ReplicaSet/api-4146221093
+Controlled By:  ReplicaSet/api-4146221093
+Containers:
+  ...
+</code></pre></div></div>
+
+<p>The above Pod can be accessed by making a request to its IP address
+(<code class="language-plaintext highlighter-rouge">10.4.2.19</code>). Since the cluster is running on Google Kubernetes Engine (and by
+extension Google Compute Engine) where by default a Pod is given an internal IP
+address it can only be accessed from a machine within the same Google Cloud
+Platform project.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"GET / HTTP/1.1</span><span class="se">\n</span><span class="s2">"</span> | nc 10.4.2.19 9000
+HTTP/1.1 200 OK
+Content-Type: text/html<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>utf-8
+Content-Length: 0
+X-Xss-Protection: 1<span class="p">;</span> <span class="nv">mode</span><span class="o">=</span>block
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+Date: Mon, 28 Jun 2017 18:23:32 GMT
+Connection: Keep-Alive
+</code></pre></div></div>
+
+<p>However having applications make requests to this IP address would be futile in
+the long run. Since Pods are by nature ephemeral the IP address assigned to
+this Pod may not be the same IP address assigned to a Pod in the future.
+Instead there needs to be a layer in front of the Pods to maintain a stable
+endpoint.</p>
+
+<h3 id="the-service-abstraction">The Service Abstraction</h3>
+
+<p>Services are an abstraction of stability for Pods providing a persistent
+endpoint representing a set of containers behind it. This is achieved with a
+Virtual Internet Protocol (VIP) address and enables Kubernetes to deal with
+changes to the cluster topology dynamically without effecting user perceived
+uptime. Clients now only need know the VIP in order to talk to the Pods behind
+the Service. This allows for rolling updates where Pods may be completely
+replaced, likely allocated different IP addresses, without the client realising
+what actions Kubernetes has taken.</p>
+
+<p>The default implementation of the Service abstraction is the <code class="language-plaintext highlighter-rouge">kube-proxy</code> that
+runs on each node in a cluster. Its main responsibility is to query the
+Kubernetes API server and configure <code class="language-plaintext highlighter-rouge">iptables</code> to forward packets to the
+correct destination Pods (backends). It is able to configure <code class="language-plaintext highlighter-rouge">iptables</code> to
+perform simple TCP and UDP stream forwarding or round robin TCP and UDP
+forwarding across a set of backends. Despite its name <code class="language-plaintext highlighter-rouge">kube-proxy</code> is <strong>not</strong> a
+proxy - once upon a time it was a proxy, now it is a controller. In fact it
+does not touch the packets traversing the Kubernetes managed network.</p>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/kubernetes-networking/kubernetes.png" alt="Kubernetes Model" /><figcaption>Kubernetes Model</figcaption>
+</figure>
+
+<p>To demonstrate this I have created a Service that creates a persistent endpoint
+for a single Pod. The <code class="language-plaintext highlighter-rouge">kubectl</code> command prints out the Services details.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp get services
+NAME      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>  AGE
+api       ClusterIP   10.7.241.228   &lt;none&gt;        80/TCP   1d
+
+kubectl <span class="nt">-n</span> myapp describe service/api
+Name:              api
+Namespace:         myapp
+Labels:            &lt;none&gt;
+Annotations:       kubectl.kubernetes.io/last-applied-configuration<span class="o">={</span><span class="s2">"apiVersion"</span>:<span class="s2">"v1"</span>,<span class="s2">"kind"</span>:<span class="s2">"Service"</span>,<span class="s2">"metadata"</span>:<span class="o">{</span><span class="s2">"annotations"</span>:<span class="o">{}</span>,<span class="s2">"name"</span>:<span class="s2">"api"</span>,<span class="s2">"namespace"</span>:<span class="s2">"myapp"</span><span class="o">}</span>,<span class="s2">"spec"</span>:<span class="o">{</span><span class="s2">"ports"</span>:[<span class="o">{</span><span class="s2">"name"</span>:<span class="s2">"http2"</span>,<span class="s2">"port"</span>:80,<span class="s2">"protocol..."</span>
+Selector:          <span class="nv">app</span><span class="o">=</span>myapp,serving<span class="o">=</span><span class="nb">true</span>,tier<span class="o">=</span>api
+Type:              ClusterIP
+IP:                10.7.241.228
+Port:              http2  80/TCP
+TargetPort:        %!d<span class="o">(</span><span class="nv">string</span><span class="o">=</span>esp-port<span class="o">)</span>/TCP
+Endpoints:         10.4.2.19:9000
+Session Affinity:  None
+Events:            &lt;none&gt;
+</code></pre></div></div>
+
+<p>Now the same Pod can be reached by making a request to the VIP (<code class="language-plaintext highlighter-rouge">10.7.241.228</code>)
+assigned to the Service.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"GET / HTTP/1.1</span><span class="se">\n</span><span class="s2">"</span> | nc 10.7.241.228 80
+HTTP/1.1 200 OK
+Content-Type: text/html<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>utf-8
+Content-Length: 0
+X-Xss-Protection: 1<span class="p">;</span> <span class="nv">mode</span><span class="o">=</span>block
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+Date: Mon, 28 Jun 2017 18:23:32 GMT
+Connection: Keep-Alive
+</code></pre></div></div>
+
+<p>By logging onto the node managing the Pod (although any of the nodes would
+produce the same output) we are able to see the list of <code class="language-plaintext highlighter-rouge">iptables</code> rules that
+have been created by <code class="language-plaintext highlighter-rouge">kube-proxy</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>iptables-save | <span class="nb">grep </span>api
+
+<span class="nt">-A</span> KUBE-SEP-JREY6CMQUZ2KMT2G <span class="nt">-s</span> 10.4.2.19/32 <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-j</span> KUBE-MARK-MASQ
+<span class="nt">-A</span> KUBE-SEP-JREY6CMQUZ2KMT2G <span class="nt">-p</span> tcp <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-m</span> tcp <span class="nt">-j</span> DNAT <span class="nt">--to-destination</span> 10.4.2.19:9000
+<span class="nt">-A</span> KUBE-SERVICES <span class="o">!</span> <span class="nt">-s</span> 10.4.0.0/14 <span class="nt">-d</span> 10.7.241.228/32 <span class="nt">-p</span> tcp <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2 cluster IP"</span> <span class="nt">-m</span> tcp <span class="nt">--dport</span> 80 <span class="nt">-j</span> KUBE-MARK-MASQ
+<span class="nt">-A</span> KUBE-SERVICES <span class="nt">-d</span> 10.7.241.228/32 <span class="nt">-p</span> tcp <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2 cluster IP"</span> <span class="nt">-m</span> tcp <span class="nt">--dport</span> 80 <span class="nt">-j</span> KUBE-SVC-CMKF3ZHDEOE3K64F
+<span class="nt">-A</span> KUBE-SVC-CMKF3ZHDEOE3K64F <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-j</span> KUBE-SEP-JREY6CMQUZ2KMT2G
+</code></pre></div></div>
+
+<p>When a Pod wants to request this Service any packets are forwarded from the
+network bridge, through <code class="language-plaintext highlighter-rouge">iptables</code> and onto the destination Pod. Specifically
+<code class="language-plaintext highlighter-rouge">kube-proxy</code> has created rules that perform a Destination Network Address
+Translation (DNAT) on all packets destined for <code class="language-plaintext highlighter-rouge">10.7.241.228/32</code> over TCP on
+port 80 and rewrites the destination address to the Pod running the container.
+In this case <code class="language-plaintext highlighter-rouge">iptables</code> rewrites the destination address to <code class="language-plaintext highlighter-rouge">10.4.2.19</code> on port
+9000.</p>
+
+<p>It is important to note that <code class="language-plaintext highlighter-rouge">iptables</code>, in addition to performing a DNAT, also
+creates a record in the connection tracking table. This allows <code class="language-plaintext highlighter-rouge">iptables</code> to
+track address translations based on a 5-tuple schema later used to reverse the
+translation when a response is received.</p>
+
+<h3 id="scaling-up">Scaling Up</h3>
+
+<p>So far we have only seen what happens with a single Pod. However most
+distributed applications require redundancy, adding further complexity. To
+demonstrate this I have increased the number of replicas for the Pod from above
+to 2. The <code class="language-plaintext highlighter-rouge">kubectl</code> command prints out the Services details.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp describe service/api
+Name:              api
+Namespace:         myapp
+Labels:            &lt;none&gt;
+Annotations:       kubectl.kubernetes.io/last-applied-configuration<span class="o">={</span><span class="s2">"apiVersion"</span>:<span class="s2">"v1"</span>,<span class="s2">"kind"</span>:<span class="s2">"Service"</span>,<span class="s2">"metadata"</span>:<span class="o">{</span><span class="s2">"annotations"</span>:<span class="o">{}</span>,<span class="s2">"name"</span>:<span class="s2">"api"</span>,<span class="s2">"namespace"</span>:<span class="s2">"myapp"</span><span class="o">}</span>,<span class="s2">"spec"</span>:<span class="o">{</span><span class="s2">"ports"</span>:[<span class="o">{</span><span class="s2">"name"</span>:<span class="s2">"http2"</span>,<span class="s2">"port"</span>:80,<span class="s2">"protocol..."</span>
+Selector:          <span class="nv">app</span><span class="o">=</span>myapp,serving<span class="o">=</span><span class="nb">true</span>,tier<span class="o">=</span>api
+Type:              ClusterIP
+IP:                10.7.241.228
+Port:              http2  80/TCP
+TargetPort:        %!d<span class="o">(</span><span class="nv">string</span><span class="o">=</span>esp-port<span class="o">)</span>/TCP
+Endpoints:         10.4.1.14:9000,10.4.2.19:9000
+Session Affinity:  None
+Events:            &lt;none&gt;
+</code></pre></div></div>
+
+<p>Once the new Pod has been created the Service has 2 backends where each Pod
+may very well be on different nodes. However because of the rules Kubernetes
+demands these Pods can both talk to one another. When this new Pod was created
+<code class="language-plaintext highlighter-rouge">kube-proxy</code> created  new rules in the <code class="language-plaintext highlighter-rouge">iptables</code> across all the nodes in the
+cluster. These rules forward packets to the new Pod when the Service is
+requested.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>iptables-save | <span class="nb">grep </span>api
+<span class="nt">-A</span> KUBE-SEP-A2E6GM52XHOS2X76 <span class="nt">-s</span> 10.4.1.14/32 <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-j</span> KUBE-MARK-MASQ
+<span class="nt">-A</span> KUBE-SEP-A2E6GM52XHOS2X76 <span class="nt">-p</span> tcp <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-m</span> tcp <span class="nt">-j</span> DNAT <span class="nt">--to-destination</span> 10.4.1.14:9000
+<span class="nt">-A</span> KUBE-SEP-JREY6CMQUZ2KMT2G <span class="nt">-s</span> 10.4.2.19/32 <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-j</span> KUBE-MARK-MASQ
+<span class="nt">-A</span> KUBE-SEP-JREY6CMQUZ2KMT2G <span class="nt">-p</span> tcp <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-m</span> tcp <span class="nt">-j</span> DNAT <span class="nt">--to-destination</span> 10.4.2.19:9000
+<span class="nt">-A</span> KUBE-SERVICES <span class="o">!</span> <span class="nt">-s</span> 10.4.0.0/14 <span class="nt">-d</span> 10.7.241.228/32 <span class="nt">-p</span> tcp <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2 cluster IP"</span> <span class="nt">-m</span> tcp <span class="nt">--dport</span> 80 <span class="nt">-j</span> KUBE-MARK-MASQ
+<span class="nt">-A</span> KUBE-SERVICES <span class="nt">-d</span> 10.7.241.228/32 <span class="nt">-p</span> tcp <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2 cluster IP"</span> <span class="nt">-m</span> tcp <span class="nt">--dport</span> 80 <span class="nt">-j</span> KUBE-SVC-CMKF3ZHDEOE3K64F
+<span class="nt">-A</span> KUBE-SVC-CMKF3ZHDEOE3K64F <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-m</span> statistic <span class="nt">--mode</span> random <span class="nt">--probability</span> 0.50000000000 <span class="nt">-j</span> KUBE-SEP-A2E6GM52XHOS2X76
+<span class="nt">-A</span> KUBE-SVC-CMKF3ZHDEOE3K64F <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"myapp/api:http2"</span> <span class="nt">-j</span> KUBE-SEP-JREY6CMQUZ2KMT2G
+</code></pre></div></div>
+
+<p>Now Kubernetes must make a choice as to which backend to forward packets.
+<code class="language-plaintext highlighter-rouge">iptables</code> will pick one of the backends at random, based on some statistic
+condition. In this case each Pod has a 50% chance of being selected. From here
+the process is as before; <code class="language-plaintext highlighter-rouge">iptables</code> will perform a DNAT, add a record to the
+connection tracking table, and forward packets to the destination Pod.</p>
+
+<p>The root network namespace now acts as a distributed load balancer. This is
+true because the same set of rules are configured on each of the nodes in a
+cluster, so a Service can be “discovered” in the same way from every Pod,
+regardless of the node that it runs on.</p>
+
+<h3 id="external-resources">External Resources</h3>
+
+<ul>
+  <li><a href="https://kubernetes.io/">Kubernetes</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Linux_namespaces">Linux Namespace</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Network_address_translation">Network Address
+Translation</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Address_Resolution_Protocol">Address Resolution
+Protocol</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Iptables">iptables</a></li>
+</ul>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-docker">
+    <a class="link" href="/tag/docker" title="Go to docker" aria-label="Go to docker">docker</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-iptables">
+    <a class="link" href="/tag/iptables" title="Go to iptables" aria-label="Go to iptables">iptables</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-kubernetes">
+    <a class="link" href="/tag/kubernetes" title="Go to kubernetes" aria-label="Go to kubernetes">kubernetes</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-services">
+    <a class="link" href="/tag/services" title="Go to services" aria-label="Go to services">services</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

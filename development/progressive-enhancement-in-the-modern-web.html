@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Progressive Enhancement in the Modern Web: Building Resilient Applications | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Progressive Enhancement in the Modern Web: Building Resilient Applications" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="In the previous articles of this series, I’ve challenged several prevailing trends in web development—from JavaScript-heavy SPAs to utility-first CSS frameworks. Now, I want to focus on a principle that has been with us since the early days of web development but has been largely forgotten in the modern era: progressive enhancement." />
+<meta property="og:description" content="In the previous articles of this series, I’ve challenged several prevailing trends in web development—from JavaScript-heavy SPAs to utility-first CSS frameworks. Now, I want to focus on a principle that has been with us since the early days of web development but has been largely forgotten in the modern era: progressive enhancement." />
+<link rel="canonical" href="https://tomasbasham.dev/development/progressive-enhancement-in-the-modern-web" />
+<meta property="og:url" content="https://tomasbasham.dev/development/progressive-enhancement-in-the-modern-web" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-04T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Progressive Enhancement in the Modern Web: Building Resilient Applications" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2025-05-04T00:00:00+01:00","datePublished":"2025-05-04T00:00:00+01:00","description":"In the previous articles of this series, I’ve challenged several prevailing trends in web development—from JavaScript-heavy SPAs to utility-first CSS frameworks. Now, I want to focus on a principle that has been with us since the early days of web development but has been largely forgotten in the modern era: progressive enhancement.","headline":"Progressive Enhancement in the Modern Web: Building Resilient Applications","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/progressive-enhancement-in-the-modern-web"},"url":"https://tomasbasham.dev/development/progressive-enhancement-in-the-modern-web"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Progressive Enhancement in the Modern Web: Building Resilient Applications</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2025-05-04T00:00:00+01:00">04 May 2025</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 7 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>In the previous articles of this series, I’ve challenged several prevailing
+trends in web development—from JavaScript-heavy SPAs to utility-first CSS
+frameworks. Now, I want to focus on a principle that has been with us since the
+early days of web development but has been largely forgotten in the modern era:
+progressive enhancement.</p>
+
+<h2 id="what-is-progressive-enhancement">What Is Progressive Enhancement?</h2>
+
+<p>At its core, progressive enhancement is a design philosophy that puts content
+first and builds additional layers of functionality and sophistication on top of
+a solid foundation. It follows a simple pattern:</p>
+
+<ol>
+  <li>Start with semantic HTML that works without CSS or JavaScript</li>
+  <li>Add CSS to enhance the visual experience</li>
+  <li>Add JavaScript to enhance behaviour and interactivity</li>
+</ol>
+
+<p>The key insight is that if any layer fails (JavaScript errors, CSS not loading,
+etc.), the application continues to function at a more basic level. This creates
+inherent resilience in your applications.</p>
+
+<p>Progressive enhancement isn’t about building outdated or simplistic interfaces.
+It’s about building sophisticated experiences that don’t collapse when things go
+wrong.</p>
+
+<h2 id="why-progressive-enhancement-still-matters">Why Progressive Enhancement Still Matters</h2>
+
+<p>Modern web development often takes the opposite approach—starting with a
+JavaScript framework and treating HTML as an afterthought (or something that’s
+generated by JavaScript). This approach, sometimes called “graceful
+degradation,” has several critical flaws:</p>
+
+<ol>
+  <li>
+    <p><strong>Single point of failure</strong>: If JavaScript fails to load or execute properly,
+nothing works</p>
+  </li>
+  <li>
+    <p><strong>Performance penalties</strong>: Users often see nothing until the JavaScript
+bundle has downloaded, parsed, and executed</p>
+  </li>
+  <li>
+    <p><strong>Accessibility issues</strong>: Screen readers and assistive technologies often
+struggle with JavaScript-generated content</p>
+  </li>
+  <li>
+    <p><strong>SEO challenges</strong>: Despite improvements in crawler JavaScript support,
+static HTML remains more reliably indexed</p>
+  </li>
+</ol>
+
+<p>These aren’t theoretical problems. Studies consistently show that JavaScript
+errors in production are common. Mobile networks are unreliable. Browsers are
+diverse. Users have varying hardware capabilities. Progressive enhancement
+acknowledges and accommodates these realities.</p>
+
+<h2 id="progressive-enhancement-in-practice">Progressive Enhancement in Practice</h2>
+
+<p>Let’s consider a concrete example: a search form with autocomplete suggestions.</p>
+
+<h3 id="the-base-layer-html">The Base Layer: HTML</h3>
+
+<p>We start with standard HTML that functions without any JavaScript:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/search"</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"search"</span><span class="nt">&gt;</span>Search:<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"search"</span> <span class="na">id=</span><span class="s">"search"</span> <span class="na">name=</span><span class="s">"q"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Search<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>This form works everywhere. It performs a GET request to <code class="language-plaintext highlighter-rouge">/search</code> with the
+query parameter, and the server returns results. It’s accessible, indexable, and
+reliable.</p>
+
+<h3 id="the-enhancement-layer-javascript">The Enhancement Layer: JavaScript</h3>
+
+<p>Now we can enhance this with HTMX and/or AlpineJS to add autocomplete
+functionality:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/search"</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"search"</span><span class="nt">&gt;</span>Search:<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;input</span>
+    <span class="na">type=</span><span class="s">"search"</span>
+    <span class="na">id=</span><span class="s">"search"</span>
+    <span class="na">name=</span><span class="s">"q"</span>
+    <span class="na">hx-get=</span><span class="s">"/api/suggestions"</span>
+    <span class="na">hx-trigger=</span><span class="s">"keyup delay:500ms"</span>
+    <span class="na">hx-target=</span><span class="s">"#suggestions"</span>
+    <span class="na">x-data=</span><span class="s">"{ query: '' }"</span>
+    <span class="na">x-model=</span><span class="s">"query"</span>
+  <span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Search<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"suggestions"</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>With HTMX, each keypress now triggers a request to <code class="language-plaintext highlighter-rouge">/api/suggestions</code> after a
+500ms delay, and the response updates the suggestions div. AlpineJS provides
+additional client-side reactivity.</p>
+
+<p>If HTMX fails to load or the <code class="language-plaintext highlighter-rouge">/api/suggestions</code> endpoint is down, the form still
+works. Users can still search. They just won’t get autocomplete.</p>
+
+<h3 id="taking-it-further-adding-graceful-enhancements">Taking It Further: Adding Graceful Enhancements</h3>
+
+<p>We can continue adding layers of enhancement that fall back gracefully:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/search"</span> <span class="na">method=</span><span class="s">"get"</span> <span class="na">hx-boost=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"search"</span><span class="nt">&gt;</span>Search:<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;input</span>
+    <span class="na">type=</span><span class="s">"search"</span>
+    <span class="na">id=</span><span class="s">"search"</span>
+    <span class="na">name=</span><span class="s">"q"</span>
+    <span class="na">hx-get=</span><span class="s">"/api/suggestions"</span>
+    <span class="na">hx-trigger=</span><span class="s">"keyup delay:500ms"</span>
+    <span class="na">hx-target=</span><span class="s">"#suggestions"</span>
+    <span class="na">x-data=</span><span class="s">"{ query: '' }"</span>
+    <span class="na">x-model=</span><span class="s">"query"</span>
+    <span class="na">hx-indicator=</span><span class="s">".spinner"</span>
+  <span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Search<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"spinner"</span> <span class="na">style=</span><span class="s">"display:none;"</span><span class="nt">&gt;</span>Loading...<span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"suggestions"</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>Now, with <code class="language-plaintext highlighter-rouge">hx-boost="true"</code>, even the form submission is enhanced to load
+results without a full page refresh. But again, if HTMX isn’t available, the
+form reverts to standard behaviour.</p>
+
+<h2 id="http-and-html-primitives-as-the-foundation">HTTP and HTML Primitives as the Foundation</h2>
+
+<p>The web platform provides powerful primitives that often get overlooked in the
+quest for novelty:</p>
+
+<h3 id="forms-and-form-controls">Forms and Form Controls</h3>
+
+<p>HTML forms are a complete solution for gathering user input. They provide:</p>
+
+<ul>
+  <li>Built-in validation</li>
+  <li>Accessibility features</li>
+  <li>Keyboard navigation</li>
+  <li>Mobile-friendly input types</li>
+  <li>Native browser features like autofill</li>
+</ul>
+
+<p>Before reaching for a complex form library, consider whether HTML’s native
+<code class="language-plaintext highlighter-rouge">&lt;form&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;select&gt;</code>, and other controls might be sufficient, perhaps
+with light JavaScript enhancements.</p>
+
+<h3 id="link-navigation">Link Navigation</h3>
+
+<p>The humble <code class="language-plaintext highlighter-rouge">&lt;a&gt;</code> element remains one of the web’s most powerful features. It
+provides:</p>
+
+<ul>
+  <li>Browser history management</li>
+  <li>Right-click context menu options</li>
+  <li>Middle-click to open in new tab</li>
+  <li>Keyboard navigation</li>
+  <li>Accessibility</li>
+</ul>
+
+<p>Libraries like HTMX extend these primitives rather than replacing them, adding
+dynamic behaviour whilst preserving their inherent benefits.</p>
+
+<h3 id="http-methods">HTTP Methods</h3>
+
+<p>HTML forms natively support GET and POST, but modern web APIs use the full range
+of HTTP methods (PUT, DELETE, PATCH, etc.). HTMX bridges this gap by allowing
+any HTML element to trigger any HTTP method:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;button</span> <span class="na">hx-delete=</span><span class="s">"/items/1"</span> <span class="na">hx-target=</span><span class="s">"#items-list"</span><span class="nt">&gt;</span>
+  Delete Item
+<span class="nt">&lt;/button&gt;</span>
+</code></pre></div></div>
+
+<p>This maintains the connection to HTTP’s request/response pattern whilst adding
+interaction without full page reloads.</p>
+
+<h2 id="the-role-of-modern-javascript-libraries">The Role of Modern JavaScript Libraries</h2>
+
+<p>I’m not suggesting we abandon JavaScript entirely. Libraries like AlpineJS and
+HTMX can enhance the user experience significantly. The key difference from
+monolithic frameworks is their approach:</p>
+
+<h3 id="alpinejs-minimal-but-powerful">AlpineJS: Minimal But Powerful</h3>
+
+<p>AlpineJS provides reactive data binding and declarative templates directly in
+HTML:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">x-data=</span><span class="s">"{ open: false }"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="err">@</span><span class="na">click=</span><span class="s">"open = !open"</span><span class="nt">&gt;</span>Toggle<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">x-show=</span><span class="s">"open"</span><span class="nt">&gt;</span>Content<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>This adds interactivity without departing from HTML’s declarative nature. And if
+AlpineJS fails to load, the content remains visible—it just won’t toggle.</p>
+
+<h3 id="htmx-extending-html-for-ajax">HTMX: Extending HTML for AJAX</h3>
+
+<p>As demonstrated earlier, HTMX adds dynamic behaviour to HTML elements through
+attributes:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;button</span> <span class="na">hx-post=</span><span class="s">"/api/like"</span> <span class="na">hx-swap=</span><span class="s">"outerHTML"</span><span class="nt">&gt;</span>
+  Like
+<span class="nt">&lt;/button&gt;</span>
+</code></pre></div></div>
+
+<p>This maintains a connection to the server whilst avoiding full page reloads. If
+HTMX doesn’t load, the button still submits a form post to <code class="language-plaintext highlighter-rouge">/api/like</code>.</p>
+
+<h2 id="common-objections-to-progressive-enhancement">Common Objections to Progressive Enhancement</h2>
+
+<p>Despite its benefits, progressive enhancement faces resistance. Let’s address
+some common objections:</p>
+
+<h3 id="our-users-always-have-javascript-enabled">“Our users always have JavaScript enabled”</h3>
+
+<p>Even if every user has JavaScript enabled, JavaScript can still fail for
+countless reasons:</p>
+
+<ul>
+  <li>Network errors when loading scripts</li>
+  <li>Browser extensions interfering with execution</li>
+  <li>Corporate proxies modifying content</li>
+  <li>CDN outages</li>
+  <li>Parsing errors in your code</li>
+  <li>Third-party script conflicts</li>
+</ul>
+
+<p>Progressive enhancement isn’t about supporting JavaScript-disabled browsers—it’s
+about resilience in the face of inevitable failures.</p>
+
+<h3 id="it-takes-too-much-development-time">“It takes too much development time”</h3>
+
+<p>Actually, progressive enhancement often saves time in the long run:</p>
+
+<ul>
+  <li>Fewer edge cases to debug</li>
+  <li>Reduced complexity in error handling</li>
+  <li>Better separation of concerns</li>
+  <li>More predictable user experiences</li>
+  <li>Fewer support tickets for broken functionality</li>
+</ul>
+
+<p>Starting with HTML forces you to think about core functionality first, leading
+to clearer product design.</p>
+
+<h3 id="modern-web-apps-are-too-complex-for-this-approach">“Modern web apps are too complex for this approach”</h3>
+
+<p>This objection conflates complexity with approach. Even complex applications can
+be built with progressive enhancement principles. Consider GitHub, which uses
+progressive enhancement extensively despite its complexity.</p>
+
+<p>The truth is that most web applications are essentially forms and data
+presentation—precisely what HTML was designed to handle.</p>
+
+<h2 id="progressive-enhancement-as-practical-strategy">Progressive Enhancement as Practical Strategy</h2>
+
+<p>Progressive enhancement isn’t just a technical approach—it’s a business strategy
+that aligns with core web values:</p>
+
+<ul>
+  <li><strong>Inclusivity</strong>: Works for more users in more contexts</li>
+  <li><strong>Performance</strong>: Provides faster initial content</li>
+  <li><strong>Reliability</strong>: Continues functioning under suboptimal conditions</li>
+  <li><strong>Maintainability</strong>: Creates clearer separation of concerns</li>
+  <li><strong>Longevity</strong>: Reduces dependency on specific frameworks</li>
+</ul>
+
+<p>These values translate directly to business metrics: wider audience reach,
+higher conversion rates, improved user satisfaction, and lower maintenance
+costs.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Progressive enhancement represents a return to the web’s core strength: the
+universal accessibility of content. By starting with HTML and HTTP primitives
+and layering enhancements on top, we create experiences that are both
+sophisticated and resilient.</p>
+
+<p>This approach doesn’t reject modern tools or techniques—it simply places them in
+their proper context, as enhancements rather than requirements. HTMX and
+AlpineJS fit perfectly into this model, extending the web platform rather than
+replacing it.</p>
+
+<p>As we’ve seen throughout this series, many of the web’s current challenges stem
+from forgetting its foundational principles. Progressive enhancement reminds us
+that the web’s power lies not in its ability to mimic native applications, but
+in its unique combination of accessibility, resilience, and reach.</p>
+
+<p>In the next article, I’ll explore how these technical approaches affect team
+structure, and how we might build truly cross-functional teams that break down
+the artificial silos between frontend and backend development.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-development">
+    <a class="link" href="/tag/development" title="Go to development" aria-label="Go to development">development</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-javascript">
+    <a class="link" href="/tag/javascript" title="Go to javascript" aria-label="Go to javascript">javascript</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-htmx">
+    <a class="link" href="/tag/htmx" title="Go to htmx" aria-label="Go to htmx">htmx</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-alpinejs">
+    <a class="link" href="/tag/alpinejs" title="Go to alpinejs" aria-label="Go to alpinejs">alpinejs</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-progressive-enhancement">
+    <a class="link" href="/tag/progressive-enhancement" title="Go to progressive-enhancement" aria-label="Go to progressive-enhancement">progressive-enhancement</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

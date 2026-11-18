@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Building libjingle for the Raspberry Pi | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Building libjingle for the Raspberry Pi" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="A step by step guide to cross-compile the libjingle library for the Raspberry Pi." />
+<meta property="og:description" content="A step by step guide to cross-compile the libjingle library for the Raspberry Pi." />
+<link rel="canonical" href="https://tomasbasham.dev/development/building-libjingle-on-the-raspberry-pi" />
+<meta property="og:url" content="https://tomasbasham.dev/development/building-libjingle-on-the-raspberry-pi" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-05-28T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building libjingle for the Raspberry Pi" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2016-05-28T00:00:00+01:00","datePublished":"2016-05-28T00:00:00+01:00","description":"A step by step guide to cross-compile the libjingle library for the Raspberry Pi.","headline":"Building libjingle for the Raspberry Pi","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/building-libjingle-on-the-raspberry-pi"},"url":"https://tomasbasham.dev/development/building-libjingle-on-the-raspberry-pi"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Building libjingle for the Raspberry Pi</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2016-05-28T00:00:00+01:00">28 May 2016</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 6 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>Following an increasing trend in decentralised applications there is an ever
+growing demand to produce secure protocols and software development frameworks
+from which to implement these applications. The modern browser implements an API
+definition drafted by the World Wide Web Consortium (W3C), called WebRTC, that
+supports peer-to-peer (P2P) voice/video calling and file sharing without the
+need to install external plugins.</p>
+
+<p>In this article I will discuss what WebRTC is and its underlying libraries. In
+addition I will guide you through cross-compiling <code class="language-plaintext highlighter-rouge">libjingle</code> for the Raspberry
+Pi to take advantage of P2P technologies within your own applications. Note that
+this is a largely untested process and does not go through using the library
+once built.</p>
+
+<h3 id="what-is-webrtc">What is WebRTC</h3>
+
+<p>WebRTC is an API definition containing video and audio codecs and Realtime
+Transport (RTP) stack. Its primary goal is to provide a layer of abstraction
+away from the underlying <code class="language-plaintext highlighter-rouge">libjingle</code> libraries that implement the Extensible
+Messaging and Presence Protocol (XMPP) stack, Session Traversal Utilities for
+NAT (STUN) and Interactive Connectivity Establishment (ICE) protocols.</p>
+
+<p>Originally an <a href="https://en.wikipedia.org/wiki/Open-source_software">open source</a>
+project released by Google in 2011, following work has been made to standardise
+the relevant protocols in the IETF and browser APIs in the W3C. These standards
+aim to allow compatible browsers to establish P2P connectivity across internal
+and external networks (such as the Internet) and even through firewalls, making
+it truly distributed at a large scale.</p>
+
+<p>WebRTC is designed as a JavaScript API with 3 major components:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">getUserMedia</code>, which allows a web browser to access the camera and microphone</li>
+  <li><code class="language-plaintext highlighter-rouge">RTCPeerConnection</code>, which sets up audio/video calls</li>
+  <li><code class="language-plaintext highlighter-rouge">RTCDataChannel</code>, which allow browsers to share data through a P2P connection</li>
+</ul>
+
+<h3 id="the-libjingle-library">The libjingle library</h3>
+
+<p><code class="language-plaintext highlighter-rouge">libjingle</code> is a collection of open source C++ code that enable you to build P2P
+applications. The code handles creating a network connection (through NAT and
+firewall devices, relay servers, and proxies), negotiating session details
+(codecs, formats, etc.), and exchanging data.</p>
+
+<p>The code includes network and proxy negotiation classes, XML parsing classes, a
+STUN server, and all the code required to initiate connections and exchange data
+between two computers. The connection code enables applications to robustly
+traverse NAT and firewall devices using the ICE mechanism, to use STUN servers,
+and to exchange either UDP or TCP data packets. You can use the code as
+provided, or extend it fit your own specific needs, according to the
+Berkeley-style license.</p>
+
+<p><code class="language-plaintext highlighter-rouge">libjingle</code> was created at about the same time as the
+<a href="https://en.wikipedia.org/wiki/Jingle_(protocol)">Jingle</a> Extensible Messaging
+and Presence Protocol (XMPP) extension. Despite sharing similar names, it is
+worth noting that <code class="language-plaintext highlighter-rouge">libjingle</code> implements its own protocol to handle session
+negotiation; thus, although the <code class="language-plaintext highlighter-rouge">libjingle</code> protocol and Jingle are very
+similar, they are not the same, and are not interoperable.</p>
+
+<h3 id="cross-compiling-libjingle-for-the-raspberry-pi">Cross-compiling libjingle for the Raspberry Pi</h3>
+
+<p>First we requires a suitable Linux cross-compilation host. I will tend to use
+another linux host, preferably Debian based, since Raspbian is Debian based
+also. Due to this they share a similar command line and should have compatible
+build tools. Regardless you will need to install the necessary toolchain.</p>
+
+<p>I have created a repository containing all of the configuration you are about to
+read through. You can find it on
+<a href="https://github.com/tomasbasham/webrtc-armhf">GitHub</a> in its current
+incarnation. Any pull requests are welcome to help complete this project.</p>
+
+<h3 id="installing-the-toolchain">Installing the toolchain</h3>
+
+<p>First we need to install <code class="language-plaintext highlighter-rouge">depot_tools</code> and add it to the shell <code class="language-plaintext highlighter-rouge">PATH</code>.
+<code class="language-plaintext highlighter-rouge">depot_tools</code> is a collection of code checkout management packages maintained by
+Google that includes <code class="language-plaintext highlighter-rouge">gclient</code>, <code class="language-plaintext highlighter-rouge">gcl</code>, <code class="language-plaintext highlighter-rouge">git-cl</code>, <code class="language-plaintext highlighter-rouge">repo</code> and others. We will use
+these tools to checkout and build the webrtc codebase.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>git
+<span class="nb">sudo </span>git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git /opt/depot_tools
+<span class="nb">echo</span> <span class="s2">"export PATH=/opt/depot_tools:</span><span class="se">\$</span><span class="s2">PATH"</span> | <span class="nb">sudo tee</span> /etc/profile.d/depot_tools.sh
+</code></pre></div></div>
+
+<p>The second part of the toolchain is a series of common linux packages already
+compiled for the Raspberry Pi ARM architecture. These will be used to
+cross-compile the webrtc codebase.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>git clone https://github.com/raspberrypi/tools.git /opt/rpi_tools
+<span class="nb">echo</span> <span class="s2">"export PATH=/opt/rpi_tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin:</span><span class="se">\$</span><span class="s2">PATH"</span> | <span class="nb">sudo tee</span> /etc/profile.d/rpi_tools.sh
+</code></pre></div></div>
+
+<p>Last we need to define a series of build flags.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"export GYP_CROSSCOMPILE=1"</span> | <span class="nb">sudo tee</span> /etc/profile.d/meta_build.sh
+<span class="nb">echo</span> <span class="s2">"export GYP_DEFINES=</span><span class="se">\"</span><span class="s2">target_arch=arm arm_float_abi=hard clang=0 include_tests=0 sysroot=</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">/rootfs werror=</span><span class="se">\"</span><span class="s2">"</span> | <span class="nb">sudo tee</span> <span class="nt">-a</span> /etc/profile.d/meta_build.sh
+<span class="nb">echo</span> <span class="s2">"export GYP_GENERATOR_OUTPUT=arm"</span> | <span class="nb">sudo tee</span> <span class="nt">-a</span> /etc/profile.d/meta_build.sh
+</code></pre></div></div>
+
+<p>Remember that despite adding these statements into the <code class="language-plaintext highlighter-rouge">profile.d</code> folder they
+will not take effect until you start a new shell session. To do this either
+logout and back in or simply type <code class="language-plaintext highlighter-rouge">source /etc/profile</code> to “refresh” your
+current session.</p>
+
+<h3 id="bootstrapping-a-compatible-filesystem">Bootstrapping a compatible filesystem</h3>
+
+<p>Next we are going to install a Debian base filesystem into a subdirectory of the
+current folder compatible with the ARM Hard Float Port architecture. We will do
+so using the debootstrap package. This is known as “cross-debootstrapping”.</p>
+
+<p>This needs to be done in two parts because we’ll be bootstrapping a foreign base
+system with a differing architectures from the host. The initial step downloads
+the necessary <code class="language-plaintext highlighter-rouge">.deb</code> files and unpacks them only. A copy of debootstrap
+sufficient for completing the bootstrap process will be installed as
+/debootstrap/debootstrap in the target filesystem. This is then run with the
+<code class="language-plaintext highlighter-rouge">--second-stage</code> option to complete the bootstrapping process.</p>
+
+<p>The second part runs all of the package configuration scripts, which must be
+done using the target architecture (or by using qemu-user-static to emulate the
+target architecture). Here we opt for the latter by copying <code class="language-plaintext highlighter-rouge">qemu-arm-static</code>
+into the bootstrapped filesystem just before running the second stage.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>qemu-user-static debootstrap
+<span class="nb">sudo </span>debootstrap <span class="nt">--arch</span> armhf <span class="nt">--foreign</span> <span class="nt">--include</span><span class="o">=</span>g++,libasound2-dev,libpulse-dev,libudev-dev,libexpat1-dev,libnss3-dev,libgtk2.0-dev jessie rootfs
+<span class="nb">sudo cp</span> /usr/bin/qemu-arm-static rootfs/usr/bin/
+<span class="nb">sudo chroot </span>rootfs /debootstrap/debootstrap <span class="nt">--second-stage</span>
+
+find rootfs/usr/lib/arm-linux-gnueabihf <span class="nt">-lname</span> <span class="s1">'\*'</span> <span class="nt">-printf</span> <span class="s1">'%p %l\n'</span> | <span class="k">while </span><span class="nb">read link </span>target<span class="p">;</span> <span class="k">do
+  </span><span class="nb">sudo ln</span> <span class="nt">-snfv</span> <span class="s2">"../../..</span><span class="k">${</span><span class="nv">target</span><span class="k">}</span><span class="s2">"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">link</span><span class="k">}</span><span class="s2">"</span>
+<span class="k">done
+
+</span>find rootfs/usr/lib/arm-linux-gnueabihf/pkgconfig <span class="nt">-printf</span> <span class="s2">"%f</span><span class="se">\n</span><span class="s2">"</span> | <span class="k">while </span><span class="nb">read </span>target<span class="p">;</span> <span class="k">do
+  </span><span class="nb">sudo ln</span> <span class="nt">-snfv</span> <span class="s2">"../../lib/arm-linux-gnueabihf/pkgconfig/</span><span class="k">${</span><span class="nv">target</span><span class="k">}</span><span class="s2">"</span> rootfs/usr/share/pkgconfig/<span class="k">${</span><span class="nv">target</span><span class="k">}</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<p>When this has finished you will have successfully built an environment capable
+of cross-compiling webrtc for the raspberry pi.</p>
+
+<h3 id="building-the-library">Building the library</h3>
+
+<p>Finally we can your the tools downloaded earlier to build the webrtc codebase.
+First create a working directory chage directory into it. You can call this
+working directory whatever you want and is used primarily to encapsulate what
+we’re trying to achieve. From here building the libjingle library is simply a
+series of 3 commands that will checkout the code; synchronise it with the
+external repository (if necessary); and then finally build from source.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fetch <span class="nt">--no-history</span> <span class="nt">--nohooks</span> webrtc
+gclient <span class="nb">sync</span> <span class="nt">--verbose</span>
+ninja <span class="nt">-C</span> <span class="si">$(</span>PWD<span class="si">)</span>/src/arm/out/Release
+</code></pre></div></div>
+
+<p>This can take a rather long time and the <code class="language-plaintext highlighter-rouge">gclient</code> command is prone to error
+from time to time. If this does happen then running it again should fix the
+problem. You may need to run it several more time until it completes.</p>
+
+<h3 id="external-resources">External Resources</h3>
+
+<ul>
+  <li>WebRTC homepage. See <a href="http://www.webrtc.org/">webrtc.org</a>.</li>
+  <li>WebRTC development documentation (see
+<a href="https://webrtc.org/native-code/development/">development</a>).</li>
+</ul>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-development">
+    <a class="link" href="/tag/development" title="Go to development" aria-label="Go to development">development</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-p2p">
+    <a class="link" href="/tag/p2p" title="Go to p2p" aria-label="Go to p2p">p2p</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-webrtc">
+    <a class="link" href="/tag/webrtc" title="Go to webrtc" aria-label="Go to webrtc">webrtc</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

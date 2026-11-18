@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Feature Scaling | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+    <link rel="stylesheet" href="/css/katex-KwBvjUzP.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Feature Scaling" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Investigation into fraud at Enron, continuing with feature scaling" />
+<meta property="og:description" content="Investigation into fraud at Enron, continuing with feature scaling" />
+<link rel="canonical" href="https://tomasbasham.dev/machine%20learning/feature-scaling" />
+<meta property="og:url" content="https://tomasbasham.dev/machine%20learning/feature-scaling" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-10T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Feature Scaling" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2019-01-10T00:00:00+00:00","datePublished":"2019-01-10T00:00:00+00:00","description":"Investigation into fraud at Enron, continuing with feature scaling","headline":"Feature Scaling","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/machine%20learning/feature-scaling"},"url":"https://tomasbasham.dev/machine%20learning/feature-scaling"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Feature Scaling</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2019-01-10T00:00:00+00:00">10 Jan 2019</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 9 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>In general, classifiers that exploit distances (i.e.
+<a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>) or
+similarities between examples are sensitive to features taking on broad ranges
+of values. That is classifiers that have a co-dependency between dimensions are
+effected by feature scaling. For example if one feature takes on a range of
+values much greater than the other features in the same dataset, the distance
+will be governed by this particular feature. Therefore it is best practice to
+normalise (or standardise) all features within a dataset such that each
+contributes proportionately to the final distance.</p>
+
+<p>Examples of classifiers sensitive to feature scaling include both Support Vector
+Machines and K-Nearest Neighbour. Therefore it is imperative for this experiment
+that, at least in the case of the <code class="language-plaintext highlighter-rouge">LinearSVC</code>, the features are appropriately
+scaled.</p>
+
+<p>Conversely graphical-model based classifiers, such as Naive Bayes, as well as
+Decision trees and Tree-based ensemble methods (Random Forest, AdaBoost) are
+invariant to feature scaling. However as part of the experimentation I will
+scale the data for these classifiers to investigate what difference, if any, it
+makes to the performance.</p>
+
+<h3 id="rescaling-min-max-normalisation">Rescaling (min-max Normalisation)</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Normalization_(statistics)">Normalisation</a> is a
+method commonly deployed in machine learning centred around rescaling that uses
+the extreme values within a particular distribution. More specifically it looks
+at the minimum and maximum values, the range of a feature, and then shrinks or
+stretches each value to a common range. This common range will typically be
+between<code class="language-plaintext highlighter-rouge">[0, 1]</code> or <code class="language-plaintext highlighter-rouge">[-1, 1]</code>. Selecting the target range depends on the nature
+of the data. The general formula is given as:</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right" columnspacing=""><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><msup><mi>x</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>=</mo><mfrac><mrow><mo fence="true">(</mo><mi>x</mi><mo>−</mo><msub><mi>x</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo fence="true">)</mo></mrow><mrow><mo fence="true">(</mo><msub><mi>x</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>−</mo><msub><mi>x</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo fence="true">)</mo></mrow></mfrac></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+x^{\prime} = \frac{\left(x - x_{min}\right)}{\left(x_{max} - x_{min}\right)}
+\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.663em;vertical-align:-1.0815em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5815em;"><span style="top:-3.5815em;"><span class="pstrut" style="height:3.427em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">ma</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">min</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">min</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0815em;"><span></span></span></span></span></span></span></span></span></span></span></span>
+
+<p>It is basically at what percentage of a range the value lies. Since the range is
+only determined by the minimum and maximum for each feature normalisation is
+invariant to extreme values. For example a series containing values
+<code class="language-plaintext highlighter-rouge">[-100, 10, 11, 12, 900]</code> can still be normalised within a range of <code class="language-plaintext highlighter-rouge">[0, 1]</code>.
+Here the normalised output would be <code class="language-plaintext highlighter-rouge">[0, 0.11, 0.111, 0.112, 1]</code>. What follows
+is an example of applying feature normalisation to the Enron dataset and what
+effect this has to the performance of each classifier.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="nc">MinMaxScaler</span><span class="p">()</span>
+<span class="n">columns_to_scale</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">)</span> <span class="c1"># poi is not a feature and should not be considered
+</span>
+<span class="c1"># Make a copy of the extended dataset and perform scaling.
+</span><span class="n">enron_data_normalised</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+<span class="n">enron_data_normalised</span><span class="p">[</span><span class="n">columns_to_scale</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaler</span><span class="p">.</span><span class="nf">fit_transform</span><span class="p">(</span><span class="n">enron_data</span><span class="p">[</span><span class="n">columns_to_scale</span><span class="p">])</span>
+
+<span class="c1"># Extract the data from the dataframe, with the features normalised.
+</span><span class="n">my_normalised_dataset</span> <span class="o">=</span> <span class="n">enron_data_normalised</span><span class="p">.</span><span class="nf">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="sh">'</span><span class="s">index</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Create a list of classifiers to evaluate.
+</span><span class="n">clfs</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">Naive Bayes</span><span class="sh">'</span><span class="p">,</span> <span class="nc">GaussianNB</span><span class="p">()),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">SVM</span><span class="sh">'</span><span class="p">,</span> <span class="nc">LinearSVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">)),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">Random Forest</span><span class="sh">'</span><span class="p">,</span> <span class="nc">RandomForestClassifier</span><span class="p">()),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">AdaBoost</span><span class="sh">'</span><span class="p">,</span> <span class="nc">AdaBoostClassifier</span><span class="p">())</span>
+<span class="p">]</span>
+
+<span class="nf">test_classifiers</span><span class="p">(</span><span class="n">clfs</span><span class="p">,</span> <span class="n">my_normalised_dataset</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>=====&gt; Running Naive Bayes
+
+=====&gt; Running SVM
+
+=====&gt; Running Random Forest
+
+=====&gt; Running AdaBoost
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>accuracy</th>
+        <th>precision</th>
+        <th>recall</th>
+        <th>f1</th>
+        <th>f2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AdaBoost</td>
+        <td>0.87</td>
+        <td>0.56</td>
+        <td>0.47</td>
+        <td>0.52</td>
+        <td>0.49</td>
+      </tr>
+      <tr>
+        <td>SVM</td>
+        <td>0.83</td>
+        <td>0.42</td>
+        <td>0.42</td>
+        <td>0.42</td>
+        <td>0.42</td>
+      </tr>
+      <tr>
+        <td>Random Forest</td>
+        <td>0.88</td>
+        <td>0.68</td>
+        <td>0.28</td>
+        <td>0.40</td>
+        <td>0.32</td>
+      </tr>
+      <tr>
+        <td>Naive Bayes</td>
+        <td>0.67</td>
+        <td>0.24</td>
+        <td>0.57</td>
+        <td>0.33</td>
+        <td>0.45</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>Quite unsurprisingly, normalising the features has had no (or very little)
+effect on the results of the AdaBoost and RandomForest classifiers, having only
+in the case of the RandomForest classifier increasd recall by 1%. This I have
+deemed not significant enough to warrant any further investigation. Conversely
+normalisaing the features has surprisingly had a mixed effect on the Naive Bayes
+classifier, reducing the accuracy by almost 10% whilst increasing the recall by
+over 20%. Since all texts online have led me to believe Naive Bayes is invariant
+to feature scaling I am rather curious as to why this has had such a significant
+impact.</p>
+
+<p>Again unsurprisingly, as the only non graphical-model based classifer I am using
+to evaluate a predictive model, the performance of the support vector machine
+has improved vastly having previously been the least performant, then when
+normalisation applied being far more comparible to the most performant
+classifiers in the table.</p>
+
+<h3 id="standardisation">Standardisation</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Feature_scaling#Standardization">Standardisation</a>
+is another method of feature scaling and is employed by
+<code class="language-plaintext highlighter-rouge">sklearn.preprocessing.scale()</code> which assumes that all features are normally
+distributed (each feature with a different mean and standard deviation), and
+scales them such that each feature’s Gaussian distribution is now centered
+around 0, and it’s standard deviation is 1 (unit-variance).</p>
+
+<p>It achieves this by calculating the distribution mean and standard deviation for
+each feature, and converts each value into a z-score, defined as the number of
+standard deviations away from the mean:</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right" columnspacing=""><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><msup><mi>x</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>=</mo><mfrac><mrow><mo fence="true">(</mo><mi>x</mi><mo>−</mo><mover accent="true"><mi>x</mi><mo>ˉ</mo></mover><mo fence="true">)</mo></mrow><mi>σ</mi></mfrac></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+x^{\prime} = \frac{\left(x - \bar{x}\right)}{\sigma}
+\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.413em;vertical-align:-0.9565em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4565em;"><span style="top:-3.4565em;"><span class="pstrut" style="height:3.427em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.5678em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">x</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2222em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9565em;"><span></span></span></span></span></span></span></span></span></span></span></span>
+
+<p>In ideal circumstances where all features hold the normality assumption, in
+addition to many practical situations where the normality assumption does not
+hold but the distributions are somewhat close, this scheme still works pretty
+well. On the other hand if the data is far from normally distributed, for
+example, highly skewed, fat-tailed distributions like a
+<a href="https://en.wikipedia.org/wiki/Power_law">power-law</a>, this scheme will not give
+good results.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="nc">StandardScaler</span><span class="p">()</span>
+<span class="n">columns_to_scale</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">)</span> <span class="c1"># poi is not a feature and should not be considered
+</span>
+<span class="c1"># Make a copy of the extended dataset and perform scaling.
+</span><span class="n">enron_data_standardised</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+<span class="n">enron_data_standardised</span><span class="p">[</span><span class="n">columns_to_scale</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaler</span><span class="p">.</span><span class="nf">fit_transform</span><span class="p">(</span><span class="n">enron_data</span><span class="p">[</span><span class="n">columns_to_scale</span><span class="p">])</span>
+
+<span class="c1"># Extract the data from the dataframe, with the features standardised.
+</span><span class="n">my_standardised_dataset</span> <span class="o">=</span> <span class="n">enron_data_standardised</span><span class="p">.</span><span class="nf">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="sh">'</span><span class="s">index</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Create a list of classifiers to evaluate.
+</span><span class="n">clfs</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">Naive Bayes</span><span class="sh">'</span><span class="p">,</span> <span class="nc">GaussianNB</span><span class="p">()),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">SVM</span><span class="sh">'</span><span class="p">,</span> <span class="nc">LinearSVC</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">)),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">Random Forest</span><span class="sh">'</span><span class="p">,</span> <span class="nc">RandomForestClassifier</span><span class="p">()),</span>
+  <span class="p">(</span><span class="sa">u</span><span class="sh">'</span><span class="s">AdaBoost</span><span class="sh">'</span><span class="p">,</span> <span class="nc">AdaBoostClassifier</span><span class="p">())</span>
+<span class="p">]</span>
+
+<span class="nf">test_classifiers</span><span class="p">(</span><span class="n">clfs</span><span class="p">,</span> <span class="n">my_standardised_dataset</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>=====&gt; Running Naive Bayes
+
+=====&gt; Running SVM
+
+=====&gt; Running Random Forest
+
+=====&gt; Running AdaBoost
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>accuracy</th>
+        <th>precision</th>
+        <th>recall</th>
+        <th>f1</th>
+        <th>f2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AdaBoost</td>
+        <td>0.87</td>
+        <td>0.56</td>
+        <td>0.48</td>
+        <td>0.52</td>
+        <td>0.49</td>
+      </tr>
+      <tr>
+        <td>SVM</td>
+        <td>0.84</td>
+        <td>0.44</td>
+        <td>0.56</td>
+        <td>0.49</td>
+        <td>0.53</td>
+      </tr>
+      <tr>
+        <td>Random Forest</td>
+        <td>0.88</td>
+        <td>0.67</td>
+        <td>0.28</td>
+        <td>0.40</td>
+        <td>0.32</td>
+      </tr>
+      <tr>
+        <td>Naive Bayes</td>
+        <td>0.63</td>
+        <td>0.23</td>
+        <td>0.68</td>
+        <td>0.35</td>
+        <td>0.49</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>The results above show a similar trend to those obtained from normalising the
+data, with no discernible difference in performance from both the AdaBoost and
+RandomForest classifiers and a large improvement from the support vector
+machine. It is important to note however that standardising the data has
+somewhat further improved the performance of the support vector machine over
+normalisation, boosting the F1 score to almost that of the most performant
+classifier.</p>
+
+<p>As before, and just as surprisingly the Naive Bayes classifier has returned a
+decrease in accuracy but overall improvement in recall and therefore F2 score.
+At a later date I would like to dive into why scaling the data is causing this
+behaviour from this particular classifier.</p>
+
+<h3 id="considerations">Considerations…</h3>
+
+<p>Rescaling
+(<a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html#sklearn.preprocessing.MinMaxScaler">MinMaxScaler</a>)
+works much better in certain cases where standardisation
+(<a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">StandardScaler</a>)
+might not work well. For example, if the standard deviations are very small for
+features, standardisation is highly sensitive to tiny changes between standard
+deviations of different features, but rescaling is very robust. Also, for
+features with highly skewed distributions, or sparse cases where each feature
+has a lot of zeros that move the distribution away from a Gaussian, rescaling is
+a better choice.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">]).</span><span class="nf">std</span><span class="p">().</span><span class="nf">to_frame</span><span class="p">(</span><span class="sh">'</span><span class="s"># standard deviations</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th># standard deviations</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>salary</td>
+        <td>197600.56</td>
+      </tr>
+      <tr>
+        <td>to_messages</td>
+        <td>2043.02</td>
+      </tr>
+      <tr>
+        <td>deferral_payments</td>
+        <td>766161.13</td>
+      </tr>
+      <tr>
+        <td>total_payments</td>
+        <td>8901866.63</td>
+      </tr>
+      <tr>
+        <td>exercised_stock_options</td>
+        <td>4995771.18</td>
+      </tr>
+      <tr>
+        <td>bonus</td>
+        <td>1082916.14</td>
+      </tr>
+      <tr>
+        <td>restricted_stock</td>
+        <td>2030256.98</td>
+      </tr>
+      <tr>
+        <td>shared_receipt_with_poi</td>
+        <td>937.60</td>
+      </tr>
+      <tr>
+        <td>restricted_stock_deferred</td>
+        <td>277901.51</td>
+      </tr>
+      <tr>
+        <td>total_stock_value</td>
+        <td>6361214.05</td>
+      </tr>
+      <tr>
+        <td>expenses</td>
+        <td>46381.80</td>
+      </tr>
+      <tr>
+        <td>loan_advances</td>
+        <td>6915543.11</td>
+      </tr>
+      <tr>
+        <td>from_messages</td>
+        <td>1459.43</td>
+      </tr>
+      <tr>
+        <td>other</td>
+        <td>1150429.36</td>
+      </tr>
+      <tr>
+        <td>from_this_person_to_poi</td>
+        <td>73.39</td>
+      </tr>
+      <tr>
+        <td>director_fees</td>
+        <td>29479.77</td>
+      </tr>
+      <tr>
+        <td>deferred_income</td>
+        <td>615568.91</td>
+      </tr>
+      <tr>
+        <td>long_term_incentive</td>
+        <td>682003.43</td>
+      </tr>
+      <tr>
+        <td>from_poi_to_this_person</td>
+        <td>57.80</td>
+      </tr>
+      <tr>
+        <td>fraction_salary</td>
+        <td>0.20</td>
+      </tr>
+      <tr>
+        <td>fraction_bonus</td>
+        <td>0.59</td>
+      </tr>
+      <tr>
+        <td>fraction_long_term_incentive</td>
+        <td>0.56</td>
+      </tr>
+      <tr>
+        <td>fraction_exercised_stock_options</td>
+        <td>0.39</td>
+      </tr>
+      <tr>
+        <td>fraction_from_poi_to_this_person</td>
+        <td>0.03</td>
+      </tr>
+      <tr>
+        <td>fraction_from_this_person_to_poi</td>
+        <td>0.17</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>Despite there being a small handful of features with tiny standard deviations,
+all resulting from features engineered in the previous section, it is conclusive
+from the test results that standardisation has seen the largest improvements in
+the non graphical-model based classifiers (in this case only SVM). Moreover
+since standardisation also has no significant effect on both the AdaBoost and
+RandomForest classifiers it should not harm to apply the same scaling operation
+when further testing these classifiers in later sections, thus making
+experimentation much easier and fair.</p>
+
+<p>However due to the surprising results from the Naive Bayes classifier it may be
+time to eliminate it from the list of potential candidates for final selection.
+Despite in both cases (normalisation and standardisation) Naive Bayes performed
+slightly better, according to the evaluation metrics I’m optimising for, I feel
+this may be coincidental and this particular classifier too unpredictable to
+continue evaluating.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-data">
+    <a class="link" href="/tag/data" title="Go to data" aria-label="Go to data">data</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-enron">
+    <a class="link" href="/tag/enron" title="Go to enron" aria-label="Go to enron">enron</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-feature">
+    <a class="link" href="/tag/feature" title="Go to feature" aria-label="Go to feature">feature</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-mathematics">
+    <a class="link" href="/tag/mathematics" title="Go to mathematics" aria-label="Go to mathematics">mathematics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-normalisation">
+    <a class="link" href="/tag/normalisation" title="Go to normalisation" aria-label="Go to normalisation">normalisation</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-rescaling">
+    <a class="link" href="/tag/rescaling" title="Go to rescaling" aria-label="Go to rescaling">rescaling</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-scaling">
+    <a class="link" href="/tag/scaling" title="Go to scaling" aria-label="Go to scaling">scaling</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-standardisation">
+    <a class="link" href="/tag/standardisation" title="Go to standardisation" aria-label="Go to standardisation">standardisation</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-statistics">
+    <a class="link" href="/tag/statistics" title="Go to statistics" aria-label="Go to statistics">statistics</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

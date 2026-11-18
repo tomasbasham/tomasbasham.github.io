@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>HyperText and HTML: Why SPAs Are Dead | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="HyperText and HTML: Why SPAs Are Dead" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="In the first article of this series, I established my position that modern web development has strayed from its roots, creating unnecessary complexity and artificial divisions. Now, I want to focus specifically on how our industry’s obsession with client-side rendering and single-page applications (SPAs) has undermined the very essence of the web: HyperText." />
+<meta property="og:description" content="In the first article of this series, I established my position that modern web development has strayed from its roots, creating unnecessary complexity and artificial divisions. Now, I want to focus specifically on how our industry’s obsession with client-side rendering and single-page applications (SPAs) has undermined the very essence of the web: HyperText." />
+<link rel="canonical" href="https://tomasbasham.dev/development/hypertext-and-html" />
+<meta property="og:url" content="https://tomasbasham.dev/development/hypertext-and-html" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-02T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="HyperText and HTML: Why SPAs Are Dead" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2025-05-02T00:00:00+01:00","datePublished":"2025-05-02T00:00:00+01:00","description":"In the first article of this series, I established my position that modern web development has strayed from its roots, creating unnecessary complexity and artificial divisions. Now, I want to focus specifically on how our industry’s obsession with client-side rendering and single-page applications (SPAs) has undermined the very essence of the web: HyperText.","headline":"HyperText and HTML: Why SPAs Are Dead","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/hypertext-and-html"},"url":"https://tomasbasham.dev/development/hypertext-and-html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">HyperText and HTML: Why SPAs Are Dead</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2025-05-02T00:00:00+01:00">02 May 2025</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 5 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>In the first article of this series, I established my position that modern web
+development has strayed from its roots, creating unnecessary complexity and
+artificial divisions. Now, I want to focus specifically on how our industry’s
+obsession with client-side rendering and single-page applications (SPAs) has
+undermined the very essence of the web: HyperText.</p>
+
+<h2 id="how-we-got-here">How We Got Here</h2>
+
+<p>The rise of SPAs wasn’t arbitrary. Around 2010-2015, several forces converged to
+make them seem like the logical evolution of web development:</p>
+
+<ol>
+  <li>Smartphones created user expectations for app-like experiences</li>
+  <li>Browser APIs expanded dramatically, enabling more on the client</li>
+  <li>JavaScript engines became significantly faster</li>
+  <li>The desire to separate concerns led to API-driven architectures</li>
+  <li>Facebook’s React introduced a compelling component model</li>
+</ol>
+
+<p>For a time, these applications genuinely solved problems. They provided rich
+interactions without full page reloads and helped teams scale by separating
+frontend and backend concerns.</p>
+
+<p>But in solving these problems, we created a host of new ones.</p>
+
+<h2 id="the-price-of-client-side-rendering">The Price of Client-Side Rendering</h2>
+
+<p>The shift to SPAs brought substantial costs that many teams still don’t fully
+account for:</p>
+
+<h3 id="complexity">Complexity</h3>
+
+<p>Let’s be frank: modern frontend development is absurdly complex. Consider the
+toolchain required to build even a simple React application:</p>
+
+<ul>
+  <li>Webpack (or alternatives) for bundling</li>
+  <li>Babel for transpilation</li>
+  <li>State management libraries (Redux, MobX, Zustand, etc.)</li>
+  <li>Routing libraries</li>
+  <li>Form handling libraries</li>
+  <li>Data fetching utilities</li>
+  <li>Testing frameworks designed specifically for components</li>
+  <li>CSS-in-JS solutions or complex styling approaches</li>
+</ul>
+
+<p>Each of these tools is brilliant in isolation. Webpack, in particular, solves
+genuinely hard problems. But collectively, they represent an extraordinary
+amount of complexity—complexity that simply doesn’t exist when rendering HTML on
+the server.</p>
+
+<h3 id="the-json-api-fallacy">The JSON API Fallacy</h3>
+
+<p>Perhaps the most questionable pattern to emerge is what I call the “JSON API
+fallacy”: the belief that backends should primarily serve as JSON APIs, even
+when they have exactly one consumer—the frontend of the same application.</p>
+
+<p>Consider the typical flow in a React application:</p>
+
+<ol>
+  <li>Browser loads a minimal HTML shell</li>
+  <li>JavaScript loads and executes</li>
+  <li>JavaScript makes API requests to fetch data</li>
+  <li>JavaScript transforms that data into HTML</li>
+  <li>The user finally sees content</li>
+</ol>
+
+<p>Compare this to server rendering:</p>
+
+<ol>
+  <li>Server processes request</li>
+  <li>Server generates complete HTML</li>
+  <li>Browser renders HTML immediately</li>
+</ol>
+
+<p>The SPA approach introduces multiple round trips, client-side processing, and
+numerous failure modes. All to accomplish what servers have done efficiently for
+decades: transform data into HTML.</p>
+
+<p>And for what benefit? “Decoupling,” we’re told. But is this decoupling actually
+serving us?</p>
+
+<h3 id="the-team-silo-problem">The Team Silo Problem</h3>
+
+<p>This architectural choice directly reinforces the frontend/backend divide I
+criticised in the first article. With a JSON API between teams, we’ve
+institutionalised a contract negotiation that must happen before work can
+proceed.</p>
+
+<p>The backend team builds and documents APIs, the frontend team consumes them, and
+an enormous amount of communication overhead ensues. When requirements change
+(as they inevitably do), this process repeats.</p>
+
+<p>Is this really more efficient than having developers who understand both sides?</p>
+
+<h2 id="htmx-the-return-to-hypertext">HTMX: The Return to HyperText</h2>
+
+<p>Fortunately, we’re seeing a renaissance of HyperText approaches led by libraries
+like HTMX. What makes HTMX so compelling is its simplicity: it extends HTML
+rather than replacing it.</p>
+
+<p>Consider a typical HTMX interaction:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;button</span> <span class="na">hx-post=</span><span class="s">"/submit"</span> <span class="na">hx-target=</span><span class="s">"#response-div"</span><span class="nt">&gt;</span>
+  Submit
+<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"response-div"</span><span class="nt">&gt;&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>With just two attributes, we’ve created an asynchronous form submission that
+updates a specific part of the page. No JSON transformation, no state
+management, no virtual DOM—just HTML talking to HTML.</p>
+
+<p>HTMX embraces what the web does best: exchanging HTML between client and server.
+It provides:</p>
+
+<ul>
+  <li>Partial page updates without full reloads</li>
+  <li>History management and bookmarkable states</li>
+  <li>Form validation and submission</li>
+  <li>Dynamic content loading</li>
+  <li>All with minimal JavaScript</li>
+</ul>
+
+<p>This isn’t a step backward—it’s recognising that HTML was always the right
+solution for document structure, and enhancing it for modern needs.</p>
+
+<h2 id="the-case-against-spas">The Case Against SPAs</h2>
+
+<p>With tools like HTMX available, it’s increasingly difficult to justify SPAs for
+most web applications. They make sense in specific contexts:</p>
+
+<ul>
+  <li>Applications with significant offline requirements</li>
+  <li>Highly interactive interfaces like design tools or games</li>
+  <li>Situations where minimising server load is critical</li>
+</ul>
+
+<p>But for the vast majority of CRUD applications, dashboards, content sites, and
+e-commerce platforms? SPAs represent significant overengineering.</p>
+
+<p>Consider these fundamental questions:</p>
+
+<ol>
+  <li>Why generate HTML on the client when servers are designed for this exact
+purpose?</li>
+  <li>Why create JSON APIs that will only ever have one consumer?</li>
+  <li>Why force users to download and execute megabytes of JavaScript before seeing
+content?</li>
+  <li>Why rebuild browser features like navigation and form handling in JavaScript?</li>
+</ol>
+
+<h2 id="the-career-question">The Career Question</h2>
+
+<p>I anticipate pushback on this idea, largely because many developers have built
+careers around frontend frameworks. There’s a legitimate concern: if we simplify
+our approach to web development, what happens to these specialised roles?</p>
+
+<p>This concern reveals an uncomfortable truth: some of the complexity in our
+industry exists to justify specialisation rather than to solve actual problems.</p>
+
+<p>But I believe this fear is misplaced. Frontend development remains a critical
+discipline even in a HyperText-centric world:</p>
+
+<ul>
+  <li>Accessibility requires deep expertise</li>
+  <li>Animation and micro-interactions demand specialisation</li>
+  <li>Performance optimisation is increasingly important</li>
+  <li>CSS layout and responsive design remain challenging</li>
+  <li>Client-side interactivity still has its place</li>
+</ul>
+
+<p>The difference is that frontend developers would focus on these genuinely hard
+problems rather than reimplementing server rendering on the client.</p>
+
+<h2 id="the-full-stack-future">The Full Stack Future</h2>
+
+<p>Moving back toward HyperText doesn’t diminish the role of frontend developers—it
+elevates all developers to full-stack contributors. When the artificial boundary
+between frontend and backend dissolves, engineers can:</p>
+
+<ul>
+  <li>Make end-to-end changes without coordination overhead</li>
+  <li>Understand the full impact of their changes</li>
+  <li>Optimise the entire request/response cycle</li>
+  <li>Create more coherent user experiences</li>
+</ul>
+
+<p>This isn’t just more efficient—it’s more fulfilling work.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>SPAs had their moment, and for certain applications, they remain the right
+choice. But for the vast majority of web projects, it’s time to admit they’ve
+created more problems than they’ve solved.</p>
+
+<p>By returning to HyperText principles with modern tools like HTMX, we can:</p>
+
+<ul>
+  <li>Simplify our development process</li>
+  <li>Deliver faster initial page loads</li>
+  <li>Improve accessibility and SEO</li>
+  <li>Reduce development time and costs</li>
+  <li>Create more cohesive teams</li>
+</ul>
+
+<p>The future of web development doesn’t look like ever more complex JavaScript
+frameworks. It looks like HTML, enhanced with just enough dynamic behaviour to
+meet modern expectations.</p>
+
+<p>In the next article, I’ll turn my attention to another area where modern
+practices have arguably gone astray: CSS and the rise of utility-first
+frameworks like Tailwind.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-development">
+    <a class="link" href="/tag/development" title="Go to development" aria-label="Go to development">development</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-web">
+    <a class="link" href="/tag/web" title="Go to web" aria-label="Go to web">web</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-htmx">
+    <a class="link" href="/tag/htmx" title="Go to htmx" aria-label="Go to htmx">htmx</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-spa">
+    <a class="link" href="/tag/spa" title="Go to spa" aria-label="Go to spa">spa</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

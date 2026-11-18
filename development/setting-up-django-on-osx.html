@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Setting up Django on OS X | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Setting up Django on OS X" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Web development with Django within virtual Python installations" />
+<meta property="og:description" content="Web development with Django within virtual Python installations" />
+<link rel="canonical" href="https://tomasbasham.dev/development/setting-up-django-on-osx" />
+<meta property="og:url" content="https://tomasbasham.dev/development/setting-up-django-on-osx" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-06-09T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Setting up Django on OS X" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2013-06-09T00:00:00+01:00","datePublished":"2013-06-09T00:00:00+01:00","description":"Web development with Django within virtual Python installations","headline":"Setting up Django on OS X","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/setting-up-django-on-osx"},"url":"https://tomasbasham.dev/development/setting-up-django-on-osx"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Setting up Django on OS X</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2013-06-09T00:00:00+01:00">09 Jun 2013</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 4 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>Django is a Python web framework that encourages rapid development and clean,
+pragmatic design. Developed initially for a fast-paced environment where strict
+deadlines were the ‘norm’ Django was designed to make common web development
+task simple, quick and easy.</p>
+
+<p>Similar to web frameworks such as Play! and Ruby on Rails, Django ships with its
+own simplistic server that is run through Python. This means that developers
+don’t have to mess around with Apache until deployment, and can simply deal with
+a lightweight server whilst developing their application.</p>
+
+<h3 id="environment">Environment</h3>
+
+<p>I have installed Django on Mac OS X and have done so in a virtual environment.
+The basic problem being addressed with the virtual environment is one of
+dependencies and versions, and indirectly permissions. Imagine you have an
+application that needs version 1 of LibFoo, but another application requires
+version 2. How can you use both these applications? If you install everything
+into /usr/lib/python2.7/site-packages (or whatever your platform’s standard
+location is), it’s easy to end up in a situation where you unintentionally
+upgrade an application that shouldn’t be upgraded. Using a virtual environment
+isolates Python environments so that this issue does not occur.</p>
+
+<p>To accomplish this environment I have installed the following software:</p>
+
+<ul>
+  <li>Python 2.7</li>
+  <li>Django</li>
+  <li>Git</li>
+  <li>GCC</li>
+  <li>pip</li>
+  <li>Virtualenv</li>
+</ul>
+
+<h3 id="installing-git">Installing Git</h3>
+
+<p>Git is a distributed repository manager used for software configuration
+management. This is very easy to install, just visit the
+<a href="http://git-scm.com">git-scm</a> homepage and follow the download link.</p>
+
+<h3 id="installing-gcc">Installing GCC</h3>
+
+<p>I already have Xcode installed on my mac so I did not have to install GCC. Xcode
+is recommended for installing Python but it is not the only way of installing
+it. There are alternative download sources to get GCC which are as follows:</p>
+
+<ul>
+  <li><a href="https://github.com/kennethreitz/osx-gcc-installer/releases/download/v0.3/GCC-10.7-v0.3.zip">For OS X 10.7 Lion</a></li>
+  <li><a href="https://github.com/kennethreitz/osx-gcc-installer/releases/download/v0.3/GCC-10.6-v0.3.zip">For OS X 10.6 Snow Leopard</a></li>
+</ul>
+
+<p>However I recommend downloading an installing Xcode, which can be easily
+downloaded from the Mac App Store.</p>
+
+<h3 id="installing-python">Installing Python</h3>
+
+<p>Python comes preinstalled on OS X and so this was not a necessary step for me.
+However, it is often the case that Python is outdated on the mac and as such it
+is best to download the latest version of Python from
+<a href="http://www.python.org/download/">here</a>. Doing this ensures that Python benefits
+from all of the bug fixes that have occurred since the version preinstalled on
+OS X.</p>
+
+<h3 id="installing-pip">Installing Pip</h3>
+
+<p>Pip is a Python package manager and allows for Python packages to be easily
+installed. Using Python’s easy install I downloaded pip through the terminal
+with the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>easy_install pip
+</code></pre></div></div>
+
+<h3 id="installing-virtualenv">Installing Virtualenv</h3>
+
+<p>Next, to download virtualenv I issued the following command in the terminal:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>pip <span class="nb">install </span>virtualenv
+</code></pre></div></div>
+
+<p>I have found this needs to be run as the root user (<code class="language-plaintext highlighter-rouge">sudo</code>) otherwise it fails
+to build and move the files into the appropriate place, because pip tries to
+access system owned directories.</p>
+
+<h3 id="creating-a-new-virtualenv">Creating a new Virtualenv</h3>
+
+<p>To create the isolated environment to install and run Django, I created a new
+folder for my project and browsed into it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>new_directory_name
+<span class="nb">cd </span>new_directory_name
+</code></pre></div></div>
+
+<p>I found later on that creating a directory which contains a space or having the
+directory reside within a path containing a space causes problems. The later use
+of pip to install Django into this new environment will not like any spaces in
+the directory structure and will subsequently break. I then ran the following
+commands to start a new virtual environment (again, no spaces) and activate the
+environment:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>virtualenv environment_name <span class="nt">--no-site-packages</span>
+<span class="nb">source </span>environment_name/bin/activate
+</code></pre></div></div>
+
+<p>The first command creates a virtual Python environment to work within, whilst
+the second command runs a bash script called activate which prepends the virtual
+environment’s <code class="language-plaintext highlighter-rouge">bin/</code> directory to the <code class="language-plaintext highlighter-rouge">$PATH</code> system variable. This means that
+all subsequent commands will first be resolved by this directory, causing all
+Python calls to be executed by the Python executable in this directory. The
+activate script will also modify the shell prompt to indicate which environment
+is currently active.</p>
+
+<p>It is worth noting that to deactivate the environment type <code class="language-plaintext highlighter-rouge">deactivate</code> into the
+terminal.</p>
+
+<h3 id="installing-django">Installing Django</h3>
+
+<p>To finally install Django, I simply issued the following command in the
+terminal:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>django
+</code></pre></div></div>
+
+<p>Unlike before issuing this command as the root user will produce adverse
+effects. Using a standard user will install all the Django files into the new
+environment that was just created.</p>
+
+<h3 id="starting-a-django-project">Starting a Django Project</h3>
+
+<p>Lastly I just started using Django as normal, issuing this command to create a
+new project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>django-admin.py startproject project_name
+</code></pre></div></div>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-development">
+    <a class="link" href="/tag/development" title="Go to development" aria-label="Go to development">development</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-osx">
+    <a class="link" href="/tag/osx" title="Go to osx" aria-label="Go to osx">osx</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-python">
+    <a class="link" href="/tag/python" title="Go to python" aria-label="Go to python">python</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

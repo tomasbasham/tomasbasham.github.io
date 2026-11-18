@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Validation Strategies | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Validation Strategies" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Investigation into fraud at Enron, continuing with assessing validation strategies." />
+<meta property="og:description" content="Investigation into fraud at Enron, continuing with assessing validation strategies." />
+<link rel="canonical" href="https://tomasbasham.dev/machine%20learning/validation-strategies" />
+<meta property="og:url" content="https://tomasbasham.dev/machine%20learning/validation-strategies" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-12-09T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Validation Strategies" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2018-12-09T00:00:00+00:00","datePublished":"2018-12-09T00:00:00+00:00","description":"Investigation into fraud at Enron, continuing with assessing validation strategies.","headline":"Validation Strategies","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/machine%20learning/validation-strategies"},"url":"https://tomasbasham.dev/machine%20learning/validation-strategies"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Validation Strategies</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2018-12-09T00:00:00+00:00">09 Dec 2018</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 8 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>Learning the parameters of a predictive model and testing it on the same data is
+a methodological mistake: a model that would just repeat the labels of the
+samples that it has just seen would have a perfect score but would fail to
+predict anything useful on yet-unseen data. This situation is called
+overfitting. To avoid it, it is common practice when performing a (supervised)
+machine learning experiment to hold out part of the available data as a test
+set.</p>
+
+<p>This is called validation: a set of techniques used to make sure a predictive
+model performs well in a wide range of situations, and is not just optimised for
+a particular dataset or set of conditions. In this section I cover 2 of the more
+widely used validation methods describing some of the issues and how these can
+be overcome.</p>
+
+<h3 id="train-test-split">Train Test Split</h3>
+
+<p>Train test split is a validation method that partitions the original dataset
+into a training set to train the model; a validation set for tuning the model;
+and a test set to evaluate it. There is no general rule dictating how many
+samples should be made available for each set and depends largely and how strong
+the patterns are in the data. However it is advised to maximise the training
+data as much as possible.</p>
+
+<p>The training set, as the name suggests, is used to train a predictive model by
+attempting to identify the patterns in the data that drive it to generalise on a
+solution. During training the model fits itself around the data it is provided,
+but there is no validation performed at this stage.</p>
+
+<p>The validation set is used strictly for model tuning. Using the model created
+during training, parameters may be tuned and the performance of each adjustment
+is recorded. Using an independent dataset attempts to prevent the model from
+“cheating” and inaccurately reporting higher performance for a particular
+combination of parameter values.</p>
+
+<p>The test set is used to make a final estimate of the error. Until this point,
+the most performant model has been exposed to both the training and validation
+sets for parameter tuning. So, it must be checked on an unseen set so that we
+may forecast how well it will perform in the real world.</p>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/enron-machine-learning/train-test-split.png" alt="Train Test Split" /><figcaption>Train Test Split</figcaption>
+</figure>
+
+<p>We can see how the Enron dataset may be split to create a training, validation,
+and test set using
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html"><code class="language-plaintext highlighter-rouge">train_test_split</code></a>.
+Note that the dataset is shuffled to distribute the class labels.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="c1"># First shuffle the data.
+</span><span class="n">shuffled_data</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># Create a 80% split of the data.
+</span><span class="n">split_boundary</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">shuffled_data</span><span class="p">)</span> <span class="o">*</span> <span class="p">.</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">test_set</span> <span class="o">=</span> <span class="n">shuffled_data</span><span class="p">[</span><span class="n">split_boundary</span><span class="p">:]</span>
+<span class="n">train_validation_set</span> <span class="o">=</span> <span class="n">shuffled_data</span><span class="p">[:</span><span class="n">split_boundary</span><span class="p">]</span>
+
+<span class="c1"># Create a further split for training and validation data.
+</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="nf">train_test_split</span><span class="p">(</span>
+  <span class="n">train_validation_set</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">]),</span>
+  <span class="n">train_validation_set</span><span class="p">[</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">],</span>
+  <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+  <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+
+<span class="c1"># Justify the output of samples.
+</span><span class="n">print_samples</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">{} set:</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">t</span><span class="p">).</span><span class="nf">ljust</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span> <span class="nf">len</span><span class="p">(</span><span class="n">samples</span><span class="p">),</span> <span class="sh">'</span><span class="s">samples</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="nf">print_samples</span><span class="p">(</span><span class="sh">'</span><span class="s">training</span><span class="sh">'</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span>
+<span class="nf">print_samples</span><span class="p">(</span><span class="sh">'</span><span class="s">validation</span><span class="sh">'</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">)</span>
+<span class="nf">print_samples</span><span class="p">(</span><span class="sh">'</span><span class="s">test</span><span class="sh">'</span><span class="p">,</span> <span class="n">test_set</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>training set:    83 samples
+validation set:  28 samples
+test set:        28 samples
+</code></pre></div></div>
+
+<p>The above however is only viable when there is enough data to make three splits.
+In this example I have created a 60-20-20 split that yields only 83 samples from
+the Enron dataset to be used for training. This is likely not nearly enough data
+to identify patterns that are possibly hidden in the other 56 samples being used
+for validation and testing. Furthermore making such a segregation, despite the
+data having been shuffled, may disturb the target distribution and therefore we
+may find that most of the persons of interest are contained in any one of the
+three sets.</p>
+
+<p>This is one of the drawbacks of this particular validation strategy and by
+definition it does not maximise the number of samples available for training
+since it must hold back a percentage of the samples to be distributed across
+both the validation and test sets.</p>
+
+<p>On a more general note validation and test sets “wear out” with repeated use.
+That is, the more you use the same data to make decisions about hyperparameter
+settings or other model improvements, the less confidence you’ll have that these
+results actually generalize to new, unseen data. Note that validation sets
+typically wear out more slowly than test sets.</p>
+
+<p>If possible, it’s a good idea to collect more data to “refresh” the validation
+and test sets. This of course is not possible in respect to the Enron dataset
+since we already have the records of all employees at the company.</p>
+
+<h3 id="cross-validation">Cross-validation</h3>
+
+<p>Cross-validation is a technique to validate predictive models by partitioning
+the original dataset into a training set to train the model, and a test set to
+evaluate it.</p>
+
+<p>In k-fold cross-validation, the original sample is randomly partitioned into <code class="language-plaintext highlighter-rouge">k</code>
+equal size subsamples. Of the <code class="language-plaintext highlighter-rouge">k</code> subsamples, a single subsample is retained as
+the validation data for testing the model, and the remaining <code class="language-plaintext highlighter-rouge">k-1</code> subsamples
+are used as training data. The cross-validation process is then repeated <code class="language-plaintext highlighter-rouge">k</code>
+times (the folds), with each of the <code class="language-plaintext highlighter-rouge">k</code> subsamples used exactly once as the
+validation data. The <code class="language-plaintext highlighter-rouge">k</code> results from the folds can then be averaged (or
+otherwise combined) to produce a single estimation.</p>
+
+<p>Moreover, we can use the
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html"><code class="language-plaintext highlighter-rouge">StratifiedShuffleSplit</code></a>
+cross-validation object; a merge of
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold"><code class="language-plaintext highlighter-rouge">StratifiedKFold</code></a>
+and
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.ShuffleSplit.html"><code class="language-plaintext highlighter-rouge">ShuffleSplit</code></a>,
+which returns stratified randomised folds. The folds are made by preserving the
+percentage of samples for each class.</p>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/enron-machine-learning/cross-validation.png" alt="Cross Validation" /><figcaption>Cross Validation</figcaption>
+</figure>
+
+<p>As before we can see how this may be applied to the Enron dataset using the
+object sklearn.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">StratifiedShuffleSplit</span>
+
+<span class="c1"># Cross-validator with 10 splits.
+</span><span class="n">cv</span> <span class="o">=</span> <span class="nc">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># The cross-validator returns an iterator. Grab only the first item.
+</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span> <span class="o">=</span> <span class="nf">next</span><span class="p">(</span><span class="n">cv</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="n">enron_data</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">]),</span> <span class="n">enron_data</span><span class="p">[</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">]))</span>
+
+<span class="c1"># Justify the output of samples.
+</span><span class="n">print_samples</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">{} set:</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">t</span><span class="p">).</span><span class="nf">ljust</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span> <span class="nf">len</span><span class="p">(</span><span class="n">samples</span><span class="p">),</span> <span class="sh">'</span><span class="s">samples</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="nf">print_samples</span><span class="p">(</span><span class="sh">'</span><span class="s">training</span><span class="sh">'</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span>
+<span class="nf">print_samples</span><span class="p">(</span><span class="sh">'</span><span class="s">validation</span><span class="sh">'</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>training set:    125 samples
+validation set:  14 samples
+</code></pre></div></div>
+
+<p>The advantage of this method is that all samples are used for both training and
+validation, and each sample is used for validation exactly once. This therefore
+maximises the number of samples used for training.</p>
+
+<p>For the remainder of this experiment I shall use cross validation when
+evaluating my models and their respective hyperparameters.</p>
+
+<h2 id="testing">Testing</h2>
+
+<p>To drive the evaluation of each classifier I will use the function included in
+this project, <code class="language-plaintext highlighter-rouge">test_classifier</code>, offering a consistent means through which every
+classifier may be tested. Furthermore it will be the same function used to
+evaluate my classifier upon submission.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">tester</span> <span class="kn">import</span> <span class="n">test_classifier</span>
+</code></pre></div></div>
+
+<p>This testing strategy does however come with the limitation that I am unable to
+manipulate the validation data before it is used to evaluate each classifier.
+This is something I discussed earlier concerning validation leakage. If this
+were not the case I could perform imputation at the time of evaluation such that
+the validation set is not biased by the same data used for training.</p>
+
+<p>Using the above function I have additionally implemented a means through which
+to test multiple classifiers sequentially whilst keeping the output to a
+minimum. Once each classifier has been tested the results are returned in a
+DataFrame and the results sorted (ascending F1 score by default). This is really
+useful to reduce the noise in this notebook, displaying only the most important
+information.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">utils</span> <span class="kn">import</span> <span class="n">redirect_stdout</span>
+
+<span class="k">def</span> <span class="nf">test_classifiers</span><span class="p">(</span><span class="n">clfs</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="sh">'</span><span class="s">f1</span><span class="sh">'</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+  <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nc">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">accuracy</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">precision</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">recall</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">f1</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">f2</span><span class="sh">'</span><span class="p">])</span>
+  <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">clfs</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">=====&gt; Running {}</span><span class="se">\n</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+      <span class="n">results</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nf">test_classifier</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">features</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">with</span> <span class="nf">redirect_stdout</span><span class="p">():</span>
+        <span class="n">results</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nf">test_classifier</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">features</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">results</span><span class="p">.</span><span class="nf">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-cross-validation">
+    <a class="link" href="/tag/cross-validation" title="Go to cross-validation" aria-label="Go to cross-validation">cross-validation</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-data">
+    <a class="link" href="/tag/data" title="Go to data" aria-label="Go to data">data</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-enron">
+    <a class="link" href="/tag/enron" title="Go to enron" aria-label="Go to enron">enron</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-mathematics">
+    <a class="link" href="/tag/mathematics" title="Go to mathematics" aria-label="Go to mathematics">mathematics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-statistics">
+    <a class="link" href="/tag/statistics" title="Go to statistics" aria-label="Go to statistics">statistics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-strategies">
+    <a class="link" href="/tag/strategies" title="Go to strategies" aria-label="Go to strategies">strategies</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-train-test-split">
+    <a class="link" href="/tag/train-test-split" title="Go to train-test-split" aria-label="Go to train-test-split">train-test-split</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-validation">
+    <a class="link" href="/tag/validation" title="Go to validation" aria-label="Go to validation">validation</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

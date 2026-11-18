@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Removing Outliers from Source Data | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-FGvFQBDA.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-DiEs8MEC.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Removing Outliers from Source Data" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Investigation into fraud at Enron, continuing with removing outliers from the source data." />
+<meta property="og:description" content="Investigation into fraud at Enron, continuing with removing outliers from the source data." />
+<link rel="canonical" href="https://tomasbasham.dev/machine%20learning/removing-outliers-from-source-data" />
+<meta property="og:url" content="https://tomasbasham.dev/machine%20learning/removing-outliers-from-source-data" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-11-04T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Removing Outliers from Source Data" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2018-11-04T00:00:00+00:00","datePublished":"2018-11-04T00:00:00+00:00","description":"Investigation into fraud at Enron, continuing with removing outliers from the source data.","headline":"Removing Outliers from Source Data","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/machine%20learning/removing-outliers-from-source-data"},"url":"https://tomasbasham.dev/machine%20learning/removing-outliers-from-source-data"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Removing Outliers from Source Data</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2018-11-04T00:00:00+00:00">04 Nov 2018</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 7 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      <p>In previous sections I’ve cleaned data that exhibited issues with data entry and
+missing values. Now I would like to discover the outliers. This part of the data
+exploration has deliberately been left until last. The reason being that this
+step is destructive. That is up until now we have been correcting the data so
+that it is true to the source, or using sensible data where it was otherwise not
+available. In this section I will remove data that will not be useful to the
+investigation.</p>
+
+<p>Conveniently the definition of an outlier can be described as a point which
+falls more than 1.5 times the interquartile range above the third quartile or
+below the first quartile.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">original_data</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">])</span> <span class="c1"># poi is not a feature and should not be considered
+</span>
+<span class="n">first_quantile</span> <span class="o">=</span> <span class="n">original_data</span><span class="p">.</span><span class="nf">quantile</span><span class="p">(.</span><span class="mi">25</span><span class="p">)</span>
+<span class="n">third_quantile</span> <span class="o">=</span> <span class="n">original_data</span><span class="p">.</span><span class="nf">quantile</span><span class="p">(.</span><span class="mi">75</span><span class="p">)</span>
+
+<span class="n">median</span> <span class="o">=</span> <span class="n">original_data</span><span class="p">.</span><span class="nf">quantile</span><span class="p">(.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">interquantile_range</span> <span class="o">=</span> <span class="n">third_quantile</span> <span class="o">-</span> <span class="n">first_quantile</span>
+
+<span class="n">outlier_data</span> <span class="o">=</span> <span class="n">median</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">interquantile_range</span>
+<span class="n">outliers</span> <span class="o">=</span> <span class="p">(</span><span class="n">original_data</span> <span class="o">&gt;</span> <span class="n">outlier_data</span><span class="p">).</span><span class="nf">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">to_frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">'</span><span class="s"># of outliers</span><span class="sh">'</span><span class="p">)</span> \
+    <span class="p">.</span><span class="nf">sort_values</span><span class="p">(</span><span class="sh">'</span><span class="s"># of outliers</span><span class="sh">'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">five_percent_of_sample</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">enron_data</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.06</span><span class="p">)</span>
+
+<span class="c1"># Merge the outliers with the original enron data.
+</span><span class="n">outliers</span> <span class="o">=</span> <span class="n">outliers</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="n">enron_data</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="sh">'</span><span class="s">inner</span><span class="sh">'</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> \
+  <span class="p">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="sh">'</span><span class="s"># of outliers</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">]]</span>
+<span class="n">outliers</span><span class="p">.</span><span class="nf">head</span><span class="p">(</span><span class="n">five_percent_of_sample</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th># outliers</th>
+        <th>poi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>FREVERT MARK A</td>
+        <td>13</td>
+        <td>False</td>
+      </tr>
+      <tr>
+        <td>LAY KENNETH L</td>
+        <td>13</td>
+        <td>True</td>
+      </tr>
+      <tr>
+        <td>SKILLING JEFFREY K</td>
+        <td>12</td>
+        <td>True</td>
+      </tr>
+      <tr>
+        <td>TOTAL</td>
+        <td>12</td>
+        <td>False</td>
+      </tr>
+      <tr>
+        <td>WHALLEY LAWRENCE G</td>
+        <td>12</td>
+        <td>False</td>
+      </tr>
+      <tr>
+        <td>LAVORATO JOHN J</td>
+        <td>10</td>
+        <td>False</td>
+      </tr>
+      <tr>
+        <td>HAEDICKE MARK E</td>
+        <td>8</td>
+        <td>False</td>
+      </tr>
+      <tr>
+        <td>BELDEN TIMOTHY N</td>
+        <td>8</td>
+        <td>True</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>Our data set is really small, so I’m going to consider just 5% of the samples
+with the largest number of outliers:</p>
+
+<ul>
+  <li>Mark Frevert and Lawrence ‘Greg’ Whalley are lesser known employees but still
+top managers of Enron (the latter being President and COO of Enron) who also
+represent valuable examples for our predictive model.</li>
+  <li>Kenneth Lay (Enron chairman and CEO) and Jeffrey Skilling (former Enron
+president and CEO) are very well known persons from Enron and heavily involved
+in the scandal. They represent important examples in our dataset and falsely
+flagged as true outliers.</li>
+  <li>The example TOTAL is the total value of financial payments from the FindLaw
+dataset. This clearly is not an individual person and will unbalance the
+distribution across several features in the dataset. Therefore it should be
+removed.</li>
+  <li>John Lavorato, another senior Enron executive, has little media exposure and
+there are no reports of him being involved in the scandal. Since his data
+contains many outliers that could potentially bias our predictive model I’ll
+remove him from the dataset.</li>
+  <li>Timothy ‘Norris’ Belden is the former head of trading in Enron Energy
+Services. He is considered a key player in the Enron scandal constituting a
+good example for our predictive model.</li>
+</ul>
+
+<p>From the above considered 8 examples I will exclude only 2 of them. However
+before doing so I will visualise some of the features, hoping they will make the
+outliers and errors immediately stand out. This will convince me further that
+these examples should be removed from the dataset.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">ggplot</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">enron_data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="sh">'</span><span class="s">salary</span><span class="sh">'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="sh">'</span><span class="s">bonus</span><span class="sh">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">))</span> <span class="o">+</span> \
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mf">40.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/enron-machine-learning/salary-bonus-original.png" alt="Salary v Bonus Original" /><figcaption>Salary v Bonus Original</figcaption>
+</figure>
+
+<p>The above graph diagrams the salaries each Enron employee earned against the
+bonuses they received. It is evident that there is some discrepancy with this
+data where one employee received both a salary and bonus at a size well beyond
+everyone else. Let’s take a look at this data point more closely.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">[</span><span class="n">enron_data</span><span class="p">[</span><span class="sh">'</span><span class="s">salary</span><span class="sh">'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1e7</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>salary</th>
+        <th>to_messages</th>
+        <th>deferral_payments</th>
+        <th>total_payments</th>
+        <th>exercised_stock_options</th>
+        <th>bonus</th>
+        <th>restricted_stock</th>
+        <th>shared_receipt_with_poi</th>
+        <th>restricted_stock_deferred</th>
+        <th>total_stock_values</th>
+        <th>expenses</th>
+        <th>loan_advances</th>
+        <th>from_messages</th>
+        <th>other</th>
+        <th>from_this_person_to_poi</th>
+        <th>poi</th>
+        <th>directors_fees</th>
+        <th>deferred_income</th>
+        <th>long_term_incentive</th>
+        <th>from_poi_to_this_person</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>TOTAL</td>
+        <td>26704229.00</td>
+        <td>944.00</td>
+        <td>32083396.00</td>
+        <td>309886585.00</td>
+        <td>311764000.00</td>
+        <td>97343619.00</td>
+        <td>130322299.00</td>
+        <td>594.00</td>
+        <td>-7576788.00</td>
+        <td>434509511.00</td>
+        <td>5235198.00</td>
+        <td>83925000.00</td>
+        <td>41.00</td>
+        <td>42667589.00</td>
+        <td>6.00</td>
+        <td>False</td>
+        <td>1398517.00</td>
+        <td>-27992891.00</td>
+        <td>48521928.00</td>
+        <td>26.50</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>This data point corresponds to the <code class="language-plaintext highlighter-rouge">TOTAL</code> flagged previously as an outlier.
+Let’s just remove this and make the same plot to see how things have improved.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="sh">'</span><span class="s">TOTAL</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">enron_data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="sh">'</span><span class="s">salary</span><span class="sh">'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="sh">'</span><span class="s">bonus</span><span class="sh">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">))</span> <span class="o">+</span> \
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mf">40.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/enron-machine-learning/salary-bonus-without-total.png" alt="Salary v Bonus Without TOTAL" /><figcaption>Salary v Bonus Without TOTAL</figcaption>
+</figure>
+
+<p>You may conclude that there are four more outliers in the data. However
+considering the top 2 earners are Jeffrey Skilling and Kenneth Lay, both persons
+of interest, these should remain in the dataset. Similarly we can conclude there
+to be a single outlier within the bonus data. We can list the highest receivers
+to see just who this is.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">.</span><span class="nf">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="sh">'</span><span class="s">bonus</span><span class="sh">'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">).</span><span class="nf">head</span><span class="p">().</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="sh">'</span><span class="s">salary</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">bonus</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>salary</th>
+        <th>bonus</th>
+        <th>poi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>LAVORATO JOHN J</td>
+        <td>339288.00</td>
+        <td>8000000.00</td>
+        <td>False</td>
+      </tr>
+      <tr>
+        <td>LAY KENNETH L</td>
+        <td>1072321.00</td>
+        <td>7000000.00</td>
+        <td>True</td>
+      </tr>
+      <tr>
+        <td>SKILLING JEFFREY K</td>
+        <td>1111258.00</td>
+        <td>5600000.00</td>
+        <td>True</td>
+      </tr>
+      <tr>
+        <td>BELDEN TIMOTHY N</td>
+        <td>213999.00</td>
+        <td>5249999.00</td>
+        <td>True</td>
+      </tr>
+      <tr>
+        <td>ALLEN PHILLIP K</td>
+        <td>201955.00</td>
+        <td>4175000.00</td>
+        <td>False</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>The person receiving the highest bonus is John Lavorato, somebody we have
+already identified above as a potential outlier. Given this name has appeared a
+couple times as an outlier I will remove it from the dataset.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span> <span class="o">=</span> <span class="n">enron_data</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="sh">'</span><span class="s">LAVORATO JOHN J</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">enron_data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="sh">'</span><span class="s">salary</span><span class="sh">'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="sh">'</span><span class="s">bonus</span><span class="sh">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">))</span> <span class="o">+</span> \
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mf">40.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/enron-machine-learning/salary-bonus-without-outlier.png" alt="Salary v Bonus Without Outlier" /><figcaption>Salary v Bonus Without Outlier</figcaption>
+</figure>
+
+<p>Now that we’ve cleaned up the dataset, lets see how many examples and features
+remain.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">enron_data</span><span class="p">.</span><span class="nf">info</span><span class="p">()</span>
+
+<span class="o">&lt;</span><span class="k">class</span> <span class="err">'</span><span class="nc">pandas</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">DataFrame</span><span class="sh">'</span><span class="s">&gt;
+Index: 139 entries, ALLEN PHILLIP K to YEAP SOON
+Data columns (total 20 columns):
+salary                       139 non-null float64
+to_messages                  139 non-null float64
+deferral_payments            139 non-null float64
+total_payments               139 non-null float64
+exercised_stock_options      139 non-null float64
+bonus                        139 non-null float64
+restricted_stock             139 non-null float64
+shared_receipt_with_poi      139 non-null float64
+restricted_stock_deferred    139 non-null float64
+total_stock_value            139 non-null float64
+expenses                     139 non-null float64
+loan_advances                139 non-null float64
+from_messages                139 non-null float64
+other                        139 non-null float64
+from_this_person_to_poi      139 non-null float64
+poi                          139 non-null bool
+director_fees                139 non-null float64
+deferred_income              139 non-null float64
+long_term_incentive          139 non-null float64
+from_poi_to_this_person      139 non-null float64
+dtypes: bool(1), float64(19)
+memory usage: 21.9+ KB
+</span></code></pre></div></div>
+
+<p>In total I have:</p>
+
+<ul>
+  <li>removed 7 examples,</li>
+  <li>removed 1 feature,</li>
+  <li>corrected inconsistent data,</li>
+  <li>filled in missing financial data with a zero value,</li>
+  <li>imputed missing email data using the median value from each class.</li>
+</ul>
+
+<p>Let’s write this cleaned dataset to disk to be used for the later evaluation.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Save the cleaned dictionary containing the dataset.
+</span><span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">final_prject_dataset_cleaned.pkl</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">wb</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="p">.</span><span class="nf">dump</span><span class="p">(</span><span class="n">enron_data</span><span class="p">.</span><span class="nf">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="sh">'</span><span class="s">index</span><span class="sh">'</span><span class="p">),</span> <span class="n">data_file</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="p">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>With the dataset cleaned up it feels about the right time to investigate how
+machine learning can help identify persons of interest, starting with how the
+results of the investigation are to be measured, to ensure consistent and fair
+comparison between alternative approaches. This will be the focus of the next
+post on theis topic.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-data">
+    <a class="link" href="/tag/data" title="Go to data" aria-label="Go to data">data</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-enron">
+    <a class="link" href="/tag/enron" title="Go to enron" aria-label="Go to enron">enron</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-mathematics">
+    <a class="link" href="/tag/mathematics" title="Go to mathematics" aria-label="Go to mathematics">mathematics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-outliers">
+    <a class="link" href="/tag/outliers" title="Go to outliers" aria-label="Go to outliers">outliers</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-pandas">
+    <a class="link" href="/tag/pandas" title="Go to pandas" aria-label="Go to pandas">pandas</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-python">
+    <a class="link" href="/tag/python" title="Go to python" aria-label="Go to python">python</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-statistics">
+    <a class="link" href="/tag/statistics" title="Go to statistics" aria-label="Go to statistics">statistics</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-DiEs8MEC.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>
