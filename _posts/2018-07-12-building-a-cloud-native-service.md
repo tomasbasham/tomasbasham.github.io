@@ -3,7 +3,7 @@ layout: post
 title: Building a Cloud Native Service
 description: How to use microservices at scale to build modern backend web applications.
 category: development
-tags: featured development docker grpc kubernetes microservices protobuf web
+tags: featured docker grpc kubernetes microservices protobuf
 ---
 
 Most modern software services attempt to provide a system that is available
@@ -161,7 +161,7 @@ Whilst gRPC alone can be used to reliably transmit data across the wire it is
 only part of the parcel. Akin to JSON, that is typically used to package
 messages to and from an API, the serialisation solution offered by gRPC is that
 of protocol buffers. I have covered protocol buffers in a [previous
-post](/development/2017/09/13/protocol-buffers-and-optional-fields.html) but
+post]({% post_url 2017-09-13-protocol-buffers-and-optional-values %}) but
 what they offer in a word is structure.
 
 Although building a JSON API is simple, there is an inherent risk of

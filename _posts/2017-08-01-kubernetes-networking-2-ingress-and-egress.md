@@ -3,10 +3,11 @@ layout: post
 title: Kubernetes Networking 2 — Ingress and Egress
 description: Looking further under the hood of networking in Kubernetes.
 category: operations
-tags: docker egress ingress iptables kubernetes
+tags: docker iptables kubernetes networking ingress
+series: kubernetes-networking
 ---
 
-In a [previous post](/development/2017/06/30/kubernetes-networking.html) I wrote
+In a [previous post]({% post_url 2017-06-30-kubernetes-networking %}) I wrote
 about the Kubernetes networking model and how it uses `iptables` to create a
 Service abstraction allowing for simple service discovery and stable endpoints.
 In this post I want to continue that train of thought and write about how
@@ -34,17 +35,16 @@ Network Address Translation (NAT).
 When a node in a Kubernetes cluster wants to make a request to an external
 public network the 1:1 NAT will take the internal source address and translate
 it to the machines external address. Then when packets are returned the NAT
-reverses the process. There are no surprises here and demonstrates how NAT is
-suppose to work. This is all hidden from the user but can be a problem for
-Kubernetes.
+reverses the process. There are no surprises here; this is how NAT is supposed
+to work. It is all hidden from the user, but it is a problem for Kubernetes.
 
-Taking this idea further we can explore what happens when a Pod make a request
+Taking this idea further we can explore what happens when a Pod makes a request
 to an external public network. As mentioned in my previous post the Kubernetes
 networking model demands a flattening of the IP address space, allowing any Pod
 on the same cluster to communicate with any other Pod. However the address of
-the Pod is not the same address as the node on which it is running. Therefore
-when it sends packets destined for another network the NAT drops it as it is
-unable to translate an address it does not know.
+the Pod is not the address of the node on which it is running. Therefore when it
+sends packets destined for another network the NAT drops them, as it is unable
+to translate an address it does not know.
 
 To solve this issue Kubernetes makes further use of `iptables`, configuring IP
 masquerading. When a packet passes through the `iptables` rules it has its
@@ -114,7 +114,7 @@ Ingress details.
 ```bash
 kubectl -n myapp get ingress
 NAME      HOSTS     ADDRESS          PORTS     AGE
-client    *         35.190.229.182   80        1d
+api       *         35.190.229.182   80        1d
 
 kubectl -n myapp describe ingress/api
 Name:             api
@@ -138,9 +138,10 @@ Events:
 
 An Ingress is probably the most powerful way to expose a Service to the wider
 world, especially if exposing multiple Services that all talk the same L7
-protocol. You only need to pay for a single load balancer if using the GCLB
+protocol. With the GCLB you only pay for a single load balancer, however many
+Services sit behind it.
 
-#### External Resources
+### External Resources
 
 - [Network Address Translation](https://en.wikipedia.org/wiki/Network_address_translation)
 - [iptables](https://en.wikipedia.org/wiki/Iptables)

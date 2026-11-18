@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Why Infrastructure Work Feels Different
-description:
-category: something
-tags: technical
+description: Infrastructure work isn't satisfying because it has fewer valid designs — it's satisfying because the failure mode is legible, and the feedback is fast enough to work alone.
+category: career
+tags: infrastructure engineering-culture
 ---
 
 I'm an application developer by trade. I ended up working in infrastructure and
@@ -11,7 +11,7 @@ platform engineering out of necessity — someone had to run the Kubernetes
 cluster, someone had to own the cloud account — and somewhere along the way it
 became the work I love most. It took me a long time to work out why.
 
-## The obvious explanation, and why it's wrong
+## It isn't a shortage of opinions
 
 The easy answer is that infrastructure has fewer valid ways to do something.
 Networking works a particular way. The Linux kernel works a particular way.
@@ -27,28 +27,23 @@ five confidently different answers — argued with exactly the same intensity as
 any application development debate about state management or dependency
 injection.
 
-So "fewer opinions" doesn't hold up. Something else is going on.
-
-## The actual explanation
-
-The real difference isn't the number of valid designs. It's that **the failure
-mode is legible**.
+So "fewer opinions" doesn't hold up. The real difference isn't the number of
+valid designs — it's that the failure mode is legible.
 
 Get a BGP configuration wrong, and routes don't propagate. Get kernel cgroup
 settings wrong, and the container gets OOM-killed. The system tells you,
-unambiguously and quickly, that you were wrong. There's no room for the failure
-to be argued away, reframed, or attributed to taste.
+unambiguously and quickly, that you were wrong. There's no room for the
+failure to be argued away, reframed, or attributed to taste.
 
 A bad abstraction in an application codebase doesn't page anyone at 3am. It
 doesn't fail loudly. It just slowly makes the codebase worse, in a way that's
 contestable — someone can always argue it's fine, or that the real problem is
-somewhere else, or that it's a matter of preference. Correctness in application
-architecture is often adjudicated by consensus, because there's no kernel
-standing over the code ready to reject it.
-
-What I actually value, then, isn't a smaller solution space. It's **fast, harsh,
-non-negotiable feedback**. The system either works or it doesn't, and it tells
-you which almost immediately.
+somewhere else, or that it's a matter of preference. Correctness in
+application architecture is often adjudicated by consensus, because there's
+no kernel standing over the code ready to reject it. What I actually value,
+then, isn't a smaller solution space. It's fast, harsh, non-negotiable
+feedback — the system either works or it doesn't, and it tells you which
+almost immediately.
 
 ## Domain modelling that's already done for you
 
@@ -76,8 +71,8 @@ same claim but isn't: infrastructure work is often easier to solo. The task is
 clear, and the solution is often just as clear, or more so.
 
 It would be tempting to say this is because the problems are simpler. They're
-not. It's because **the blast radius of a decision is usually bounded and
-observable**. I can make a call, ship it, and watch metrics tell me within
+not. It's because the blast radius of a decision is usually bounded and
+observable. I can make a call, ship it, and watch metrics tell me within
 minutes or hours whether I was right — without first needing four other people
 to sign off. Application architecture decisions frequently can't be validated
 that fast; the consequences of a wrong choice surface weeks or months later,
@@ -102,7 +97,7 @@ less than the deep infrastructure layer beneath it. Which suggests the
 feedback-loop explanation is doing the real work here, not the "fewer opinions"
 explanation I started with.
 
-## The conclusion
+## Discovery, not invention under scrutiny
 
 Infrastructure work rewards being right quickly rather than persuasive slowly.
 The domain is already correctly modelled by physics and protocol, so the work is

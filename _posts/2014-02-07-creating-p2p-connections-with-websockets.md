@@ -3,7 +3,7 @@ layout: post
 title: Creating P2P Connections with WebSockets
 description: Creating persistent connections between web peers using sockets.
 category: development
-tags: development javascript p2p websockets
+tags: javascript p2p websockets
 ---
 
 WebSockets are a technology that creates a persistent connection between a web

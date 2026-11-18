@@ -1,0 +1,43 @@
+/**
+ * The navigation bar (site-nav.html), used on every page but the home page.
+ * Avanti's .navbar supplies the structure; this maps it onto the site's
+ * navigation colours (--site-nav-* in theme.css) and lines it up with the
+ * content column.
+ */
+
+.site-nav {
+  --navbar-menu-bg-color: var(--site-nav-bg);
+  --navbar-menu-color: var(--site-nav-color);
+  --navbar-menu-link-color: var(--site-nav-link-color);
+}
+
+/*
+ * The overlay look on hero pages comes from Avanti's .navbar-overlay, whose
+ * tokens these must not override, hence the :not().
+ */
+.site-nav:not(.navbar-overlay),
+.no-js .site-nav {
+  --navbar-bg-color: var(--site-nav-bg);
+  --navbar-color: var(--site-nav-color);
+  --navbar-link-color: var(--site-nav-link-color);
+  --navbar-link-hover-color: var(--site-nav-link-hover-color);
+  --navbar-border-color: var(--site-nav-border-color);
+  --navbar-shadow: 0 2px 12px rgb(0 0 0 / 18%);
+}
+
+/* The bar lines up with the article column below it (.content in blog.css). */
+.site-nav .container {
+  box-sizing: border-box;
+  max-width: var(--content-width);
+  padding-inline: var(--content-padding);
+}
+
+/* On a hero page the image runs to the top of the window, behind the bar, so
+   the bar takes no room of its own. */
+.site-nav--hero {
+  margin-block-end: calc(var(--navbar-height) * -1);
+}
+
+.site-nav .theme-toggle {
+  position: static;
+}

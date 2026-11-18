@@ -2,8 +2,8 @@
 layout: post
 title: Reclaim Your Disk Space
 description: Reclaiming the disk on you Mac.
-category: technology
-tags: technology osx
+category: development
+tags: macos
 ---
 
 This article focusses on OS X developers that have installed a series of

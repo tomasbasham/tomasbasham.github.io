@@ -15,8 +15,22 @@
  * block }`. Unlayered, specificity decides and the class wins.
  */
 .desk {
+  /* The width of the artwork, which blog.css also needs to size the intro. */
+  --desk-width: 918px;
+
+  /* What a desk item shows when it is hovered or focused: a white outline, and
+     a small lift. The label above it is white too. */
+  --desk-highlight-color: #fff;
+  --desk-highlight-filter:
+    drop-shadow(2px 2px 0 var(--desk-highlight-color))
+    drop-shadow(-2px -2px 0 var(--desk-highlight-color))
+    drop-shadow(-2px 2px 0 var(--desk-highlight-color))
+    drop-shadow(2px -2px 0 var(--desk-highlight-color));
+  --desk-lift: -5px;
+  --desk-label-color: #2f2a35;
+
   margin-inline: auto;
-  max-width: 918px;
+  max-width: var(--desk-width);
   position: relative;
   width: 100%;
 }
@@ -135,11 +149,11 @@
 }
 
 .desk__label {
-  background: #fff;
+  background: var(--desk-highlight-color);
   border-radius: 4px;
   bottom: 100%;
   box-shadow: 0 0 4px rgb(0 0 0 / 50%);
-  color: #2f2a35;
+  color: var(--desk-label-color);
   font-size: 1rem;
   left: 50%;
   line-height: 1.2;
@@ -211,8 +225,8 @@
  */
 @media (min-width: 900px) {
   .desk__hit:focus-visible~.desk__inside {
-    filter: drop-shadow(2px 2px 0 #fff) drop-shadow(-2px -2px 0 #fff) drop-shadow(-2px 2px 0 #fff) drop-shadow(2px -2px 0 #fff);
-    transform: translateY(-5px);
+    filter: var(--desk-highlight-filter);
+    transform: translateY(var(--desk-lift));
   }
 
   .desk__hit:focus-visible~.desk__label {
@@ -223,8 +237,8 @@
 
 @media (min-width: 900px) and (hover: hover) {
   .desk__item--link:hover .desk__inside {
-    filter: drop-shadow(2px 2px 0 #fff) drop-shadow(-2px -2px 0 #fff) drop-shadow(-2px 2px 0 #fff) drop-shadow(2px -2px 0 #fff);
-    transform: translateY(-5px);
+    filter: var(--desk-highlight-filter);
+    transform: translateY(var(--desk-lift));
   }
 
   .desk__item--link:hover .desk__label {

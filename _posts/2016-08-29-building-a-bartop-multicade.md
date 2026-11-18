@@ -3,8 +3,8 @@ layout: post
 title: Building a Bar Top Multicade
 description: Building my own bar top multicade with the Raspberry Pi.
 image: https://cdn.tomasbasham.dev/covers/multicade.jpg
-category: product design
-tags: arcade electronics mame raspberry-pi technology
+category: hardware-projects
+tags: arcade raspberry-pi mame
 ---
 
 For sometime I have wanted an arcade machine for retro gaming, but they can be

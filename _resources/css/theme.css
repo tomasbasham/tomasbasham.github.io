@@ -1,15 +1,22 @@
 /**
- * Site theme.
+ * Site theme: the tokens that give the site its look.
  *
- * Avanti owns the mechanism (see its base/_theme.css): it follows the system
- * colour scheme and honours `data-theme="light|dark"` on <html>. This file only
- * supplies this site's colours, unlayered so they beat Avanti's layered
- * defaults, and bridges the result to the desk illustration.
+ * Change how the site looks here. Components (blog.css, post.css and the rest)
+ * read these tokens, and where a component needs a value of its own it declares
+ * a variable for it (--chip-color, --hero-color) whose default is one of these.
+ *
+ * Avanti owns the mechanism for colour schemes (see its base/_theme.css): it
+ * follows the system colour scheme and honours `data-theme="light|dark"` on
+ * <html>. Each colour that depends on the scheme is a `-light` and `-dark` pair
+ * plus the resolved token that components use. These are unlayered so they beat
+ * Avanti's layered defaults.
  *
  * The visitor's choice (system, light or dark) lives in the Alpine `darkMode`
  * store and is remembered in localStorage; theme-init.html applies it before
  * first paint and theme-toggle.html keeps `data-theme` in step afterwards.
  */
+
+/* Colours. */
 
 :root {
   --body-bg-color-light: #f8f3ec;
@@ -23,8 +30,13 @@
   --border-color-light: #e2d9c9;
   --border-color-dark: #2d3768;
 
-  --link-color-light: #333;
-  --link-color-dark: #d7dbe6;
+  --link-color-light: #4b4646;
+  --link-color-dark: #d2dcf7;
+
+  /*
+   * The link hover colour matches the normal link colour.
+   */
+  --link-hover-color: light-dark(var(--black-color), var(--white-color));
 
   --surface-color-light: #f0e9dd;
   --surface-color-dark: #1a2248;
@@ -36,10 +48,51 @@
   --accent-color-dark: #6fc380;
   --accent-color: light-dark(var(--accent-color-light), var(--accent-color-dark));
 
+}
+
+/*
+ * Navigation bar (site-nav.html; the rules are in site-nav.css). A solid bar in
+ * a deep colour of its own, so it reads as a separate surface rather than as
+ * part of the page: dark green on the cream page, a lighter navy edge on the
+ * night one. Whatever the scheme, its links sit on a dark background, so they
+ * turn a light shade of the accent when hovered.
+ */
+:root {
+  --site-nav-bg: light-dark(#233229, #2c3c81);
+  --site-nav-color: light-dark(#f3eee4, #eef0fa);
+  --site-nav-link-color: light-dark(#ddf2e5, var(--link-color-dark));
+  --site-nav-link-hover-color: var(--white);
+  --site-nav-border-color: light-dark(#233229, #3d4d9c);
+}
+
+/* Type. */
+
+:root {
   --font-sans: 'Open Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-serif: 'Libertinus Serif', 'Linux Libertine', Georgia, serif;
   --body-font-family: var(--font-sans);
   --body-font-size: 1rem;
+
+  /* Text that is read rather than scanned: the intro, the article list and the
+     article itself. */
+  --reading-font-size: 1.1rem;
+
+  /* Dates, bylines and reading times. */
+  --meta-font-size: 0.875rem;
+
+  /* Titles, headings and metadata are set slightly tighter than body text. */
+  --tracking-tight: -0.02em;
+}
+
+/* Layout. */
+
+:root {
+  /* The column that the home page, posts and the navigation bar share. */
+  --content-width: 780px;
+  --content-padding: 2ch;
+
+  /* One line of article text: its height, and the space between blocks. */
+  --prose-rhythm: 30px;
 }
 
 /*
@@ -75,53 +128,6 @@ body {
   right: 10px;
   top: 10px;
   z-index: 99;
-}
-
-/*
- * Navigation bar (site-nav.html). A solid bar in a deep colour of its own, so
- * it reads as a separate surface rather than as part of the page: dark green
- * on the cream page, a lighter navy edge on the night one. The overlay look on
- * hero pages comes from Avanti's .navbar-overlay, which these tokens must not
- * override, hence the :not().
- */
-:root {
-  --site-nav-bg: light-dark(#233229, #2c3c81);
-  --site-nav-color: light-dark(#f3eee4, #eef0fa);
-  --site-nav-link-color: light-dark(#cfd8cc, #c3cbea);
-  --site-nav-border-color: light-dark(#233229, #3d4d9c);
-}
-
-.site-nav {
-  --navbar-menu-bg-color: var(--site-nav-bg);
-  --navbar-menu-color: var(--site-nav-color);
-  --navbar-menu-link-color: var(--site-nav-link-color);
-}
-
-.site-nav:not(.navbar-overlay),
-.no-js .site-nav {
-  --navbar-bg-color: var(--site-nav-bg);
-  --navbar-color: var(--site-nav-color);
-  --navbar-link-color: var(--site-nav-link-color);
-  --navbar-link-hover-color: var(--site-nav-color);
-  --navbar-border-color: var(--site-nav-border-color);
-  --navbar-shadow: 0 2px 12px rgb(0 0 0 / 18%);
-}
-
-/* The bar lines up with the article column below it (.content in blog.css). */
-.site-nav .container {
-  box-sizing: border-box;
-  max-width: 780px;
-  padding-inline: 2ch;
-}
-
-/* On a hero page the image runs to the top of the window, behind the bar, so
-   the bar takes no room of its own. */
-.site-nav--hero {
-  margin-block-end: calc(var(--navbar-height) * -1);
-}
-
-.site-nav .theme-toggle {
-  position: static;
 }
 
 /* Without JavaScript the control cannot work, so hide it. The layout's

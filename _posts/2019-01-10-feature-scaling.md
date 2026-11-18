@@ -2,15 +2,16 @@
 layout: post
 title: Feature Scaling
 description: Investigation into fraud at Enron, continuing with feature scaling
-category: machine learning
-tags: data enron feature mathematics normalisation rescaling scaling standardisation statistics
+category: machine-learning
+tags: enron statistics feature-engineering
+series: enron
 ---
 
 In general, classifiers that exploit distances (i.e.
 [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance)) or
 similarities between examples are sensitive to features taking on broad ranges
 of values. That is classifiers that have a co-dependency between dimensions are
-effected by feature scaling. For example if one feature takes on a range of
+affected by feature scaling. For example if one feature takes on a range of
 values much greater than the other features in the same dataset, the distance
 will be governed by this particular feature. Therefore it is best practice to
 normalise (or standardise) all features within a dataset such that each
@@ -34,7 +35,7 @@ method commonly deployed in machine learning centred around rescaling that uses
 the extreme values within a particular distribution. More specifically it looks
 at the minimum and maximum values, the range of a feature, and then shrinks or
 stretches each value to a common range. This common range will typically be
-between`[0, 1]` or `[-1, 1]`. Selecting the target range depends on the nature
+between `[0, 1]` or `[-1, 1]`. Selecting the target range depends on the nature
 of the data. The general formula is given as:
 
 $$
@@ -44,10 +45,12 @@ x^{\prime} = \frac{\left(x - x_{min}\right)}{\left(x_{max} - x_{min}\right)}
 $$
 
 It is basically at what percentage of a range the value lies. Since the range is
-only determined by the minimum and maximum for each feature normalisation is
-invariant to extreme values. For example a series containing values
-`[-100, 10, 11, 12, 900]` can still be normalised within a range of `[0, 1]`.
-Here the normalised output would be `[0, 0.11, 0.111, 0.112, 1]`. What follows
+determined only by the minimum and maximum for each feature, normalisation is
+sensitive to extreme values. For example a series containing values
+`[-100, 10, 11, 12, 900]` can still be normalised within a range of `[0, 1]`,
+but the normalised output would be `[0, 0.11, 0.111, 0.112, 1]`: the extremes
+claim the ends of the range and everything else is squeezed into a narrow band
+between them. What follows
 is an example of applying feature normalisation to the Enron dataset and what
 effect this has to the performance of each classifier.
 
@@ -98,18 +101,18 @@ test_classifiers(clfs, my_normalised_dataset, extended_features_list)
 
 Quite unsurprisingly, normalising the features has had no (or very little)
 effect on the results of the AdaBoost and RandomForest classifiers, having only
-in the case of the RandomForest classifier increasd recall by 1%. This I have
+in the case of the RandomForest classifier increased recall by 1%. This I have
 deemed not significant enough to warrant any further investigation. Conversely
-normalisaing the features has surprisingly had a mixed effect on the Naive Bayes
+normalising the features has surprisingly had a mixed effect on the Naive Bayes
 classifier, reducing the accuracy by almost 10% whilst increasing the recall by
 over 20%. Since all texts online have led me to believe Naive Bayes is invariant
 to feature scaling I am rather curious as to why this has had such a significant
 impact.
 
-Again unsurprisingly, as the only non graphical-model based classifer I am using
+Again unsurprisingly, as the only non graphical-model based classifier I am using
 to evaluate a predictive model, the performance of the support vector machine
 has improved vastly having previously been the least performant, then when
-normalisation applied being far more comparible to the most performant
+normalisation applied being far more comparable to the most performant
 classifiers in the table.
 
 ### Standardisation
@@ -118,8 +121,8 @@ classifiers in the table.
 is another method of feature scaling and is employed by
 `sklearn.preprocessing.scale()` which assumes that all features are normally
 distributed (each feature with a different mean and standard deviation), and
-scales them such that each feature's Gaussian distribution is now centered
-around 0, and it's standard deviation is 1 (unit-variance).
+scales them such that each feature's Gaussian distribution is now centred
+around 0, and its standard deviation is 1 (unit-variance).
 
 It achieves this by calculating the distribution mean and standard deviation for
 each feature, and converts each value into a z-score, defined as the number of
@@ -197,18 +200,18 @@ decrease in accuracy but overall improvement in recall and therefore F2 score.
 At a later date I would like to dive into why scaling the data is causing this
 behaviour from this particular classifier.
 
-### Considerations...
+### Considerations
 
-Rescaling
+Neither method is strictly better. Rescaling
 ([MinMaxScaler](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html#sklearn.preprocessing.MinMaxScaler))
-works much better in certain cases where standardisation
+guarantees a bounded range and makes no assumption about the shape of the
+distribution, but as seen above a single extreme value compresses everything
+else. Standardisation
 ([StandardScaler](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html))
-might not work well. For example, if the standard deviations are very small for
-features, standardisation is highly sensitive to tiny changes between standard
-deviations of different features, but rescaling is very robust. Also, for
-features with highly skewed distributions, or sparse cases where each feature
-has a lot of zeros that move the distribution away from a Gaussian, rescaling is
-a better choice.
+is somewhat less affected by extremes, but assumes a distribution reasonably
+close to Gaussian, and can behave erratically when a feature's standard
+deviation is tiny. The standard deviations of the features show how different
+their scales are:
 
 ```python
 enron_data.drop(columns=['poi']).std().to_frame('# standard deviations')

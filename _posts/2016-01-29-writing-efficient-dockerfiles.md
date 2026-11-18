@@ -3,7 +3,7 @@ layout: post
 title: Writing Efficient Dockerfiles
 description: How to write an efficient Dockerfile for development and production environments.
 category: development
-tags: development docker
+tags: docker
 ---
 
 In this article, you will learn the importance of structuring Dockerfiles when

@@ -3,8 +3,8 @@ layout: post
 title: Developer Rules
 description: 3 golden rules for object-oriented development.
 image: https://cdn.tomasbasham.dev/covers/aladdin-3-wishes.jpg
-category: development
-tags: development ruby
+category: career
+tags: ruby oop
 ---
 
 I have been working on a fairly large Ruby on Rails application for about a year

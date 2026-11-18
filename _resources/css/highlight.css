@@ -11,7 +11,7 @@
  * background.
  */
 .highlight {
-  margin-bottom: 1.875rem;
+  margin-bottom: var(--prose-rhythm);
   color: var(--code-color);
   background-color: var(--code-bg-color);
 }

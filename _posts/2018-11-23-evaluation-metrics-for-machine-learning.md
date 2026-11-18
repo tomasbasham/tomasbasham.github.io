@@ -2,8 +2,9 @@
 layout: post
 title: Evaluation Metrics for Machine Learning
 description: Investigation into fraud at Enron, continuing with assessing evaluation metrics.
-category: machine learning
-tags: accuracy data enron evaluation f-measure mathematics metrics precision recall statistics
+category: machine-learning
+tags: enron statistics evaluation-metrics
+series: enron
 ---
 
 Before continuing to implement a predictive model and investigating different
@@ -14,9 +15,9 @@ tune our predictive model.
 
 It follows that each evaluation metric favours one type of error over another,
 thus allowing a predictive model to be tuned and optimised for specific
-outcomes. For examples some metrics are more sensitive to false positives which
-will in the case of the Enron dataset tend to classify more employees as persons
-of interest than perhaps are.
+outcomes. For example, some metrics are more sensitive to false positives, which
+in the case of the Enron dataset would classify more employees as persons of
+interest than perhaps should be.
 
 ### Accuracy
 
@@ -51,9 +52,21 @@ interest.
 
 ### Balanced Accuracy
 
-http://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score
+[Balanced accuracy](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.balanced_accuracy_score.html#sklearn.metrics.balanced_accuracy_score)
+addresses the imbalance directly by averaging the recall obtained on each class
+rather than counting every prediction equally:
 
-https://en.wikipedia.org/wiki/Precision_and_recall
+$$
+\begin{aligned}
+balanced\ accuracy & = \frac{1}{2} \left(\frac{\text{true positives}}{\text{true positives} + \text{false negatives}} + \frac{\text{true negatives}}{\text{true negatives} + \text{false positives}}\right)
+\end{aligned}
+$$
+
+The always-false model from above scores 0.5 rather than 87%, since it identifies
+every non-POI and no POIs at all. That is a far more honest verdict. It is still
+a single number that gives no indication of how many of the employees we flag
+are innocent, so it is no substitute for looking at the two measures it is built
+from: [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall).
 
 ### Precision
 
@@ -67,30 +80,22 @@ precision & = \frac{\text{true positives}}{\text{true positives} + \text{false p
 $$
 
 Put more simply precision (also called the positive predictive value) measures
-the proportion of true positives that actually belong to the positive class. It
-is a measure of confidence that when the predictive model classifies an example
-as positive that it has been correctly classified.
+the proportion of positive predictions that are correct. It is a measure of
+confidence: when the predictive model classifies an example as positive, how
+often is it right?
 
-In terms of the Enron dataset precision expresses that for every employee
-classified as a person of interest the probability that this employee really is
-a person of interest.
+In terms of the Enron dataset precision is the probability that an employee
+classified as a person of interest really is one.
 
-A positive result from a predictive model with a high precision is useful for
-ruling out a possible negative classification since it rarely predicts negative
-for the truly positive examples in the dataset. Therefore a model with 100%
-precision can confidently say all positively classified examples are truly
-positive. In this case a positive result would definitively rule out a negative
-classification.
+A model with 100% precision never raises a false alarm, so every positive
+classification can be trusted. What it says nothing about is the examples it did
+not flag. Precision does not take false negatives into account, so a model can
+reach 100% precision by flagging a single obvious case and ignoring everyone
+else.
 
-On the other hand a negative result from a predictive model with a high
-precision does not guarantee a truly negative classification. This is because
-precision does not take into account false negatives. Therefore a model with
-100% precision may not recognise some examples that should belong to the
-positive class.
-
-In other words precision errs on the side of negative classification as it is
-reluctant to "pull the trigger" on edge cases. Therefore it will favour
-classifying Enron employees as non-POIs which presents a high cost as
+In other words a model tuned only for precision errs on the side of caution, as
+it becomes reluctant to "pull the trigger" on edge cases. It will favour
+classifying Enron employees as non-POIs, which presents a high cost as
 potentially many persons of interest will go undetected.
 
 ### Recall
@@ -105,24 +110,19 @@ recall & = \frac{\text{true positives}}{\text{true positives} + \text{false nega
 $$
 
 Put more simply recall (also called the true positive rate or sensitivity)
-measures the proportion of true positives that are correctly classified as such.
+measures the proportion of actual positives that are correctly identified.
 Equivalently recall is the extent to which true positives are not overlooked (so
 false negatives are few) and thus a highly sensitive predictive model rarely
 overlooks a true positive.
 
-In terms of the Enron dataset recall returns the proportion of employees who are
-classified as persons of interest among those who truly are persons of interest.
+In terms of the Enron dataset recall is the proportion of the true persons of
+interest that the model manages to classify as such.
 
-A negative result from a predictive model with a high recall is useful for
-ruling out a possible positive classification since it rarely predicts positive
-for the truly negative examples in the dataset. Therefore a model with 100%
-recall will recognise all truly positive examples. In this case a negative
-result would definitively rule out a positive classification.
-
-Conversely a positive result from a predictive model with a high recall does not
-guarantee a truly positive classification. This is because recall does not take
-into account false positives. Therefore a model with 100% recall will recognise
-not only truly positive examples but may also include many false positives.
+A model with 100% recall misses no true positive, so a negative classification
+can be trusted. What it says nothing about is the false alarms. Recall does not
+take false positives into account, so a model can reach 100% recall by
+classifying every employee as a person of interest, at the cost of including
+many innocent ones.
 
 Since recall quantifies the avoiding of false negatives this evaluation metric
 is ideal for the Enron dataset whereby not correctly identifying an employee as
@@ -158,7 +158,7 @@ This gives us a parameterised version of the F-measure allowing us to specify
 the preferred weights for each error type (false positives and false negatives).
 As discussed above we are more interested in maximising the recall since it
 avoids false negatives. Therefore we can use the F2 score, which weighs recall
-twice as high as precision (thus placing more emphasis on false negatives).
+more heavily than precision (thus placing more emphasis on false negatives).
 Plugging in the values the F2 score is defined as:
 
 $$
@@ -172,6 +172,8 @@ precision and recall greater than `0.3`. However it should be possible to
 achieve a better result given the optimal features are selected and
 hyperparameters given. Therefore when I later attempt to optimise my classifier
 I would like to lean towards maximising the F2 score. However sklearn does not
-seem to provide F2 as a possible
-[scoring function](http://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter)
-so I will fallback to maximising the F1 score.
+ship F2 as a named
+[scoring function](http://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter),
+and building one with `make_scorer` adds ceremony to every later step. I will
+instead optimise the F1 score, and report F2 alongside it so that the emphasis
+on recall is not lost.

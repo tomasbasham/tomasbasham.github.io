@@ -3,7 +3,7 @@ layout: post
 title: Starting out in CryEngine V
 description: My experiences starting out in game development with CryEngine V.
 category: development
-tags: cryengine development engine game technology
+tags: game-development cryengine
 ---
 
 It is an irrefutable fact that CryEngine is a fantastic game engine. This is

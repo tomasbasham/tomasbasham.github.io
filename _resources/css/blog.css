@@ -14,7 +14,7 @@
  * 2.295 is the stage's aspect ratio (918 / 400).
  */
 .intro {
-  --body-font-size: 1.1rem;
+  --body-font-size: var(--reading-font-size);
   --intro-min-block-size: 560px;
   --intro-text-block-size: 15rem;
 
@@ -32,7 +32,7 @@
 }
 
 .intro .desk {
-  max-width: min(918px, calc((max(var(--intro-min-block-size), 100svh) - var(--intro-text-block-size)) * 2.295));
+  max-width: min(var(--desk-width), calc((max(var(--intro-min-block-size), 100svh) - var(--intro-text-block-size)) * 2.295));
 }
 
 .intro__about {
@@ -50,8 +50,8 @@
 .content {
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: 780px;
-  padding: 2ch;
+  max-width: var(--content-width);
+  padding: var(--content-padding);
   width: 100%;
 }
 
@@ -65,14 +65,11 @@
 
 .index-headline {
   border-top: 1px solid var(--border-color);
+  color: var(--text-muted-color);
+  font-size: 0.725rem;
+  letter-spacing: 1px;
   margin: 0;
   padding: 1rem 0;
-}
-
-.index-headline span {
-  color: var(--text-muted-color);
-  font-size: 0.625rem;
-  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -83,7 +80,7 @@
 /* The article list. */
 
 .post-list {
-  --body-font-size: 1.1rem;
+  --body-font-size: var(--reading-font-size);
 
   font-size: var(--body-font-size);
 }
@@ -101,17 +98,12 @@
   font-size: 1.75rem;
   font-style: normal;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
   line-height: 1.1;
   margin: 0 0 8px;
 }
 
-.post-list .post-title a {
-  color: inherit;
-}
-
 .post-list .post-excerpt {
-  color: var(--text-muted-color);
   font-weight: 300;
   line-height: 1.3;
 }
@@ -119,7 +111,7 @@
 .post-list .post-meta {
   color: var(--text-muted-color);
   display: inline-block;
-  font-size: 0.875rem;
+  font-size: var(--meta-font-size);
   line-height: 3rem;
   margin-bottom: 4px;
   vertical-align: top;
@@ -130,24 +122,34 @@
   float: right;
 }
 
-/* Category and tag chips. */
+/*
+ * Category and tag chips. The same component whether it is a category on the
+ * article list or a tag under a post, so they look and behave alike: on hover
+ * the text and the border take the link hover colour, and neither is
+ * underlined.
+ */
 
 .tag {
   display: inline-block;
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
   text-transform: uppercase;
 }
 
 .post-tag>a {
+  --chip-bg-color: color-mix(in srgb, var(--body-color) 6%, transparent);
+  --chip-border-color: var(--border-color);
+  --chip-color: var(--text-muted-color);
+  --chip-hover-color: var(--link-hover-color);
+
   display: inline-block;
   line-height: 22px;
-  background: color-mix(in srgb, var(--body-color) 6%, transparent);
-  border: 1px solid var(--border-color);
+  background: var(--chip-bg-color);
+  border: 1px solid var(--chip-border-color);
   border-radius: 3px;
-  color: var(--text-muted-color);
+  color: var(--chip-color);
   font-size: 0.8125rem;
   font-style: normal;
   font-weight: 400;
@@ -157,10 +159,12 @@
   padding: 5px 10px;
   text-decoration: none;
   text-transform: none;
+  transition: border var(--transition-duration) ease-out, color var(--transition-duration) ease-out;
 }
 
 .post-tag>a:hover {
-  border-color: var(--text-muted-color);
+  border-color: var(--chip-hover-color);
+  color: var(--chip-hover-color);
 }
 
 /* Pagination. */
@@ -171,7 +175,7 @@
 }
 
 .pagination a:hover {
-  color: var(--body-color);
+  color: var(--link-hover-color);
 }
 
 .pagination .newer-posts {

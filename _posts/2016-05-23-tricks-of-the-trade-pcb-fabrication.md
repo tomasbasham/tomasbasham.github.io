@@ -3,10 +3,11 @@ layout: post
 title: Tricks of the Trade — PCB Fabrication
 description: Low cost PCB and stencil printing.
 category: electronics
-tags: electronics pcb technology
+tags: pcb
+series: tricks-of-the-trade
 ---
 
-In a [previous article](/product%20design/2016/05/12/netflix-and-chill.html) I
+In a [previous article]({% post_url 2016-05-12-netflix-and-chill %}) I
 describe prototyping an electronics project using through hole components and
 breadboarding. This is an effective method for quickly slapping together a
 simple circuit but falls short when you need to scale up or miniaturise your

@@ -3,7 +3,7 @@ layout: post
 title: Installing Java 6 on Ubuntu
 description: How to install Java 6 on Ubuntu for legacy applications.
 category: development
-tags: development java ubuntu
+tags: java ubuntu
 ---
 
 As of August 2011 Java no longer comes part of the default installation. This is

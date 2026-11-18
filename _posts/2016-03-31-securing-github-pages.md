@@ -3,8 +3,13 @@ layout: post
 title: Securing GitHub Pages
 description: Adding SSL to your GitHub pages.
 category: development
-tags: development security web
+tags: security web github-pages
 ---
+
+> **Note:** Kloudsec, the service this post centres on, has since shut down.
+> More importantly, GitHub Pages has supported free, automatic HTTPS for
+> custom domains since 2018, which makes the workaround below unnecessary
+> entirely. Kept for historical reference.
 
 Towards the end of 2015
 [Google announced](http://thenextweb.com/google/2015/12/17/unsecured-websites-are-about-to-get-hammered-in-googles-search-ranking/)

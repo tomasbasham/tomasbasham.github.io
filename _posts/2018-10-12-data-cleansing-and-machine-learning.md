@@ -2,8 +2,9 @@
 layout: post
 title: Data Cleansing and Machine Learning
 description: Investigation into fraud at Enron, continuing with cleaning public data.
-category: machine learning
-tags: cleaning data enron pandas python
+category: machine-learning
+tags: enron pandas python data-cleaning
+series: enron
 ---
 
 In a previous post we focussed on exploring the Enron dataset that will be key
@@ -24,7 +25,7 @@ payment features: `salary`, `bonus`, `long_term_incentive`, `deferred_income`,
 ```python
 def inaccurate_examples(features):
     '''
-    Return a function that checkes for data inconsistencies.
+    Return a function that checks for data inconsistencies.
     '''
     def sum_features(data):
         '''
@@ -51,7 +52,7 @@ inaccurate_payment_examples(enron_data)
 
 </div>
 
-Similarly we're able to find two examples where the `total_stock_values` feature
+Similarly we're able to find two examples where the `total_stock_value` feature
 is not equal to the sum of all the other stock features:
 `exercised_stock_options`, `restricted_stock`, `restricted_stock_deferred`,
 `total_stock_value`.
@@ -103,7 +104,7 @@ enron_data.loc[('BELFER ROBERT','restricted_stock')] = 44093
 enron_data.loc[('BELFER ROBERT','restricted_stock_deferred')] = -44093
 enron_data.loc[('BELFER ROBERT','total_stock_value')] = np.nan
 
-# ... and then Snajay Bhatnagar.
+# ... and then Sanjay Bhatnagar.
 enron_data.loc[('BHATNAGAR SANJAY','total_payments')] = 137864
 enron_data.loc[('BHATNAGAR SANJAY','restricted_stock_deferred')] = -2604490
 enron_data.loc[('BHATNAGAR SANJAY','total_stock_value')] = 15456290
@@ -114,7 +115,7 @@ enron_data.loc[('BHATNAGAR SANJAY','restricted_stock')] = 2604490
 enron_data.loc[('BHATNAGAR SANJAY','director_fees')] = np.nan
 ```
 
-Lets check that we have fixed the issues.
+Let's check that we have fixed the issues.
 
 ```python
 inconsistencies = len(inaccurate_payment_examples(enron_data)) + \
@@ -129,8 +130,8 @@ Number of inconsistencies: 0
 ```
 
 This is looking good and was an important step in ensuring the data we have will
-be suitable to model patterns an trends and later used to make predictions. If
-we had not corrected these issue we may have later found our predictive model to
+be suitable to model patterns and trends and later used to make predictions. If
+we had not corrected these issues we may have later found our predictive model to
 not make accurate predictions. However there is still some work outstanding
 before this data can be used to make predictions. Namely we need to decide what
-do to about missing and incomplete data. This will be covered in the next post.
+to do about missing and incomplete data. This will be covered in the next post.

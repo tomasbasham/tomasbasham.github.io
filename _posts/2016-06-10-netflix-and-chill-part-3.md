@@ -2,14 +2,15 @@
 layout: post
 title: Netflix and Chill — Part 3
 description: Building your own Netflix and chill button tutorial series concluding with assembly.
-category: product design
-tags: 3d-printing netflix technology
+category: hardware-projects
+tags: 3d-printing raspberry-pi
+series: netflix-and-chill
 ---
 
 If you have been following along with this tutorial series you should have a
 working
-[electronic prototype](/product%20design/2016/05/12/netflix-and-chill.html) with
-the necessary [code](/product%20design/2016/05/15/netflix-and-chill-part-2.html)
+[electronic prototype]({% post_url 2016-05-12-netflix-and-chill %}) with
+the necessary [code]({% post_url 2016-05-15-netflix-and-chill-part-2 %})
 to turn on your TV and signal an external messaging queue to later extend the
 functionality of your switch using a Raspberry Pi or other internet enabled
 device.
@@ -32,7 +33,7 @@ much more compatible format. The models can be found
 ### Chassis and Backplate
 
 The chasis will house the electronics from
-[part 1](/product%20design/2016/05/12/netflix-and-chill.html) preventing bits
+[part 1]({% post_url 2016-05-12-netflix-and-chill %}) preventing bits
 from rattling around when we finally put everything together. You can build this
 from any material that you like but I opted for plastic. More specifically I had
 this part 3D printed in Polylactic Acid (PLA) biodegradable thermoplastic with a
@@ -103,7 +104,7 @@ and will definitely mitigate a lot of frustration whilst assembling.
 [![Order from OSH Park](https://oshpark.com/assets/badge-5b7ec47045b78aef6eb9d83b3bac6b1920de805e9a0c227658eac6e19a045b9c.png)](https://oshpark.com/shared_projects/wV6vJPb5)
 
 After receiving the boards I used a technique called
-[hotplate reflow](/electronics/2016/06/06/tricks-of-the-trade-hotplate-reflow.html)
+[hotplate reflow]({% post_url 2016-06-06-tricks-of-the-trade-hotplate-reflow %})
 to attach some surface mount resistors I had lying around. These are the same
 value resistors as in the prototype but just far more compact as to make the
 electronics take up as little room as possible.

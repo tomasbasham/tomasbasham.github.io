@@ -3,7 +3,7 @@ layout: post
 title: Monitoring Pods with tcpdump and tshark
 description: Using tcpdump and tshark to monitor remote pods from your local machine.
 category: operations
-tags: kubernetes tcpdump tshark
+tags: kubernetes tcpdump tshark diagnostics
 ---
 
 I remember when I first started to learn about the exciting world of operations,

@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Structuring Terraform Ownership in Layers
-description:
+description: Why a flat Terraform workspace maximises blast radius, and how a four-tier ownership model bounds it instead.
 category: infrastructure
-tags: terraform infrastructure-as-code ownership security best-practices
+tags: terraform infrastructure-as-code ownership security
 ---
 
 Infrastructure teams tend to discover the same problem at different points in
@@ -227,10 +227,11 @@ combining Platform and Delivery resources that reference the foundation via
 `data` sources. The four-tier model is the natural destination as the
 infrastructure and team grow. It does not need to be the starting point.
 
-### The underlying principle
+### Least privilege, applied to tooling
 
-The layered model is principle of least privilege applied to infrastructure
-tooling. Every workspace holds exactly the access it needs to do its job.
+The layered model is the principle of least privilege applied to infrastructure
+tooling rather than to IAM policy alone. Every workspace holds exactly the
+access it needs to do its job.
 
 A misconfigured plan in a workspace with too-broad permissions can cause damage
 that takes hours to unpick. The same misconfiguration in a tightly-scoped

@@ -1,105 +1,61 @@
 ---
 layout: post
 title: 'HyperText and HTML: Why SPAs Are Dead'
-description:
+description: Why single-page applications solved real problems for a time, and why HTML plus HTMX now solves most of the same problems more simply.
 category: development
-tags: development web htmx spa
+tags: web htmx spa
+series: web-fundamentals
 ---
 
-In the first article of this series, I established my position that modern web
-development has strayed from its roots, creating unnecessary complexity and
-artificial divisions. Now, I want to focus specifically on how our industry's
-obsession with client-side rendering and single-page applications (SPAs) has
-undermined the very essence of the web: HyperText.
+The first article in this series set out my general complaint: that modern web
+development defaults to client-side complexity for problems that don't need
+it. This one is about the specific case of single-page applications, and about
+why I think the pendulum is already swinging back, whether or not the industry
+has noticed yet.
 
-## How We Got Here
+## Why SPAs happened
 
-The rise of SPAs wasn't arbitrary. Around 2010-2015, several forces converged to
-make them seem like the logical evolution of web development:
+The rise of the SPA wasn't an accident or a fad. Around 2010–2015 several
+things arrived at once: smartphones set an expectation for app-like
+interaction, browser APIs matured enough to support it, JavaScript engines got
+fast enough to make it tolerable, and React gave teams a component model that
+solved a genuine organisational problem — how a dozen people work on one UI
+without constantly colliding. For a while, these applications solved real
+problems: rich interaction without full page reloads, and a clean separation
+that let frontend and backend teams scale independently.
 
-1. Smartphones created user expectations for app-like experiences
-2. Browser APIs expanded dramatically, enabling more on the client
-3. JavaScript engines became significantly faster
-4. The desire to separate concerns led to API-driven architectures
-5. Facebook's React introduced a compelling component model
+The costs took longer to show up than the benefits did.
 
-For a time, these applications genuinely solved problems. They provided rich
-interactions without full page reloads and helped teams scale by separating
-frontend and backend concerns.
+## What it costs
 
-But in solving these problems, we created a host of new ones.
+Open the dependency tree of a moderately complex React application and you'll
+typically find a bundler, a transpiler, a state management library, a router,
+a form library, a data-fetching layer, and a component-testing framework —
+each one solving a real problem in isolation, and each one adding to a stack
+of complexity that doesn't exist at all when HTML is rendered on the server.
+None of these tools are badly designed. The complexity isn't a bug in any one
+of them; it's the sum of needing all of them at once to do what a server used
+to do by itself.
 
-## The Price of Client-Side Rendering
+The deeper issue is what I'd call the JSON API fallacy: the assumption that a
+backend should serve JSON even when it has exactly one consumer, the frontend
+of the same application. The typical SPA request looks like this — browser
+loads a near-empty HTML shell, JavaScript executes, JavaScript fetches JSON,
+JavaScript turns that JSON into HTML, and only then does the user see
+anything. A server rendering the page directly skips three of those four
+steps. The JSON step only earns its complexity when there's a second consumer
+of the API — a mobile app, a third party — that actually needs it. Most
+CRUD applications don't have one.
 
-The shift to SPAs brought substantial costs that many teams still don't fully
-account for:
+That fallacy also reinforces the frontend/backend split I mentioned in the
+first article: a JSON API is a contract, and contracts have to be negotiated,
+documented, and renegotiated every time the product changes. A team that
+didn't need the contract in the first place doesn't pay that cost.
 
-### Complexity
+## What HTMX actually does
 
-Let's be frank: modern frontend development is absurdly complex. Consider the
-toolchain required to build even a simple React application:
-
-- Webpack (or alternatives) for bundling
-- Babel for transpilation
-- State management libraries (Redux, MobX, Zustand, etc.)
-- Routing libraries
-- Form handling libraries
-- Data fetching utilities
-- Testing frameworks designed specifically for components
-- CSS-in-JS solutions or complex styling approaches
-
-Each of these tools is brilliant in isolation. Webpack, in particular, solves
-genuinely hard problems. But collectively, they represent an extraordinary
-amount of complexity — complexity that simply doesn't exist when rendering HTML
-on the server.
-
-### The JSON API Fallacy
-
-Perhaps the most questionable pattern to emerge is what I call the "JSON API
-fallacy": the belief that backends should primarily serve as JSON APIs, even
-when they have exactly one consumer — the frontend of the same application.
-
-Consider the typical flow in a React application:
-
-1. Browser loads a minimal HTML shell
-2. JavaScript loads and executes
-3. JavaScript makes API requests to fetch data
-4. JavaScript transforms that data into HTML
-5. The user finally sees content
-
-Compare this to server rendering:
-
-1. Server processes request
-2. Server generates complete HTML
-3. Browser renders HTML immediately
-
-The SPA approach introduces multiple round trips, client-side processing, and
-numerous failure modes. All to accomplish what servers have done efficiently for
-decades: transform data into HTML.
-
-And for what benefit? "Decoupling," we're told. But is this decoupling actually
-serving us?
-
-### The Team Silo Problem
-
-This architectural choice directly reinforces the frontend/backend divide I
-criticised in the first article. With a JSON API between teams, we've
-institutionalised a contract negotiation that must happen before work can
-proceed.
-
-The backend team builds and documents APIs, the frontend team consumes them, and
-an enormous amount of communication overhead ensues. When requirements change
-(as they inevitably do), this process repeats.
-
-Is this really more efficient than having developers who understand both sides?
-
-## HTMX: The Return to HyperText
-
-Fortunately, we're seeing a renaissance of HyperText approaches led by libraries
-like HTMX. What makes HTMX so compelling is its simplicity: it extends HTML
-rather than replacing it.
-
-Consider a typical HTMX interaction:
+HTMX is interesting because it doesn't propose an alternative architecture —
+it extends the one the browser already has.
 
 ```html
 <button hx-post="/submit" hx-target="#response-div">
@@ -108,95 +64,40 @@ Consider a typical HTMX interaction:
 <div id="response-div"></div>
 ```
 
-With just two attributes, we've created an asynchronous form submission that
-updates a specific part of the page. No JSON transformation, no state
-management, no virtual DOM — just HTML talking to HTML.
+Two attributes turn a button into an asynchronous form submission that
+replaces the contents of a target element with whatever HTML the server
+sends back. No JSON, no client-side templating, no state to keep in sync
+between a store and the DOM — the server still owns the rendering, HTMX just
+gives it a way to update part of a page instead of the whole thing. It's the
+same request/response model the web has always had, with slightly finer
+control over where the response lands.
 
-HTMX embraces what the web does best: exchanging HTML between client and server.
-It provides:
+## Where SPAs still make sense
 
-- Partial page updates without full reloads
-- History management and bookmarkable states
-- Form validation and submission
-- Dynamic content loading
-- All with minimal JavaScript
+I don't think this argument extends to every application. Offline-first
+tools, design and drawing applications, games — anything where the state
+genuinely lives on the client and the server is secondary — are legitimately
+served by a client-heavy architecture. What I'm arguing against is the default,
+not the exception: most dashboards, content sites, and CRUD applications
+don't have offline requirements or client-side state worth the name, and
+building them as SPAs anyway is solving a problem the project doesn't have.
 
-This isn't a step backward — it's recognising that HTML was always the right
-solution for document structure, and enhancing it for modern needs.
+## What this means for frontend work
 
-## The Case Against SPAs
+The obvious objection is that a lot of careers are built on frontend
+frameworks, and simplifying the default architecture threatens that. I think
+this gets the causality backwards: some of the complexity in frontend
+tooling exists because the specialisation needs defending, not because the
+problems demand it. But that doesn't mean frontend expertise disappears —
+accessibility, animation, layout, and genuinely interactive client-side
+behaviour are still hard, specialist problems. What changes is that frontend
+developers would be solving those problems instead of re-implementing server
+rendering in the browser.
 
-With tools like HTMX available, it's increasingly difficult to justify SPAs for
-most web applications. They make sense in specific contexts:
+Pulling the architecture back toward hypertext doesn't shrink what frontend
+developers do. It moves the boundary between frontend and backend from a
+JSON contract to a shared page, which is the thread I'll pick back up in the
+last article in this series, on team structure.
 
-- Applications with significant offline requirements
-- Highly interactive interfaces like design tools or games
-- Situations where minimising server load is critical
-
-But for the vast majority of CRUD applications, dashboards, content sites, and
-e-commerce platforms? SPAs represent significant overengineering.
-
-Consider these fundamental questions:
-
-1. Why generate HTML on the client when servers are designed for this exact
-   purpose?
-2. Why create JSON APIs that will only ever have one consumer?
-3. Why force users to download and execute megabytes of JavaScript before seeing
-   content?
-4. Why rebuild browser features like navigation and form handling in JavaScript?
-
-## The Career Question
-
-I anticipate pushback on this idea, largely because many developers have built
-careers around frontend frameworks. There's a legitimate concern: if we simplify
-our approach to web development, what happens to these specialised roles?
-
-This concern reveals an uncomfortable truth: some of the complexity in our
-industry exists to justify specialisation rather than to solve actual problems.
-
-But I believe this fear is misplaced. Frontend development remains a critical
-discipline even in a HyperText-centric world:
-
-- Accessibility requires deep expertise
-- Animation and micro-interactions demand specialisation
-- Performance optimisation is increasingly important
-- CSS layout and responsive design remain challenging
-- Client-side interactivity still has its place
-
-The difference is that frontend developers would focus on these genuinely hard
-problems rather than reimplementing server rendering on the client.
-
-## The Full Stack Future
-
-Moving back toward HyperText doesn't diminish the role of frontend developers —
-it elevates all developers to full-stack contributors. When the artificial
-boundary between frontend and backend dissolves, engineers can:
-
-- Make end-to-end changes without coordination overhead
-- Understand the full impact of their changes
-- Optimise the entire request/response cycle
-- Create more coherent user experiences
-
-This isn't just more efficient — it's more fulfilling work.
-
-## Conclusion
-
-SPAs had their moment, and for certain applications, they remain the right
-choice. But for the vast majority of web projects, it's time to admit they've
-created more problems than they've solved.
-
-By returning to HyperText principles with modern tools like HTMX, we can:
-
-- Simplify our development process
-- Deliver faster initial page loads
-- Improve accessibility and SEO
-- Reduce development time and costs
-- Create more cohesive teams
-
-The future of web development doesn't look like ever more complex JavaScript
-frameworks. It looks like HTML, enhanced with just enough dynamic behaviour to
-meet modern expectations.
-
-In the next article, I'll turn my attention to another area where modern
-practices have arguably gone astray: CSS and the rise of utility-first
-frameworks like Tailwind.
+The next article is CSS, and specifically what utility-first frameworks like
+Tailwind get right and where I think they go wrong.

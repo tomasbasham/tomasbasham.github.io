@@ -13,14 +13,21 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-a {
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
+/*
+ * Links. These sit in Avanti's base layer on purpose. Unlayered rules beat
+ * every layered one, so an unlayered `a` or `a:hover` here would override the
+ * colours and underline of Avanti's components, such as the navigation bar's
+ * links. In the base layer they are the default that components refine.
+ */
+@layer base {
+  a {
+    text-decoration: none;
+    transition: color var(--transition-duration) ease;
+  }
 
-a:hover {
-  /* TODO: needs it's own colour */
-  color: var(--body-color);
+  a:hover {
+    color: var(--link-hover-color);
+  }
 }
 
 [hidden] {
@@ -76,7 +83,7 @@ code {
 }
 
 pre {
-  margin: 0 0 1.875rem;
+  margin: 0 0 var(--prose-rhythm);
 }
 
 pre>code {

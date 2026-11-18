@@ -2,8 +2,8 @@
 layout: post
 title: Bow to our Stack Overflow Overlords
 description: The pretentious nature of the largest programming Q&A monster.
-category: development
-tags: development
+category: career
+tags: culture
 ---
 
 I have used Stack Overflow now for many years and it saves my bacon on a daily

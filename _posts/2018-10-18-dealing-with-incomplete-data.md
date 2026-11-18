@@ -2,8 +2,9 @@
 layout: post
 title: Dealing with Incomplete Data
 description: Investigation into fraud at Enron, continuing with handling incomplete data.
-category: machine learning
-tags: data enron imputation mathematics pandas python statistics
+category: machine-learning
+tags: enron pandas python statistics imputation
+series: enron
 ---
 
 Previously we corrected a couple of data entry issues that found their way into
@@ -12,7 +13,7 @@ predicting power of our model. This post builds on this work and continues the
 data exploratory section of this project by addressing missing and incomplete
 data.
 
-As seen in a previous posts this dataset is plagued with missing values. Using
+As seen in previous posts this dataset is plagued with missing values. Using
 the same Pandas DataFrame we can print out a list of all the features in the
 dataset alongside the number of values missing for that feature.
 
@@ -54,7 +55,7 @@ From the above we can see that every example in the dataset has a value for
 features can be considered complete. This will have the effect of causing
 difficulty for our predictive model to discover patterns from this data. The
 feature of largest concern is `loan_advances` which has only 4 values present in
-the entire dataset (~3%). Lets visualise the extent of the missing values in the
+the entire dataset (~3%). Let's visualise the extent of the missing values in the
 form of a bar graph.
 
 ```python
@@ -99,7 +100,7 @@ enron_data[(enron_data.isna().sum(1) / enron_data.shape[1]) > threshold]
 
 These really are adding little value and none of them are persons of interest.
 In fact `THE TRAVEL AGENCY IN THE PARK` does not represent an individual
-employee and may have a negative impact on our predictive model. Lets just drop
+employee and may have a negative impact on our predictive model. Let's just drop
 them from the dataset.
 
 ```python
@@ -122,7 +123,7 @@ this dataset will remove every available feature. A better strategy is to impute
 the missing values, i.e. to infer them from the known part of the data.
 
 There are a few statistical methods often employed to impute missing values that
-focus around central tendency. Each have their own qualities:
+focus around central tendency. Each has its own qualities:
 
 - mean: The mean value is very sensitive to outliers. That is, one or two
   extreme values can change the mean a lot,
@@ -158,7 +159,7 @@ in any way.
 Because the behaviour of a person of interest is likely to differ from somebody
 we're not interested in I will separately impute the values for these two
 classes. I feel this will provide a more accurate and fair assessment of each
-classes distribution of email values.
+class's distribution of email values.
 
 ```python
 from sklearn.preprocessing import Imputer

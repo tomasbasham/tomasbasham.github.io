@@ -2,11 +2,12 @@
 layout: post
 title: Netflix and Chill — Part 2
 description: Building your own Netflix and chill button tutorial series continuing with the code.
-category: product design
-tags: development netflix technology
+category: hardware-projects
+tags: raspberry-pi python
+series: netflix-and-chill
 ---
 
-We finished [last time](/product%20design/2016/05/12/netflix-and-chill.html)
+We finished [last time]({% post_url 2016-05-12-netflix-and-chill %})
 with a complete electronics prototype of our Netflix switch. Next we must
 implement the code to make this a working system.
 

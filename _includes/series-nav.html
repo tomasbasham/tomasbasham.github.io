@@ -1,0 +1,34 @@
+{% comment %}
+  A collapsible contents panel for a post that belongs to a series (`series:
+  <key>` in its front matter). The members come from the `series_posts` filter
+  in _plugins/series.rb; everything about how they look is decided here. The
+  panel names the series using _data/series.yml, falling back to the key, says
+  where this post sits in it, and starts closed. It is a native <details>
+  element, so opening and closing it needs no script. It is left out when the
+  series has only one published post.
+{% endcomment %}
+{% if page.series %}
+  {% assign members = page.series | series_posts %}
+  {% if members.size > 1 %}
+    {% for member in members %}
+      {% if member.url == page.url %}{% assign position = forloop.index %}{% endif %}
+    {% endfor %}
+    <details class="series-nav">
+      <summary class="series-nav-summary">
+        <span class="series-nav-title" id="series-nav-title">In this Series</span>
+        <span class="series-nav-position">Part {{ position }} of {{ members.size }}</span>
+      </summary>
+      <nav aria-labelledby="series-nav-title">
+        <ol class="series-nav-list">
+          {% for member in members %}
+            {% if member.url == page.url %}
+            <li class="series-nav-item series-nav-current" aria-current="page"><strong>{{ member.title }}</strong></li>
+            {% else %}
+            <li class="series-nav-item"><a href="{{ member.url | relative_url }}">{{ member.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ol>
+      </nav>
+    </details>
+  {% endif %}
+{% endif %}

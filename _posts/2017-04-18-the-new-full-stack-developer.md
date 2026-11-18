@@ -2,9 +2,14 @@
 layout: post
 title: The New Full Stack Developer
 description: The new definition of a full-stack developer.
-category: development
-tags: development full-stack
+category: career
+tags: full-stack
 ---
+
+> **Retrospective, 2024:** I no longer hold the view argued below. DevOps was
+> right about the wall between development and operations, but I was wrong that
+> the answer is for developers to take on the operations role themselves. I
+> explain why in [Full Stack, Revisited]({% post_url 2024-06-11-full-stack-revisited %}).
 
 I have recently been on the look out for new employment opportunities, where I
 have noticed most applications (as opposed to job descriptions a few years ago)

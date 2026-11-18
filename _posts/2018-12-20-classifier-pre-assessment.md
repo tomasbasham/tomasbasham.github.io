@@ -2,8 +2,9 @@
 layout: post
 title: Classifier Pre-Assessment
 description: Investigation into fraud at Enron, continuing with classifier assessment.
-category: machine learning
-tags: adaboost classifier data decision-tree enron mathematics naive-bayes random-forest statistics support-vector-machines
+category: machine-learning
+tags: enron statistics classifiers
+series: enron
 ---
 
 In this section I am going to perform a preliminary assessment of 4 "out of the
@@ -43,7 +44,7 @@ features_list = [
 ```
 
 Next I have to extract a dictionary from the dataframe we've been using
-throughout the fist half of this investigation. Importantly the data is
+throughout the first half of this investigation. Importantly the data is
 reorientated such that the keys in the dictionary are the Enron employees
 instead of the features, which is the default.
 
@@ -72,7 +73,7 @@ features. What this means is that a Naive Bayes classifier will assume a
 [statistical independence](<https://en.wikipedia.org/wiki/Independence_(probability_theory)>)
 between features despite there being a possible strong correlation. However in
 spite of this apparent over-simplified assumption Naive Bayes classifiers have
-been know to perform rather well in some real-world applications.
+been known to perform rather well in some real-world applications.
 
 ```python
 from sklearn.naive_bayes import GaussianNB
@@ -162,7 +163,7 @@ Unlike the other classifiers in this section I had to tune the penalty
 parameter, `C`, otherwise the classifier was not returning in a reasonable
 amount of time (if at all). This I think is likely due to the many features
 contained in the dataset that may possibly not be linearly separable. Using a
-higher penalty parameter allows the classifier to priorities correctness over
+higher penalty parameter allows the classifier to prioritise correctness over
 smooth decision boundaries.
 
 Despite my best efforts the linear Support Vector Machine classifier has
@@ -193,13 +194,13 @@ splitting no longer adds value to the predictions. This process of top-down
 induction of decision trees is an example of a greedy algorithm, and it is by
 far the most common strategy for learning decision trees from data.
 
-However One of the issues with decision tree learners is that they can create
+However, one of the issues with decision tree learners is that they can create
 over-complex trees that do not generalise well from the training data. Random
 decision forests correct for decision trees' habit of overfitting to their
 training set.
 
 An important factor that governs the performance of a random forest is the
-number of decision tree the compose it. I believe it is generally accepted that
+number of decision trees that compose it. I believe it is generally accepted that
 the greater number of decision trees the more confidence we can gain from the
 consensus. However more decision trees, and therefore more subsamples of the
 training data, result in a classifier that is much slower to train.
@@ -208,15 +209,17 @@ Another interesting parameter is the
 [criterion](https://en.wikipedia.org/wiki/Decision_tree_learning#Metrics). This
 dictates the function used to measure the impurity of a decision boundary. The
 `sklearn.tree.DecisionTreeClassifier` used here implements 2 known functions to
-measure boundary impurity. The first is
-[information gain](https://en.wikipedia.org/wiki/Information_gain_in_decision_trees)
-and is intended for classification problems, similar to that of this experiment.
-The second function is gini impurity, intended for continuous values and
-therefore more appropriate for regression problems. It is interesting to note
-that both information gain and gini impurity are largely similar as metrics and
-generally the performance of a classifier will not differ using one or the
-other. There was a paper written comparing these two metrics where the most
-important remarks were:
+measure boundary impurity, and both are intended for classification problems
+such as this one. The first is gini impurity, the default, which measures how
+often a randomly chosen example from a node would be misclassified if it were
+labelled at random according to the distribution of labels in that node. The
+second is
+[information gain](https://en.wikipedia.org/wiki/Information_gain_in_decision_trees),
+based on entropy. It is interesting to note that the two are largely similar as
+metrics and generally the performance of a classifier will not differ using one
+or the other. Raileanu and Stoffel compared the two in "Theoretical comparison
+between the Gini Index and Information Gain criteria", and the most important
+remarks were:
 
 - It only matters in 2% of the cases whether you use gini impurity or entropy.
 - Entropy might be a little slower to compute (because it makes use of the
@@ -253,7 +256,19 @@ Naive Bayes and SVM classifiers due to the significant boost in precision.
 
 ### AdaBoost
 
-<https://en.wikipedia.org/wiki/AdaBoost>
+[AdaBoost](https://en.wikipedia.org/wiki/AdaBoost) (adaptive boosting) is
+another ensemble method, but where a Random Forest grows its trees independently
+and lets them vote, AdaBoost builds its learners one after another. By default
+sklearn uses decision stumps, trees only a single split deep, as the weak
+learners. Each learner is fitted to the same data, but the examples the previous
+learners misclassified are given a greater weight, so every new learner
+concentrates on the cases its predecessors found hard. The final prediction is a
+weighted vote of all of them.
+
+Two parameters govern how this behaves: the number of learners
+(`n_estimators`, 50 by default) and the learning rate, which scales how much
+each learner contributes. A smaller learning rate generally needs more learners
+to reach the same performance, so the two have to be tuned together.
 
 ```python
 from sklearn.ensemble import AdaBoostClassifier
@@ -271,11 +286,10 @@ AdaBoostClassifier(algorithm='SAMME.R', base_estimator=None,
 
 By far the most performant out-of-the-box classifier, AdaBoost already scores
 high enough to have achieved the criteria for this experiment. Most impressively
-it has attained more true and false positives than any of the other classifiers.
-This indicates that currently this classifier errs on the side of positive
-classification (marking examples as persons of interest). This is a favourable
-trade-off likely meaning many more persons of interest will be correctly
-classified as such. However I am still concerned with the number of false
+it has identified more true positives than any of the other classifiers, with
+far fewer false positives than either Naive Bayes or the SVM. This is a
+favourable trade-off, meaning many more persons of interest are correctly
+classified as such without flagging large numbers of innocent employees. However I am still concerned with the number of false
 negatives this classifier yields. Whilst it is the lowest of all the classifiers
 it still remains too high to give a satisfactory level of confidence to dismiss
 an individual Enron employee.

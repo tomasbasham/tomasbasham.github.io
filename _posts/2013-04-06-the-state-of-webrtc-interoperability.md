@@ -3,7 +3,7 @@ layout: post
 title: The State of WebRTC Interoperability
 description: The status of WebRTC interoperability across browsers.
 category: development
-tags: development javascript webrtc
+tags: javascript webrtc
 ---
 
 Firefox Nightly (as of 06/04/13) and Chrome M25 Beta and later are

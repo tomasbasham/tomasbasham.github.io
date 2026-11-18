@@ -18,7 +18,8 @@
 
   Usage:   {% include site-nav.html %}   (once, at the top of <body>)
   Data:    _data/desk.yml
-  Styling: Avanti's .navbar; colours and the hero tweaks are in style.css.
+  Styling: Avanti's .navbar. The colours are --site-nav-* in theme.css and the
+           rules that apply them, with the hero tweaks, are in site-nav.css.
 {% endcomment %}
 <header
   class="navbar navbar-sticky site-nav{% if page.image %} navbar-overlay site-nav--hero{% endif %}"

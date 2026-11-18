@@ -3,7 +3,7 @@ layout: post
 title: Protocol Buffers and Optional Fields
 description: Using well-known types to differentiate missing vs default values with protobuf.
 category: development
-tags: development grpc protobuf
+tags: grpc protobuf
 ---
 
 Protocol Buffers are a serialisation solution developed by Google providing a

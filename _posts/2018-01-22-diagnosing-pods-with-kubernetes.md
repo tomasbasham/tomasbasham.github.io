@@ -3,7 +3,7 @@ layout: post
 title: Diagnosing Pods with Kubernetes
 description: Using the power of Kubernetes labels and selectors to diagnose problematic pods.
 category: operations
-tags: docker kubernetes
+tags: docker kubernetes diagnostics
 ---
 
 Labels are the mechanism in Kubernetes through which system objects may be

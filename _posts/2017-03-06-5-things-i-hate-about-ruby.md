@@ -4,7 +4,7 @@ title: 5 Things I Hate About Ruby
 description: An objective Ruby advocates pet hates about the language.
 image: https://cdn.tomasbasham.dev/covers/ruby.svg
 category: development
-tags: development ruby
+tags: ruby
 ---
 
 I find myself more and more lately banging on about how much better Ruby is when

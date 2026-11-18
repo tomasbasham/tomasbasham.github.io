@@ -2,8 +2,9 @@
 layout: post
 title: Identifying Fraud from Public Enron Data
 description: Investigation into fraud at Enron, beginning with a project overview and data exploration
-category: machine learning
-tags: data enron mathematics pandas python statistics
+category: machine-learning
+tags: enron pandas python statistics
+series: enron
 ---
 
 In 2000, Enron Corporation was an American energy, commodities, and services
@@ -27,13 +28,13 @@ been Enron's main auditor for years.
 The following series of articles detail the final project of the Udacity machine
 learning course which I completed the end of 2018. The objective: to implement
 and optimise a predictive model using the financial and email data provided by
-the Enron dataset, with the capacity to identify persons on interest (POIs).
+the Enron dataset, with the capacity to identify persons of interest (POIs).
 Specifically the project intends to demonstrate working with a real world
 dataset, performing data cleansing tasks and preparing the data; using feature
 selection and engineering techniques; possible dimensionality reduction;
 supervised classification and hyperparameter tuning; and validation.
 
-_This series of posts is a write up of a jupyter notebook used to conduce this
+_This series of posts is a write up of a jupyter notebook used to conduct this
 experiment. The original notebook can be found on GitHub at
 [#tomasbasham/ud120-projects](https://github.com/tomasbasham/ud120-projects)._
 
@@ -125,7 +126,7 @@ When examining the data we are trying to answer the following:
 - Are there any missing values in the data?
 - Does the data represent a realistic range of values?
 
-Lets start by reading the data from the provided `pkl` file. This extension
+Let's start by reading the data from the provided `pkl` file. This extension
 expresses that the data is stored in a Pickle file, used to serialise and
 deserialise Python data objects into a sequence of raw bytes that may be more
 efficiently stored on disk.
@@ -177,8 +178,8 @@ far easier to explore in the following sections and allows for any changes made
 to be re-exported as a simple dictionary.
 
 The indexes are the names of Enron employees. There are several familiar names
-in the expanded list closely linked to the Enron scandal, including Kennth Lay,
-Jeffry Skilling, Andrew Fastow, and Cliff Baxter. There are also many lesser
+in the expanded list closely linked to the Enron scandal, including Kenneth Lay,
+Jeffrey Skilling, Andrew Fastow, and Cliff Baxter. There are also many lesser
 known names in the list that are hopefully equally useful in describing the
 patterns we'll later discover in the data.
 
@@ -217,7 +218,7 @@ numpy.float64
 ```
 
 Great! Now that Pandas is aware of missing data and we have some sensible data
-to work with lets print out a few statistics.
+to work with, let's print out a few statistics.
 
 ```python
 # Print information about the data frame.

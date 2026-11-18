@@ -1,169 +1,111 @@
 ---
 layout: post
-title: "The Platform is the Point: Why AI-generated software doesn't change what good delivery looks like — it just makes it non-negotiable"
-description:
-category: development
-tags: development teams
+title: "AI-Generated Code Doesn't Change What Good Delivery Looks Like"
+description: If implementations are about to become disposable, the thing that has to absorb the churn is the platform underneath them — and most platforms aren't built for that yet.
+category: career
+tags: teams delivery ai-assisted-development
 ---
 
-There is a seductive idea making the rounds in engineering circles right now. It
-goes something like this: because AI can generate code faster than any human
-team, the bottleneck in software delivery has shifted. Code is now cheap.
-Abundant. Disposable, even. The constraint is no longer writing software — it is
-understanding, evaluating, and governing it.
+There's an idea doing the rounds that because AI can generate code faster
+than any team, the bottleneck in software delivery has moved: code is now
+cheap, even disposable, and the real constraint is understanding, evaluating
+and governing it. I think that's largely correct, but it carries an
+assumption worth pulling apart: that the infrastructure underneath the
+software can absorb whatever gets thrown at it. It can't, not without
+deliberate design, and the people who'll feel that first aren't developers —
+it's whoever is responsible for keeping things running while the velocity of
+change accelerates around them.
 
-This framing is compelling, and largely correct. But it carries a quiet
-assumption that deserves scrutiny: that the infrastructure underneath the
-software can absorb whatever is thrown at it.
+## Code as something you throw away
 
-It cannot. Not without deliberate design. And the teams who will feel this most
-acutely are not developers — they are the operations and platform engineers
-tasked with keeping the lights on whilst the velocity of change accelerates
-around them.
+Chad Fowler's [Phoenix Architecture](https://chadfowler.com/regenerative-software/3mb526js42k26/)
+series makes the case that the durable part of a system isn't its
+implementation, it's the evaluations that define correctness: the
+interfaces, the behavioural contracts, the tests that would still hold if
+the whole thing were rewritten in a different language. Code, on this view,
+is closer to cache than to capital — a materialised view of intent that's
+fine to discard and regenerate, provided the intent itself is written down
+somewhere that survives the rewrite.
 
-## Code as a consumable
-
-The Phoenix Architecture — a term coined to describe systems designed to burn
-and regenerate rather than persist indefinitely — proposes that the durable
-artefact of a software system is not its implementation but its intent: the
-interfaces, the behavioural contracts, the evaluations that define correctness
-independently of any particular codebase.
-
-If you accept this, the implication is significant. Code becomes a consumable
-input, not a long-lived capital asset. A feature ships, it accumulates entropy,
-it is rewritten — not refactored — and the system continues. Whole
-implementations are discarded. New ones are generated. The cycle shortens.
-
-This is not, in itself, new. Experienced engineers have always known that the
-most expensive code is the code you keep. Rewrites have always been
-underrated. What is new is the pace at which this cycle can now turn, and the
-volume of output it can produce.
-
-Which brings us to the pressure point.
+None of this is actually new. Experienced engineers have always known that
+the most expensive code is the code you keep, and rewrites have always been
+underrated relative to their reputation. What's new is the pace this cycle
+can now turn at, and the volume it can produce while turning.
 
 ## Where the strain actually lands
 
-When the rate of change increases, the thing that must absorb that change is the
-deployment target. The platform. The infrastructure layer that accepts artefacts
-and runs them.
+When the rate of change goes up, something has to absorb it, and that
+something is the deployment target — the platform, the infrastructure that
+accepts artefacts and runs them. On a fleet of hand-provisioned servers,
+each with its own accumulated quirks and institutional knowledge, every
+deployment is a small negotiation with the specific machine it's landing on.
+That friction has historically been self-limiting: snowflakes accumulate,
+runbooks grow, and the rate of change slows to match what the platform can
+actually absorb.
 
-In a world of bespoke servers — machines provisioned by hand, running specific
-software, maintained with institutional knowledge accumulated over years — this
-platform is inherently resistant to rapid change. Each deployment is a
-negotiation between the new thing and the environment that will host
-it. Snowflakes accumulate. Runbooks grow. The rate of change is self-limiting,
-partly by friction.
+Generative AI doesn't reduce that friction. It bypasses it at the
+application layer while leaving it completely intact underneath, which
+widens the gap between how fast software can be produced and how safely it
+can be deployed. Platform teams end up facing more deployments, more varied
+workloads, less consistent artefact quality, and more pressure to move
+quickly, without any corresponding change to the infrastructure complexity
+they're managing. Historically, what gives first under that pressure is
+operational discipline.
 
-Generative AI does not reduce this friction. It bypasses it at the application
-layer whilst leaving it entirely intact beneath. If anything, it widens the gap
-between how fast software can be produced and how quickly it can be safely
-deployed.
+## The infrastructure for this already exists
 
-The result is predictable: platform teams face higher volumes of deployments,
-more varied workloads, less consistent quality in the artefacts they receive,
-and greater pressure to move quickly — all without any change to the underlying
-infrastructure complexity they are managing.
+The useful part is that the industry has spent over a decade building the
+answer to this, for entirely unrelated reasons: scale, reliability, cost,
+and the general desire to stop treating infrastructure like a collection of
+pets. The underlying idea was to make the unit of deployment portable and
+self-describing, so the artefact stops depending on the specifics of the
+machine it runs on.
 
-Something has to give. And historically, what gives first is operational
-discipline.
+Containers are that idea, implemented. They changed operations less because
+process isolation was technically novel — it wasn't — and more because they
+changed the contract between development and operations: a container image
+is a promise that running it will produce the described behaviour, on any
+machine that honours the contract. That's precisely the property
+regenerative software needs. If implementations are going to be thrown away
+and regenerated at pace, the deployment target needs to be indifferent to
+exactly what it's running — whether a given version was written by a person,
+generated by a model, or some mixture of both.
 
-## The answer was already being built
+Kubernetes is the same idea at orchestration scale. Strip away the
+operational complexity around it and what's left is a system for expressing
+desired state and continuously reconciling reality against it: three
+replicas, this much memory and CPU, reachable at this address, replaced
+automatically if unhealthy. That reconciliation loop doesn't care how the
+new version was produced — rolling out a hand-crafted release and rolling
+out one generated overnight are the same operation to the scheduler. Teams
+running mature Kubernetes platforms are, as a direct consequence,
+structurally ready for AI-accelerated delivery in a way that teams without
+one aren't: the primitives built to absorb human-authored churn are the same
+primitives that absorb AI-authored churn.
 
-Here is the thing, though. The engineering community has been building the
-answer to this problem for well over a decade. Not in anticipation of AI, but
-for entirely practical reasons — scale, reliability, cost efficiency, and the
-simple desire to stop treating infrastructure like a menagerie of pets.
+## The seam needs more discipline, not less
 
-The insight was straightforward: if you make the unit of deployment portable and
-self-describing, you decouple the artefact from the environment. The machine
-stops mattering. The software carries its own context.
+The corollary Fowler's argument doesn't quite spell out is that the seam
+between disposable code and durable platform needs more care than either
+side individually — the health checks, resource declarations, shutdown
+behaviour, privilege model and image construction that make up the
+container contract. In human-authored software, violations of that contract
+accumulate slowly enough that a team notices during an incident and fixes
+it; the feedback loop is long but it works. Under AI-accelerated delivery,
+the volume crossing that seam goes up enough that violations stop
+accumulating slowly and start arriving in batches.
 
-Containers were the implementation of that insight. And they changed operations
-not because they were technically novel — process isolation and namespacing are
-old ideas — but because they changed the contract between development and
-operations. A container image is a promise: run this, and it will behave the way
-we described. The environment is standardised. The snowflake is eliminated. The
-artefact can move.
+Which means the right response to AI-driven velocity isn't to relax
+platform discipline, it's to enforce it earlier and more systematically —
+not as a gate that slows delivery, but as the contract that makes the
+platform's indifference to what it's running sustainable in the first
+place.
 
-This is exactly the property that regenerative software requires. If you are
-going to throw away implementations and generate new ones at pace, you need the
-deployment target to be indifferent to what specifically it is running.
-Containers provide that indifference. The platform does not need to know or care
-that this version of the service was written by a developer, that one by an AI,
-and the next one by some combination of both.
+## The point
 
-## Orchestration at scale
-
-Containers solve the portability problem. But running containers at any
-meaningful scale introduces a new set of concerns: scheduling, resource
-allocation, health management, service discovery, rolling updates, failure
-recovery.
-
-These concerns led to container orchestration, and container orchestration at
-scale led to platforms like Kubernetes. It is worth being precise about what
-Kubernetes actually is, beneath the operational complexity that surrounds it: it
-is a system for expressing desired state and continuously reconciling reality
-against it.
-
-You say: I want three replicas of this service, each with access to this much
-memory and CPU, accessible at this address, and I want them replaced
-automatically if they become unhealthy. Kubernetes takes that declaration and
-does the work — scheduling, watching, replacing, routing.
-
-This model has a property that is particularly well-suited to regenerative
-software: it is indifferent to churn. Rolling out a new version of a service is
-the same operation regardless of how that new version was produced. The platform
-does not distinguish between a carefully hand-crafted release and one generated
-from scratch overnight. It just reconciles the desired state.
-
-This means that teams already running mature Kubernetes platforms are,
-structurally, well-positioned for the AI-driven acceleration of software
-delivery. The primitives they built to manage human-authored churn are the same
-primitives that will manage AI-authored churn. The investment compounds.
-
-Teams without those platforms are not.
-
-## Discipline at the seam
-
-The Phoenix Architecture argues that the most durable systems are built from
-code that is meant to die. The corollary, which the piece does not make quite as
-explicit, is that the seam between the disposable code and the durable platform
-must be treated with considerably more care than either one individually.
-
-That seam is the container contract: the health checks, the resource
-declarations, the shutdown behaviour, the privilege model, the image
-construction. These things are not implementation details. They are the
-interface between what changes and what persists.
-
-In human-authored software, violations of this contract accumulate slowly. A
-team skips a health check, notices the problem during an incident, adds it. The
-feedback loop is long but functional. In AI-accelerated delivery, the volume of
-artefacts crossing this seam increases dramatically. Violations do not
-accumulate slowly, but arrive in batches.
-
-This is why the answer to AI-driven velocity is not to relax platform
-disciplines but to enforce them earlier and more systematically. Not as a gate
-that slows delivery down, but as a contract that makes the platform's job
-tractable. The platform's indifference to what it is running is only sustainable
-if what it is running is well-behaved.
-
-## The platform is the point
-
-The teams that will navigate the AI transition best are not those who generate
-the most code. They are those who have invested in deployment targets capable of
-accepting, validating, and running whatever is generated — quickly, safely, and
-repeatedly.
-
-The platform is not the background condition that enables delivery. In a world
-of regenerative software, the platform is the point. It is the persistent
-artefact. It is the thing that carries intent forward across successive
-generations of disposable implementations.
-
-Operations and platform engineers have been building that thing for years, under
-different names and with different motivations. The insight that portable,
-declarative, self-describing artefacts running on a platform with strong
-scheduling and health management primitives is the right architecture for
-high-churn environments — that insight predates AI by a decade.
-
-AI did not create this need. It just made ignoring it a great deal more
-expensive.
+The teams that come through this well won't be the ones generating the most
+code. They'll be the ones who already invested in a deployment target
+capable of accepting, validating and running whatever gets generated,
+quickly and repeatedly. That investment predates AI by a decade and was made
+for entirely different reasons — scale, reliability, cost. AI hasn't created
+the need for it. It's just made ignoring it considerably more expensive.

@@ -3,8 +3,9 @@ layout: post
 title: Netflix and Chill
 description: Building your own Netflix and chill button tutorial series starting with the electronics.
 image: https://cdn.tomasbasham.dev/covers/netflix.jpg
-category: product design
-tags: electronics netflix technology
+category: hardware-projects
+tags: electronics raspberry-pi
+series: netflix-and-chill
 ---
 
 Last year the team at Netflix posted a tutorial on how to create your own

@@ -3,11 +3,12 @@ layout: post
 title: Tricks of the Trade — Hotplate Reflow
 description: Simple at-home solution to surface mount reflow.
 category: electronics
-tags: electronics pcb technology
+tags: pcb reflow
+series: tricks-of-the-trade
 ---
 
 I previous covered
-[PCB fabrication](/electronics/2016/05/23/tricks-of-the-trade-pcb-fabrication.html)
+[PCB fabrication]({% post_url 2016-05-23-tricks-of-the-trade-pcb-fabrication %})
 and how to apply solder paste using a stencil. Now we're ready to secure our
 components.
 

@@ -3,7 +3,8 @@ layout: post
 title: Kubernetes Networking
 description: Looking under the hood of networking in Kubernetes.
 category: operations
-tags: docker iptables kubernetes services
+tags: docker iptables kubernetes networking
+series: kubernetes-networking
 ---
 
 In the software development scene today, containerisation — and Docker in
@@ -35,16 +36,16 @@ to the bridge.
 
 The result of this setup is that each container Docker manages can communicate
 with all other containers providing they are connected to the same virtual
-bridge. By extension since the bridge is configured behind the node's own Ethernet
-device the containers must also be on the same machine. In addition because
+bridge. By extension, since the bridge is configured behind the node's own Ethernet
+device, the containers must also be on the same machine. In addition, because
 Docker is configured to use the same IP address range on every node it follows
 that containers across nodes may be assigned the same IP address. This makes
 containers unable to communicate with each other across nodes out-of-the-box.
 
-One way for containers across nodes to communicate it to carefully coordinate
+One way for containers across nodes to communicate is to carefully coordinate
 the allocation of ports on the node's own IP address and then forward packets
-to the respective container. This can be rather errors prone and often lead to
-high contention.
+to the respective container. This is error prone and often leads to high
+contention.
 
 Below is a diagram depicting how Docker manages virtual network namespaces for
 each container. From this it can be seen how packets would have to traverse
@@ -139,7 +140,7 @@ endpoint.
 Services are an abstraction of stability for Pods providing a persistent
 endpoint representing a set of containers behind it. This is achieved with a
 Virtual Internet Protocol (VIP) address and enables Kubernetes to deal with
-changes to the cluster topology dynamically without effecting user perceived
+changes to the cluster topology dynamically without affecting user perceived
 uptime. Clients now only need know the VIP in order to talk to the Pods behind
 the Service. This allows for rolling updates where Pods may be completely
 replaced, likely allocated different IP addresses, without the client realising
@@ -250,7 +251,7 @@ Events:            <none>
 Once the new Pod has been created the Service has 2 backends where each Pod
 may very well be on different nodes. However because of the rules Kubernetes
 demands these Pods can both talk to one another. When this new Pod was created
-`kube-proxy` created  new rules in the `iptables` across all the nodes in the
+`kube-proxy` created new rules in the `iptables` across all the nodes in the
 cluster. These rules forward packets to the new Pod when the Service is
 requested.
 

@@ -3,7 +3,7 @@ layout: post
 title: Swift 3 — Enums
 description: Useful application of enums and how to implement them.
 category: development
-tags: development ios swift
+tags: swift ios
 ---
 I am always looking out for better solutions to implement software features
 where the language lends itself well to the problem. This way I get the most

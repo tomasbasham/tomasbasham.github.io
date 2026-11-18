@@ -1,15 +1,45 @@
-require:
-- rubocop-jekyll
+---
+plugins:
+- rubocop-capybara
+- rubocop-performance
+- rubocop-rake
 - rubocop-rspec
 
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 3.4
 
-Jekyll/NoPAllowed:
-  Enabled: true
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
 
-Jekyll/NoPutsAllowed:
-  Enabled: true
+Layout/LineLength:
+  Enabled: false
+
+Lint/Debugger:
+  DebuggerMethods:
+    Custom:
+    - puts
+    - p
+    - pp
+    - print
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Naming/BlockForwarding:
+  Enabled: false
+
+Style/ArgumentsForwarding:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: single_quotes
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: consistent_comma

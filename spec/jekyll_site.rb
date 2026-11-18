@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Serves a built Jekyll site the way a static host does: a directory is served
+# from its index.html, and a page may be requested without its .html extension.
 class JekyllSite
   attr_reader :root, :server
 
@@ -9,19 +11,25 @@ class JekyllSite
   end
 
   def call(env)
-    path = env['PATH_INFO']
-
-    # Use index.html for / paths
-    if path.end_with?('/') && exist?("#{path}index.html")
-      env['PATH_INFO'] = "#{path}index.html"
-    elsif !exist?(path) && exist?("#{path}.html")
-      env['PATH_INFO'] += '.html'
-    end
-
+    env['PATH_INFO'] = resolve(env['PATH_INFO'])
     server.call(env)
   end
 
   def exist?(path)
     File.exist?(File.join(root, path))
+  end
+
+  private
+
+  def resolve(path)
+    index = File.join(path, 'index.html')
+
+    if exist?(index)
+      index
+    elsif !exist?(path) && exist?("#{path}.html")
+      "#{path}.html"
+    else
+      path
+    end
   end
 end

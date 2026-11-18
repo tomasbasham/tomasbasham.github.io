@@ -2,8 +2,9 @@
 layout: post
 title: Building New Features from Existing Data
 description: Investigation into fraud at Enron, continuing with feature engineering
-category: machine learning
-tags: data engineering enron feature mathematics statistics
+category: machine-learning
+tags: enron statistics feature-engineering
+series: enron
 ---
 
 The next step in this experiment is to create new features from the existing
@@ -17,7 +18,7 @@ financial compensation awarded as a fraction of the total payment received by
 each Enron employee. Needless to say that it is quite typical that employees at
 any organisation can be incentivised by three common types of compensation:
 salary, bonus and long term incentives (e.g. reward for long service). Therefore
-is stands to reason that perhaps those persons of interest involved in the Enron
+it stands to reason that perhaps those persons of interest involved in the Enron
 scandal were receiving large bonuses or being rewarded huge long service
 incentives in an attempt to hide fraudulent behaviour. More specifically I have
 created 3 new features:
@@ -39,7 +40,7 @@ enron_data['fraction_salary'] = enron_data.salary / enron_data.total_payments
 enron_data['fraction_bonus'] = enron_data.bonus / enron_data.total_payments
 enron_data['fraction_long_term_incentive'] = enron_data.long_term_incentive / enron_data.total_payments
 
-# Replace any infinate or missing values.
+# Replace any infinite or missing values.
 enron_data = enron_data.replace([np.inf, -np.inf], np.nan)
 enron_data = enron_data.fillna(0)
 
@@ -76,7 +77,7 @@ ggplot(enron_data, aes(x='fraction_salary', y='fraction_long_term_incentive', co
   <figcaption>Salary v Long Term Investment Over Total Payments</figcaption>
 </figure>
 
-Apart from the two glaring obvious persons of interest that have long term
+Apart from the two glaringly obvious persons of interest that have long term
 incentives much larger than their total payment, there does not appear to be any
 conclusive trend in this data. However I shall keep this feature in case it
 proves useful to the classifiers. If I find this to not be the case this feature
@@ -88,14 +89,14 @@ total stock value for each Enron employee. The rationale behind this new feature
 is that employees involved in the scandal may have been given huge amounts of
 stock that could be later sold.
 
-I did not have any other feature that I though appropriate to plot this against
-so I'll just leave this feature for the classifiers to judge it's usefulness
+I did not have any other feature that I thought appropriate to plot this against
+so I'll just leave this feature for the classifiers to judge its usefulness
 whilst performing feature selection.
 
 ```python
 enron_data['fraction_exercised_stock_options'] = enron_data.exercised_stock_options / enron_data.total_stock_value
 
-# Replace any infinate or missing values.
+# Replace any infinite or missing values.
 enron_data = enron_data.replace([np.inf, -np.inf], np.nan)
 enron_data = enron_data.fillna(0)
 ```
@@ -109,7 +110,7 @@ privately sending messages to coordinate fraudulent activity. More specifically
 I have created 2 new features:
 
 - messages sent to a person of interest as a fraction of total messages sent
-- messaged received from a person of interest as a fraction of total messaged
+- messages received from a person of interest as a fraction of total messages
   received
 
 I have plotted these two features against each other to find any trends.
@@ -131,13 +132,13 @@ Intuitively I would have imagined persons of interest to sit somewhere towards
 the top right of the graph whilst the other employees would be scattered about
 as they innocently get on with their jobs. However the scatter plot does not
 contain any discernible pattern that I can see. What is apparent from this plot
-is that Enron employees tended to send more email messages to persons on
+is that Enron employees tended to send more email messages to persons of
 interest than receive them.
 
 However all is not lost as there are a few data points in this plot worth
-exploring. An interesting data point is the Enron employee that has not be
+exploring. An interesting data point is the Enron employee that has not been
 flagged as a person of interest but has only ever sent email messages to other
-persons of interest. Lets find out who this is.
+persons of interest. Let's find out who this is.
 
 ```python
 enron_data.sort_values(by='fraction_from_this_person_to_poi', ascending=False) \
@@ -164,14 +165,14 @@ messages:
 Considering he only sent 17 messages it is not too hard to believe why this
 metric is so high.
 
-Jeffrey Sherrick in another interesting data point who sent email messages
+Jeffrey Sherrick is another interesting data point who sent email messages
 primarily to Kenneth Lay. However this is justified by the fact he was the
 President of Enron Global Exploration & Production Inc. and therefore part of
 the corporate leadership and central management at Enron.
 
 The last data point I want to explore is the employee that has clearly received
 the most emails from persons of interest as a fraction of the total number of
-emails received. Lets find out who this is.
+emails received. Let's find out who this is.
 
 ```python
 enron_data.sort_values(by='fraction_from_poi_to_this_person', ascending=False) \
@@ -257,9 +258,9 @@ test_classifiers(clfs, my_extended_dataset, extended_features_list)
 
 </div>
 
-The above table shows that overall adding these 4 new features has not had a
+The above table shows that overall adding these 6 new features has not had a
 significant impact on the performance of each classifier, with exception to the
-`RandomForestClassifier` that has an improved F1 score of 41% (an 8% increase).
+`RandomForestClassifier` that has an improved F1 score of 42% (an 8% increase).
 This is due to both an increase in the precision and recall of this particular
 classifier. This I admit is a little disappointing as I had hoped some latent
 patterns to be discovered in these new features that would show a greater

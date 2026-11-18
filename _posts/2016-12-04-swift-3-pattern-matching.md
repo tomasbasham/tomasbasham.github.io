@@ -3,7 +3,7 @@ layout: post
 title: Swift 3 — Pattern Matching
 description: Pattern matching in Swift. A function paradigm in a largely procedural language.
 category: development
-tags: development ios swift
+tags: swift ios
 ---
 
 Whilst working on an iOS app, I was able to really jump into some Swift 3

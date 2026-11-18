@@ -2,11 +2,14 @@
 layout: post
 title: Leaky Data
 description: Why is data leakage a concern when implementing predictive models and how it can be avoided.
-category: machine learning
-tags: correlation data enron labels leakage mathematics pandas python statistics validation
+category: machine-learning
+tags: enron pandas python statistics data-leakage
+series: enron
 ---
 
-So far in this series of machine learning posts we have...
+So far in this series I have corrected data entry errors in the Enron dataset and
+dealt with its missing and incomplete values. Before going any further there is
+one more way the data can mislead us that is worth understanding: leakage.
 
 Data leakage causes a predictive model to appear accurate on the validation data
 but perform poorly when trying to use the model to make further predictions on
@@ -27,7 +30,7 @@ was in fact a person of interest.
 
 In this example an employee will be incarcerated after they are given the status
 "person of interest". So the raw dataset shows a strong correlation between the
-two features. But `is_incarcerated` will frequently be changed __after__ the
+two features. But `is_incarcerated` will frequently be changed *after* the
 value for `poi` is determined.
 
 The predictive model will show that a value of `False` for `is_incarcerated`

@@ -1,62 +1,34 @@
 ---
 layout: post
 title: 'The CSS Conundrum: Why Utility Classes Are Not The Answer'
-description:
+description: Utility-first CSS solved real problems with the cascade, but at the cost of the separation between structure and presentation.
 category: development
-tags: development css tailwindcss
+tags: css tailwindcss
+series: web-fundamentals
 ---
 
-In the previous articles in this series, I've examined how modern web
-development has drifted from its foundational principles and advocated for a
-return to HyperText. Now it's time to address another concerning trend: the
-proliferation of utility-first CSS frameworks, particularly TailwindCSS, and the
-practice of embedding styling directly within component markup.
+The previous two articles in this series argued for pulling web development
+back toward hypertext and away from unnecessary client-side architecture. This
+one covers a parallel trend in styling: the rise of utility-first CSS,
+TailwindCSS in particular, and the broader habit of embedding presentation
+directly in markup.
 
-## The Rise of Utility Classes
+## The problems Tailwind actually solves
 
-The popularity of utility-first CSS frameworks didn't emerge from nowhere.
-Traditional CSS approaches presented genuine challenges:
+Traditional CSS has real failure modes, and it's worth naming them honestly
+before arguing against the fix. Selectors are globally scoped, so two
+developers can collide on a class name without realising it. The cascade,
+useful as it is, makes it easy to produce specificity fights nobody can trace
+back to their source. Large stylesheets accumulate dead rules nobody's
+confident enough to delete. Utility-first frameworks solve all of this by
+sidestepping it: a class like `bg-blue-500` can never collide, can never be
+overridden unexpectedly, and is either used on the page or it isn't.
 
-1. Global scope leading to specificity conflicts
-2. The cascade creating unexpected side effects
-3. Difficulty in maintaining large stylesheets
-4. Challenges in creating reusable styles
+That's a real trade, not a fake one. The question is what you give up to make it.
 
-These were legitimate problems that needed solving. But as with JavaScript
-frameworks, I would argue that the solution has introduced more problems than it
-solved.
+## What gets lost
 
-## The TailwindCSS Phenomenon
-
-TailwindCSS has become extraordinarily popular, particularly among developers
-working with component-based frameworks. The premise is straightforward: rather
-than creating semantic class names that describe the element's purpose, you
-apply tiny single-purpose utility classes directly to your HTML elements:
-
-```html
-<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-  Click me
-</button>
-```
-
-Proponents argue this approach:
-
-1. Eliminates the need to context-switch between HTML and CSS files
-2. Reduces the risk of unused CSS accumulating
-3. Makes it easy to understand exactly what styles are applied
-4. Enables rapid prototyping and consistent design
-
-At first glance, these benefits seem compelling. But they come at significant
-costs.
-
-## The Problems with Utility Classes
-
-### Readability and Semantics
-
-HTML was designed to be semantic — to convey meaning about content
-structure. CSS was designed to separate presentation from that
-structure. Utility classes fundamentally break this separation, resulting in
-markup like this:
+Compare these two versions of the same component:
 
 ```html
 <div class="flex flex-col md:flex-row justify-between items-center p-4 bg-gray-100 rounded-lg shadow-md">
@@ -73,11 +45,6 @@ markup like this:
 </div>
 ```
 
-What is this component? A user card? A comment? A notification? The HTML
-provides no semantic clues because it's overwhelmed with presentation details.
-
-Compare this to semantic HTML with separate CSS:
-
 ```html
 <div class="user-card">
   <div class="user-profile">
@@ -91,106 +58,51 @@ Compare this to semantic HTML with separate CSS:
 </div>
 ```
 
-The second example clearly communicates what each element represents. A
-developer can immediately understand the component's purpose without needing to
-mentally parse dozens of utility classes.
+The first tells you nothing about what the component is until you've parsed
+every class on every element. The second tells you in one glance: a user
+card, with a profile and a follow button. That's not a style preference —
+semantic markup is supposed to describe structure, and the utility-class
+version has given that job up entirely in exchange for the collision-safety
+described above.
 
-### Maintainability
+The maintainability cost follows from the same trade. If a design system
+decision changes — say, standard button padding — the semantic version
+changes one rule. The utility version means grepping every file that
+happens to use that combination of classes and hoping you found them all.
+Responsive variants make this worse before they make it better: `md:flex-row`
+and `md:mb-0` scattered through markup is exactly the kind of noise that
+semantic class names were invented to hide.
 
-While component-based frameworks mitigate some of the maintainability issues,
-utility classes create new ones:
+The usual justification is colocation — keeping everything about a component
+in one file so there's nowhere else to look. But colocation and coupling are
+the same thing described from two different angles. Keeping style and markup
+in one file doesn't eliminate the need for consistency, it just means every
+place that needs it has to restate it, which is worse for consistency, not
+better.
 
-1. **Changes require markup updates across many files**: If your design system
-   changes (e.g., standard button padding increases), you must update every
-   component rather than changing one CSS rule.
+## What CSS was actually for
 
-2. **Responsive designs become unwieldy**: Notice the `md:flex-row` and
-   `md:mb-0` classes in the example. As breakpoints multiply, these conditional
-   classes create significant visual noise.
+The cascade, inheritance, and specificity exist to let presentation be
+defined once and applied broadly, and to let it change in one place when the
+underlying intent changes. That's not an accident of the spec; it's the
+reason it's called Cascading Style Sheets rather than Per-Element Style
+Attributes. Utility classes don't improve on that model — they opt out of it,
+in favour of a programmatic style closer to inline styling, dressed up as
+classes.
 
-3. **Duplication abounds**: The same combinations of utility classes appear
-   repeatedly throughout the codebase, often with subtle variations that create
-   inconsistency.
+## Where I'd actually land
 
-### The False Promise of Colocation
+None of this is an argument for the stylesheet chaos that made Tailwind
+attractive in the first place. CSS Modules give you real scoping without the
+global-namespace risk. Sass or plain CSS with sensible partials and variables
+give you the cascade back without reintroducing the collision problem. CSS
+custom properties cover most of what people reach for a JavaScript-driven
+design-token system to do. BEM, applied with some discipline, gives markup
+back its semantics while still keeping class names predictable. All four
+solve the real problems that made utility classes look necessary, without
+giving up what semantic HTML and the cascade are for.
 
-Utility-first approaches are often justified by the desire to keep everything
-related to a component in one file. But this "colocation" actually creates
-tighter coupling and makes systemic changes more difficult.
-
-When styling is embedded directly in markup:
-
-1. **Global styling changes become nearly impossible**: There's no single place
-   to update a component style across the application.
-
-2. **Design system consistency suffers**: Even with disciplined developers,
-   variations inevitably creep in when styles are repeated rather than
-   referenced.
-
-3. **The cascade — one of CSS's most powerful features — is nullified**: Instead
-   of leveraging inheritance, styles are explicitly repeated at every level.
-
-## The Spirit of CSS
-
-To understand why utility classes represent such a departure, we need to revisit
-CSS's core principles:
-
-1. **Separation of concerns**: CSS was explicitly designed to separate
-   presentation from content, allowing each to evolve independently.
-
-2. **The cascade**: The "C" in CSS stands for "Cascading," allowing styles to
-   flow through the document tree and be selectively overridden.
-
-3. **Inheritance**: Child elements inherit properties from their parents,
-   reducing repetition and creating visual consistency.
-
-4. **Specificity**: A sophisticated system for resolving competing style rules
-   based on selector types.
-
-Utility classes effectively abandon these principles in favour of a more
-programmatic, inline approach to styling. This isn't enhancing CSS — it's
-replacing it with a fundamentally different paradigm.
-
-## A More Balanced Approach
-
-I'm not suggesting we return to massive global stylesheets with selector
-specificity wars. But there are better alternatives than saturating our markup
-with utility classes:
-
-1. **CSS Modules**: Scoped CSS files that eliminate global namespace concerns
-   whilst maintaining the separation of concerns.
-
-2. **SASS/SCSS with sensible organization**: Preprocessors with partials,
-   variables, and mixins provide modularity without abandoning CSS principles.
-
-3. **Custom Properties (CSS Variables)**: Modern CSS includes powerful variable
-   capabilities that enable consistent design tokens.
-
-4. **Well-structured BEM methodology**: The Block-Element-Modifier pattern
-   creates namespaced classes that clearly communicate component structure.
-
-These approaches maintain the separation of concerns whilst addressing the
-legitimate problems that led to utility-first CSS.
-
-## Conclusion
-
-The web was built on the principle that content, presentation, and behaviour
-should be separate concerns. HTML provides structure, CSS provides presentation,
-and JavaScript provides behaviour. This separation isn't arbitrary — it allows
-each layer to evolve independently and excel at its primary purpose.
-
-Utility-first CSS frameworks like Tailwind, encouraged by component-based
-JavaScript frameworks, have blurred these boundaries, embedding presentation
-deeply into content markup. While this approach may offer short-term convenience
-for individual developers, it creates long-term maintainability problems and
-undermines the web's fundamental architecture.
-
-Like the overuse of JavaScript and the artificial division between frontend and
-backend, the proliferation of utility classes represents another way our
-industry has drifted from the web's foundational principles.
-
-In the next article, I'll explore potential topics like accessible progressive
-enhancement, the return of server-side rendering with frameworks like Phoenix
-LiveView and Laravel Livewire, or the evolving role of JavaScript in a
-HyperText-centric world. I welcome your feedback on which direction would be
-most valuable to explore.
+The next article in this series moves from CSS to a principle that both of
+the previous two implicitly depend on: progressive enhancement, and why
+building up from working HTML is still the right default even when a page
+ends up fully interactive.

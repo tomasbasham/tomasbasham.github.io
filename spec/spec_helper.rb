@@ -1,18 +1,33 @@
 # frozen_string_literal: true
 
 require 'capybara'
+require 'capybara/cuprite'
 require 'capybara/dsl'
 require 'capybara/rspec'
 require 'capybara/session'
 require 'cgi'
 require 'jekyll_site'
 require 'rack'
+require 'yaml'
 
 def site_path
   directory = File.join(File.dirname(__FILE__), '..', '_site')
   raise IOError, '`_site` directory does not exist.' unless File.directory?(directory)
 
   directory
+end
+
+# `jekyll serve` writes pages whose assets are served by the Vite dev server
+# (see the jekyll-vite `mode` option), and the dev server is not running when
+# the tests are. Pages built by `jekyll build` use the files Vite wrote to
+# _site instead.
+def development_build?
+  html = File.read(File.join(site_path, 'index.html'))
+  html.match?(%r{<(script|link)[^>]+(src|href)="https?://(localhost|127\.0\.0\.1|\[::1\])[:/]})
+end
+
+def site_config
+  YAML.safe_load_file(File.join(File.dirname(__FILE__), '..', '_config.yml'))
 end
 
 def pages
@@ -26,18 +41,32 @@ Capybara.app = Rack::Builder.new do
     use Rack::Lint
     run JekyllSite.new(
       site_path,
-      Rack::Files.new(site_path)
+      Rack::Files.new(site_path),
     )
   end
 end.to_app
 
+# Pages are fetched with rack_test, which is fast but runs no JavaScript.
+# Examples tagged `:js` run in headless Chrome through Cuprite instead.
+Capybara.register_driver(:cuprite) do |driver_app|
+  options = { window_size: [1280, 800] }
+  options[:browser_options] = { 'no-sandbox' => nil } if ENV['CI']
+  Capybara::Cuprite::Driver.new(driver_app, **options)
+end
+
 Capybara.default_selector  = :css
 Capybara.default_driver    = :rack_test
-Capybara.javascript_driver = :webkit
+Capybara.javascript_driver = :cuprite
+Capybara.server            = :puma, { Silent: true }
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.include Capybara::DSL
+
+  # Examples that run JavaScript need the built assets.
+  config.before(:each, :js) do
+    raise 'The site in _site was built for the Vite dev server. Run `bundle exec rake test`.' if development_build?
+  end
 
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

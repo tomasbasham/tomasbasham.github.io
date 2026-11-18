@@ -2,8 +2,9 @@
 layout: post
 title: Removing Outliers from Source Data
 description: Investigation into fraud at Enron, continuing with removing outliers from the source data.
-category: machine learning
-tags: data enron mathematics outliers pandas python statistics
+category: machine-learning
+tags: enron pandas python statistics outliers
+series: enron
 ---
 
 In previous sections I've cleaned data that exhibited issues with data entry and
@@ -14,9 +15,10 @@ that it is true to the source, or using sensible data where it was otherwise not
 available. In this section I will remove data that will not be useful to the
 investigation.
 
-Conveniently the definition of an outlier can be described as a point which
-falls more than 1.5 times the interquartile range above the third quartile or
-below the first quartile.
+A common rule of thumb defines an outlier as a point that falls more than 1.5
+times the interquartile range beyond the quartiles. For a first pass I'm using a
+slightly cruder variant: counting, for each employee, the features that sit more
+than 1.5 times the interquartile range above the median.
 
 ```python
 original_data = enron_data.drop(columns=['poi']) # poi is not a feature and should not be considered
@@ -31,12 +33,12 @@ outlier_data = median + 1.5 * interquantile_range
 outliers = (original_data > outlier_data).sum(axis=1).to_frame(name='# of outliers') \
     .sort_values('# of outliers', ascending=False)
 
-five_percent_of_sample = int(len(enron_data) * 0.06)
+top_six_percent_of_sample = int(len(enron_data) * 0.06)
 
 # Merge the outliers with the original enron data.
 outliers = outliers.merge(right=enron_data, how='inner', left_index=True, right_index=True) \
   .loc[:, ['# of outliers', 'poi']]
-outliers.head(five_percent_of_sample)
+outliers.head(top_six_percent_of_sample)
 ```
 
 <div class="table-wrapper" markdown="block">
@@ -54,8 +56,8 @@ outliers.head(five_percent_of_sample)
 
 </div>
 
-Our data set is really small, so I'm going to consider just 5% of the samples
-with the largest number of outliers:
+Our data set is really small, so I'm going to consider only the top 6% of the
+samples, the eight with the largest number of outliers:
 
 - Mark Frevert and Lawrence 'Greg' Whalley are lesser known employees but still
   top managers of Enron (the latter being President and COO of Enron) who also
@@ -63,7 +65,7 @@ with the largest number of outliers:
 - Kenneth Lay (Enron chairman and CEO) and Jeffrey Skilling (former Enron
   president and CEO) are very well known persons from Enron and heavily involved
   in the scandal. They represent important examples in our dataset and falsely
-  flagged as true outliers.
+  not true outliers.
 - The example TOTAL is the total value of financial payments from the FindLaw
   dataset. This clearly is not an individual person and will unbalance the
   distribution across several features in the dataset. Therefore it should be
@@ -163,7 +165,7 @@ ggplot(enron_data, aes(x='salary', y='bonus', color='poi')) + \
   <figcaption>Salary v Bonus Without Outlier</figcaption>
 </figure>
 
-Now that we've cleaned up the dataset, lets see how many examples and features
+Now that we've cleaned up the dataset, let's see how many examples and features
 remain.
 
 ```python
@@ -208,7 +210,7 @@ Let's write this cleaned dataset to disk to be used for the later evaluation.
 
 ```python
 # Save the cleaned dictionary containing the dataset.
-with open('final_prject_dataset_cleaned.pkl', 'wb') as data_file:
+with open('final_project_dataset_cleaned.pkl', 'wb') as data_file:
     pickle.dump(enron_data.to_dict(orient='index'), data_file, protocol=pickle.HIGHEST_PROTOCOL)
 ```
 
@@ -216,4 +218,4 @@ With the dataset cleaned up it feels about the right time to investigate how
 machine learning can help identify persons of interest, starting with how the
 results of the investigation are to be measured, to ensure consistent and fair
 comparison between alternative approaches. This will be the focus of the next
-post on theis topic.
+post on this topic.

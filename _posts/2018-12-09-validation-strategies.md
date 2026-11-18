@@ -2,8 +2,9 @@
 layout: post
 title: Validation Strategies
 description: Investigation into fraud at Enron, continuing with assessing validation strategies.
-category: machine learning
-tags: cross-validation data enron mathematics statistics strategies train-test-split validation
+category: machine-learning
+tags: enron statistics cross-validation
+series: enron
 ---
 
 Learning the parameters of a predictive model and testing it on the same data is
@@ -25,7 +26,7 @@ be overcome.
 Train test split is a validation method that partitions the original dataset
 into a training set to train the model; a validation set for tuning the model;
 and a test set to evaluate it. There is no general rule dictating how many
-samples should be made available for each set and depends largely and how strong
+samples should be made available for each set and depends largely on how strong
 the patterns are in the data. However it is advised to maximise the training
 data as much as possible.
 
@@ -61,7 +62,7 @@ from sklearn.model_selection import train_test_split
 # First shuffle the data.
 shuffled_data = enron_data.sample(frac=1).reset_index(drop=True)
 
-# Create a 80% split of the data.
+# Create an 80% split of the data.
 split_boundary = int(len(shuffled_data) * .80)
 test_set = shuffled_data[split_boundary:]
 train_validation_set = shuffled_data[:split_boundary]
@@ -141,7 +142,7 @@ percentage of samples for each class.
 </figure>
 
 As before we can see how this may be applied to the Enron dataset using the
-object sklearn.
+object that sklearn provides.
 
 ```python
 from sklearn.model_selection import StratifiedShuffleSplit
@@ -164,14 +165,17 @@ training set:    125 samples
 validation set:  14 samples
 ```
 
-The advantage of this method is that all samples are used for both training and
-validation, and each sample is used for validation exactly once. This therefore
-maximises the number of samples used for training.
+The advantage of this method is that every sample is available for both
+training and validation, which maximises the number of samples used for
+training. Strictly, with `StratifiedShuffleSplit` the validation sets are drawn
+independently for each split, so a sample may be validated on more than once, or
+not at all. With a dataset this small I consider that a fair price for the
+repeated, stratified resampling.
 
 For the remainder of this experiment I shall use cross validation when
 evaluating my models and their respective hyperparameters.
 
-## Testing
+### Testing
 
 To drive the evaluation of each classifier I will use the function included in
 this project, `test_classifier`, offering a consistent means through which every
@@ -191,7 +195,7 @@ the validation set is not biased by the same data used for training.
 Using the above function I have additionally implemented a means through which
 to test multiple classifiers sequentially whilst keeping the output to a
 minimum. Once each classifier has been tested the results are returned in a
-DataFrame and the results sorted (ascending F1 score by default). This is really
+DataFrame and the results sorted (descending F1 score by default). This is really
 useful to reduce the noise in this notebook, displaying only the most important
 information.
 

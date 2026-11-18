@@ -2,8 +2,9 @@
 layout: post
 title: Selecting the Right Features
 description: Investigation into fraud at Enron, continuing with feature selection
-category: machine learning
-tags: data enron feature importance mathematics recursive selection statistics univariate
+category: machine-learning
+tags: enron statistics feature-selection
+series: enron
 ---
 
 The features in our dataset have a significant influence over the performance of
@@ -208,8 +209,8 @@ fraction_exercised_stock_options:  0.0
 It is rather interesting to compare the feature importances of both the
 RandomForestClassifer and the AdaBoostClassifier. It is clear from the results
 that both classifiers do not agree on the 10 most important features despite
-each classifier having arguably equal accuracy thus far. This could be noted
-further indication that accuracy is not a great metric in this experiment.
+each classifier having arguably equal accuracy thus far. This is further
+indication that accuracy is not a great metric in this experiment.
 However what is clear is that both classifiers regard several of the engineered
 features more important than many of the original features in dataset. This
 would suggest that these features in fact describe a trend in the data posing a
@@ -218,7 +219,7 @@ strong correlation to the output variable.
 There would be little point to investigate further whether only using the top
 `n` features has any impact on the performance of the predictive model since
 there is likely a co-dependency on the classifier hyperparameters which will be
-investigates in a later section. For now it is enough to know how wildly
+investigated in a later section. For now it is enough to know how wildly
 different the importances are for each classifier with their respective default
 options.
 
@@ -342,7 +343,7 @@ importances returned from the Random Forest and AdaBoost classifiers.
 
 Given that using this algorithm we can select only a subset of features that are
 most relevant the problem is reduced to that of optimising how many features
-should be selected to obtain the most performant predictive model. Choosing thss
+should be selected to obtain the most performant predictive model. Choosing this
 value will be the focus of the hyperparameter tuning section of this experiment.
 
 ### Recursive Feature Elimination
@@ -350,7 +351,7 @@ value will be the focus of the hyperparameter tuning section of this experiment.
 Recursive feature elimination works by identifying which attributes (and
 combination of attributes) contribute the most to predicting the target value.
 This is achieved by first training the predictive model on the initial set of
-feature and then removing the least relevant feature, indicated by the smallest
+features and then removing the least relevant feature, indicated by the smallest
 feature coefficient or feature importance. The model is then retrained and the
 next least relevant feature removed. This process continues by considering
 smaller and smaller sets of features until we arrive at the desired number of
@@ -360,7 +361,7 @@ We can use
 [`sklearn.feature_selection.RFE`](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html)
 to perform this task, that given a classifier capable of assigning
 weights/scores to each feature, will determine the least relevant feature
-through either the `coef_` or `feature_importances` attribute. We have observed
+through either the `coef_` or `feature_importances_` attribute. We have observed
 that the classifiers used in this experiment process either attribute and can
 therefore all be used to perform recursive feature elimination.
 
@@ -371,12 +372,28 @@ stage these same feature could turn out to be quite important. Fortunately we
 have already covered this in the previous section where we are standardising the
 data using the `StandardScaler`.
 
-Unlike univariate feature selection
+Unlike univariate feature selection, which scores each feature in isolation,
+recursive feature elimination judges features by how the classifier itself uses
+them. A feature that looks weak on its own can matter a great deal in
+combination with others, and `RFE` can see that where `SelectKBest` cannot. The
+price is that it must train the classifier once per eliminated feature.
 
-As with univariate feature selection the problem of selecting features is
-reduced to the of optimising how many features should be selected to obtain the
-most performant model. For this I would like to
-[`sklearn.feature_selection.RFECV`](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html#sklearn.feature_selection.RFECV)
-which extend `RFE` with a cross-validation step with the intent to seek out the
-optimal number of features given for a given metric. In this case I will
+As with univariate feature selection, the problem reduces to deciding how many
+features to keep. Rather than guess, I will use
+[`sklearn.feature_selection.RFECV`](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html#sklearn.feature_selection.RFECV),
+which extends `RFE` with a cross-validation step to find the optimal number of
+features for a given metric. As with every other decision so far, I will
 optimise for the F1 score.
+
+### Where This Leaves Us
+
+Three methods, three different answers. Feature importances, univariate scores
+and recursive elimination each rank the features differently, and none of them
+can be trusted until it has been tested against a held-out set. More
+importantly, each answer depends on the classifier's hyperparameters, and those
+in turn depend on which features the classifier is given.
+
+That circularity is why I have not run `RFECV` here. Running it now, against
+default parameters, would only tell us which features suit a classifier I am
+about to change. The next section tunes the two together, with cross-validation
+wrapped around the whole process so that no test data leaks into the selection.

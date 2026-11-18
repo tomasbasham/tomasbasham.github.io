@@ -1,9 +1,9 @@
 ---
 layout: post
 title: The WIP Limit Isn't the Problem
-description:
-category: something
-tags: technical
+description: A team oscillating between too much WIP and too much pairing isn't failing to find the right process setting — it's trying to solve a need for individual ownership using a dial that was never built to hold it.
+category: career
+tags: delivery engineering-culture agile
 ---
 
 In an earlier post I described a mismatch: I want slow, deliberate, many-voiced
@@ -48,42 +48,42 @@ again. And the cycle restarts.
 
 The obvious read is that the team hasn't found the right WIP limit yet — too
 high causes thrashing, too low causes disengagement, so somewhere in between
-must be correct. I don't think that's right, and there's a tell in the pattern
-that gives it away: **it's frequently the same people, unhappy in both states.**
-The person complaining "I never get to finish anything, everything's rushed" in
-the high-WIP sprint is often the same person complaining "I'm bored, I'm not
-really contributing" in the paired sprint.
+must be correct. I don't think that's right, and there's a tell in the
+pattern that gives it away: it's frequently the same people, unhappy in both
+states. The person complaining "I never get to finish anything, everything's
+rushed" in the high-WIP sprint is often the same person complaining "I'm
+bored, I'm not really contributing" in the paired sprint.
 
 If WIP were the actual variable, you wouldn't expect that. You'd expect the
 complaints to come from different people depending on their tolerance for
-context-switching versus their tolerance for close collaboration. Instead the
-same individuals are dissatisfied on both sides of the dial, which suggests the
-dial isn't the thing they actually care about.
+context-switching versus their tolerance for close collaboration. Instead
+the same individuals are dissatisfied on both sides of the dial, which
+suggests the dial isn't what they actually care about.
 
-What they're asking for, in both states, looks like the same underlying thing:
-**individual, attributable ownership of a solved problem.** Something they
-drove, that's recognisably theirs, that demonstrates the specific expertise they
-bring to the team. High WIP gives everyone a shot at that — their own stream,
-their own area — but not the completion of it, because constant interruption
-means nothing actually gets finished under their name. Pairing gives the
-completion, but only to whoever's driving that session; the navigator gets the
-outcome without the authorship.
+What they're asking for, in both states, looks like the same underlying
+thing: individual, attributable ownership of a solved problem. Something they
+drove, that's recognisably theirs, that demonstrates the specific expertise
+they bring to the team. High WIP gives everyone a shot at that — their own
+stream, their own area — but not the completion of it, because constant
+interruption means nothing actually gets finished under their name. Pairing
+gives the completion, but only to whoever's driving that session; the
+navigator gets the outcome without the authorship.
 
 Neither format is failing at its stated job, either. Throughput-wise, the
 low-WIP sprints work — the team said as much, work gets done on time. What's
-failing is a need nobody's named out loud in the retrospective, because "reduce
-WIP" and "pair more" are the only vocabulary a sprint retrospective tends to
-offer. Recognition and demonstrated individual expertise aren't on that menu, so
-the dissatisfaction keeps getting misdiagnosed as a process setting, and the
-process gets nudged back and forth in search of a value that isn't on that axis
-at all.
+failing is a need nobody's named out loud in the retrospective, because
+"reduce WIP" and "pair more" are the only vocabulary a sprint retrospective
+tends to offer. Recognition and demonstrated individual expertise aren't on
+that menu, so the dissatisfaction keeps getting misdiagnosed as a process
+setting, and the process gets nudged back and forth in search of a value that
+isn't on that axis at all.
 
-This is also, worth naming, the same shape of mistake as the oracle-mismatch
-from the earlier post, one level up: **using a process mechanism (a WIP limit, a
-pairing cadence) to try to solve a need that mechanism was never built to
-answer.** A WIP limit is a good tool for managing flow efficiency and reducing
-thrash. It has no lever for felt ownership. Turning the dial harder in either
-direction won't produce a value it was never designed to hold.
+It's the same shape of mistake as the oracle mismatch from the earlier post,
+one level up: using a process mechanism — a WIP limit, a pairing cadence — to
+solve a need that mechanism was never built to answer. A WIP limit is a good
+tool for managing flow efficiency and reducing thrash. It has no lever for
+felt ownership. Turning the dial harder in either direction won't produce a
+value it was never designed to hold.
 
 ## Where "shaping" fits, and where it doesn't yet
 
@@ -135,48 +135,32 @@ conversation that stops it from repeating next sprint.
 
 ## Why driver rotation rarely survives contact with reality
 
-There's a smaller-scale version of this same tension worth naming, because it
-complicates the conclusion above rather than just illustrating it. Pairing's
-usual answer to the navigator-boredom problem is to rotate the driver
-frequently, so everybody gets a turn. In practice, this rarely happens without
-real discipline enforcing it, and it's worth being honest about why — because
-the reasons aren't laziness, they're structural, and they mirror the diagnosis
-in this post rather than contradicting it.
+There's a smaller-scale version of the same tension worth naming, because it
+complicates the conclusion rather than just illustrating it. Pairing's usual
+answer to navigator boredom is to rotate the driver frequently. In practice
+this rarely happens without real discipline enforcing it, and the reasons are
+structural, not laziness. Natural stopping points are genuinely hard to find
+mid-problem, and driving isn't just operating the keyboard — it's holding the
+shape of a half-built solution in your head. Handing that off mid-thought
+means someone else either preserves your intent or quietly replaces it with
+their own, and watching your own partially-built approach get overridden
+while you can only observe is a real discomfort, not reluctance to share
+credit. Rotate too eagerly and the rotation destroys the very ownership it
+was meant to produce.
 
-Natural stopping points are genuinely hard to find mid-problem. And there's a
-cost to handing over that's easy to underrate: driving isn't just operating the
-keyboard, it's holding the current shape of a half-built solution in your
-head. Handing that off mid-thought means someone else has to either preserve
-your intent or quietly replace it with their own — and watching your own
-partially-built approach get "ruined" by somebody else's direction, while you
-can only observe, is a real and specific discomfort, not a reluctance to share
-credit in the abstract. Rotate too eagerly and you can destroy the very
-ownership the rotation was meant to produce, because ownership includes
-authorship of the approach, not merely presence in the room.
+There's also a genuine efficiency case against it: "I could do this faster if
+I were just allowed to drive" is frequently true in the moment. What it
+discounts is that the return on letting someone else drive shows up later, as
+team capability, rather than now, as this task's completion time — the same
+mistake as everything else here, just measuring the wrong feedback loop. Left
+unmanaged, the loop you can feel immediately wins by default over the one
+that actually matters. And sometimes there simply isn't slack to spend on
+anyone's growth right now, and some work is genuinely better driven by
+whoever's fastest at it.
 
-There's also a genuine efficiency case against rotating, most often raised on
-work that sits squarely in someone's area of expertise: "I could do this faster
-if I were just allowed to drive." That's frequently true in the moment. What it
-discounts is that letting someone else drive is how they get faster at this next
-time — the return shows up later, as team capability, not now, as this task's
-completion time. That's the same mistake in miniature as everything else in this
-post: using a short feedback loop (is this task faster today) to answer a
-question that should be answered by a longer one (is the team faster over the
-next ten initiatives). Left unmanaged, the short loop wins by default, because
-it's the one everyone can feel immediately.
-
-And sometimes the honest answer is that there simply isn't slack to spend on
-anyone's growth right now. Pressure to ship is often too real for "slow down so
-everyone catches up" to be viable, and in those moments some work is genuinely
-better driven by whoever's fastest at it, full stop.
-
-None of that undermines the conclusion above. The point was never that ownership
-should rotate mechanically, on principle, at every opportunity; it's that
-rotation should be a deliberate default, consciously overridden when the cost of
-slowing down is genuinely too high, rather than something that silently never
-happens because nobody wanted to be the one to insist on it. That distinction —
-deliberate concentration under acknowledged pressure, versus ownership quietly
-never rotating because handing over is uncomfortable — is exactly the difference
-between a team managing this tension on purpose and a team stuck oscillating
-through it by accident, which is the whole problem this post set out to
-describe.
+None of that undermines the point above. Rotation isn't something that should
+happen mechanically, on principle, at every opportunity — it's a deliberate
+default, consciously overridden when the cost of slowing down is genuinely
+too high, rather than something that silently never happens because nobody
+wanted to insist on it. That's the actual difference between a team managing
+this tension on purpose and one stuck oscillating through it by accident.

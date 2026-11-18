@@ -3,7 +3,7 @@ layout: post
 title: Git Workflows for Project Management
 description: Basic Git workflow for project management.
 category: development
-tags: featured development git management
+tags: featured git project-management
 ---
 
 This is how I use `git` either working as part of a team or individually.

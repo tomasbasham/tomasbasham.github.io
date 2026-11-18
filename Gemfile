@@ -30,12 +30,16 @@ group :development do
 end
 
 group :development, :test do
-  gem 'capybara'
-  gem 'rack-jekyll'
-  gem 'rspec'
-  gem 'rubocop-jekyll'
-  gem 'rubocop-rspec'
-  gem 'selenium-webdriver'
+  gem 'capybara',            '~> 3.40'
+  gem 'cuprite',             '~> 0.20'
+  gem 'puma',                '~> 8.1'
+  gem 'rack-jekyll',         '~> 0.3'
+  gem 'rspec',               '~> 3.13'
+  gem 'rubocop',             '~> 1.92'
+  gem 'rubocop-capybara',    '~> 3.1'
+  gem 'rubocop-performance', '~> 1.27'
+  gem 'rubocop-rake',        '~> 0.7'
+  gem 'rubocop-rspec',       '~> 3.10'
 end
 
 # Windows and JRuby do not include zoneinfo files, so bundle the tzinfo-data gem
