@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Building a Cloud Native Service | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Building a Cloud Native Service" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="How to use microservices at scale to build modern backend web applications." />
+<meta property="og:description" content="How to use microservices at scale to build modern backend web applications." />
+<link rel="canonical" href="https://tomasbasham.dev/development/building-a-cloud-native-service" />
+<meta property="og:url" content="https://tomasbasham.dev/development/building-a-cloud-native-service" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-07-12T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building a Cloud Native Service" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2018-07-12T00:00:00+01:00","datePublished":"2018-07-12T00:00:00+01:00","description":"How to use microservices at scale to build modern backend web applications.","headline":"Building a Cloud Native Service","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/building-a-cloud-native-service"},"url":"https://tomasbasham.dev/development/building-a-cloud-native-service"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Building a Cloud Native Service</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2018-07-12T00:00:00+01:00">12 Jul 2018</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 7 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+
+      <p>Most modern software services attempt to provide a system that is available
+100% of the time to millions of users around the world. However this provides
+many challenges in respect to reliability and scalability that are not easily
+solved with traditional software development and operational methodologies. In
+this article I talk about how a more resilient software service can be achieved
+through employing a series of open source technologies and distributed
+microservices.</p>
+
+<p>From the very beginning of any project in is often favourable to build a
+monolithic application providing familiarity, fewer barriers to entry and
+smaller upfront operational costs. However this will later pose a challenge to
+scale and therefore be much more difficult to break out into smaller services
+that may be independently scaled. Instead, and although a more complicated
+concept to that of traditional monolithic applications, I propose beginning a
+project by modelling the domain and separating responsibilities into
+intercommunicating microservices. Domain modelling is covered widely across
+numerous other blog posts so I will not be talking it about it here. I have
+linked to several such resources below.</p>
+
+<p>Netflix, and other high profile service providers, have demonstrated how highly
+scalable microservices have increased productivity, overall system
+maintainability and made more efficient use available resources.</p>
+
+<p>To meet the demands of an always available service I focus on 4 key areas:</p>
+
+<ol>
+  <li>
+    <p><strong>Cluster scheduling</strong>: We need an efficient, automated pipeline to manage
+both a small and large numbers of nodes as constraints and resources change.
+It is the responsibility of the container scheduler to distribute work
+appropriately among nodes, and react to machine failure.</p>
+  </li>
+  <li>
+    <p><strong>Disposable services</strong>: Loosely coupled software services can be considered
+as both disposable and immutable. That is to say refactoring is frowned
+upon, and instead of restructuring code we simply replace it with an
+entirely new service. This provides a proof that a system is resilient to
+change.</p>
+  </li>
+  <li>
+    <p><strong>Reliable data interchange</strong>: With large numbers of services distributed
+across hosts, data centres, and even continents, the success of our system
+depends on having a solid RPC layer that can route around component failure,
+minimise latency, and help us understand its runtime behaviour. This layer
+has to make our system stronger than its weakest link.</p>
+  </li>
+  <li>
+    <p><strong>Consistent network transport</strong>: Service meshes are an increasingly common
+networking model for cloud native architectures. By putting the logic needed
+for fast and reliable interservice communications into a sidecar process,
+developers on independent teams, working in the technology stack of their
+choice, can get a consistent network transport without requiring libraries
+or changes to their application code.</p>
+  </li>
+</ol>
+
+<p><strong>Note</strong>: I realise this list does not cover other important topics such as
+network security, asynchronous communication and eventual consistency to
+mention just a few. I may cover these in a later post.</p>
+
+<h3 id="cluster-scheduling">Cluster Scheduling</h3>
+
+<p>If we want to build a fault-tolerant, elastically-scalable system, it follows
+that we need the ability to add and remove servers as hardware fails, and as
+user demand changes. Running only a single service per host is wasteful (the
+service may not need all the resources of the host), and the traditional
+approach of manually partitioning services among hosts is tedious and difficult
+to scale.</p>
+
+<p>Cluster schedulers are designed to abstract applications away from the hardware
+on which they run. They use algorithms to schedule applications onto hosts
+according to their resource requirements, scale them up and down, and replace
+them when they fail. It’s our ultimate goal to run our entire system on a
+scheduler, which means we want to deploy stateful as well as stateless apps in
+this way.</p>
+
+<p>Containerisation – and Docker in particular – is hard to ignore these days.
+Behind the hype, they are simply a combination of technologies in the Linux
+kernel coupled with an image format, but they provide a powerful abstraction.
+By packaging an application and all its dependencies into a single,
+standardised image, the application is decoupled from the operating system, and
+isolated from other applications on the same host. A cluster manager that deals
+exclusively with containers makes a lot of sense.</p>
+
+<p>For this we decided to use Kubernetes, which we run on a fleet of CoreOS
+machines. It is very tightly integrated with Docker, and is the product of
+Google’s long experience running containers in production at global
+scale. Deploying Kubernetes in a highly available configuration on AWS is not
+for the faint of heart and requires you to get familiar with its internals, but
+we are very pleased with the results.  We regularly kill hosts in production and
+Kubernetes quickly reschedules applications to accommodate. In fact, we may soon
+deploy something like Netflix’s Simian Army to deliberately induce failure and
+ensure our systems tolerate it transparently.</p>
+
+<p>In addition to improving our resilience, Kubernetes has given us impressive
+cost savings. Our production infrastructure costs about a quarter of what it
+did before we switched to Kubernetes. To illustrate one example why, consider
+our build systems. Previously, we ran several very beefy Jenkins hosts
+dedicated to the task, which were inefficient and expensive. Now, build jobs
+run under Kubernetes, using spare capacity in our existing infrastructure,
+which is basically free. Resource allocations and limits ensure that
+resource-intensive but low priority jobs like these do not affect the
+performance of critical, user-facing services.</p>
+
+<h3 id="disposable-services">Disposable Services</h3>
+
+<p>Long running services can have indeterministic state. This relates not
+exclusively to configuration management tools such as Puppet and Chef that
+deploy applications that may not be restarted for some time. During this time
+an application may follow many code paths that ultimately lead it to an
+unreproducible state. This is undesirable and indicative of a system not
+resilient to change.</p>
+
+<p>Chad Fowler, CEO at Wunderlist, gave a great talk about microservices where he
+expresses treating each microservice as an immutable component of a system.</p>
+
+<figure class="container container-media">
+  <iframe src="https://www.youtube.com/embed/-UKEPd2ipEk?start=850" width="743" height="640" allowfullscreen="" scrolling="no" referrerpolicy="strict-origin"></iframe>
+  <figcaption>Kill "Microservices" before its too late — Chad Fowler</figcaption>
+</figure>
+
+<p>In particular Fowler says:</p>
+
+<blockquote>
+  <p>Mutability of the system is enhanced by the immutability of its components.</p>
+</blockquote>
+
+<p>This is a great way to consider writing services; just throw away the entire
+thing and start again. However this only works when services are small enough
+that they can be quickly rewritten.</p>
+
+<p>This idea that code is expendable lends itself well to a polyglot environment
+where we may replace an entire service if another language or open source
+technology that better suites our needs. Presently I make large use of Swift
+and Golang, and whilst these will probably remain the dominant languages
+composing any service I may write, using them exclusively means I cannot take
+advantage of tools written in other languages.</p>
+
+<p>In a professional sense creating a culture not attached to code is in the long
+term highly conducive to a resilient system architecture. If we are able to
+design our services to be later thrown away and reimplemented we can move
+faster, react more efficiently to issues, and try new things without
+unrecoverable repercussions.</p>
+
+<h3 id="compatible-data-interchange">Compatible Data Interchange</h3>
+
+<p>As mentioned above polyglot services need a reliable data interchange, supported
+across each language.</p>
+
+<p>Within a distributed system of services having a reliable data interchange,
+compatible across services, is of extreme importance. For this reason Remote
+Procudure Call (RPC) frameworks are often employed. gRPC is an open source
+Remote Procedure Call (RPC) framework enabling services to transparently
+communicate over the HTTP/2 protocol. The advantage that HTTP/2 provides over
+HTTP/1 is a constant TCP connection between endpoints enabling communication to
+happen through streams. This mitigates the overhead of creating a TCP
+connection for each and every request, furthermore allowing for multiplexing
+the streams providing parallelism of requests over a single connection and thus
+the potential of reduced network latency.</p>
+
+<p>Whilst gRPC alone can be used to reliably transmit data across the wire it is
+only part of the parcel. Akin to JSON, that is typically used to package
+messages to and from an API, the serialisation solution offered by gRPC is that
+of protocol buffers. I have covered protocol buffers in a <a href="/development/protocol-buffers-and-optional-values">previous
+post</a> but
+what they offer in a word is structure.</p>
+
+<p>Although building a JSON API is simple, there is an inherent risk of
+breaking service consumers due to its lack of rigid structure. You can achieve
+a variance of structure using a format such as OpenAPI, but it’s not a guarantee.</p>
+
+<p>Protocol buffers promise a certain structure that will be sent without
+exception.</p>
+
+<p>Overall, we’re in the business to deliver value to our customers, not discuss
+which JSON standard to use. JSON-API? HAL? Hypermedia at all (shivers)? We just
+want to ship. gRPC lets us do that easily.</p>
+
+<h3 id="consistent-network-transport">Consistent Network Transport</h3>
+
+<p>A service mesh provides a language agnostic platform to automate network functions.
+<a href="https://www.envoyproxy.io/">envoy proxy</a></p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-featured">
+    <a class="link" href="/tag/featured" title="Go to featured" aria-label="Go to featured">featured</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-docker">
+    <a class="link" href="/tag/docker" title="Go to docker" aria-label="Go to docker">docker</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-grpc">
+    <a class="link" href="/tag/grpc" title="Go to grpc" aria-label="Go to grpc">grpc</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-kubernetes">
+    <a class="link" href="/tag/kubernetes" title="Go to kubernetes" aria-label="Go to kubernetes">kubernetes</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-microservices">
+    <a class="link" href="/tag/microservices" title="Go to microservices" aria-label="Go to microservices">microservices</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-protobuf">
+    <a class="link" href="/tag/protobuf" title="Go to protobuf" aria-label="Go to protobuf">protobuf</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

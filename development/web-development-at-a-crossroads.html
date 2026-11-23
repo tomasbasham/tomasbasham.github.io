@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Web Development at a Crossroads: Returning to Fundamentals | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Web Development at a Crossroads: Returning to Fundamentals" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="The first in a series arguing that web development has drifted from the fundamentals that made the web work, and proposing a way back." />
+<meta property="og:description" content="The first in a series arguing that web development has drifted from the fundamentals that made the web work, and proposing a way back." />
+<link rel="canonical" href="https://tomasbasham.dev/development/web-development-at-a-crossroads" />
+<meta property="og:url" content="https://tomasbasham.dev/development/web-development-at-a-crossroads" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-01T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Web Development at a Crossroads: Returning to Fundamentals" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2025-05-01T00:00:00+01:00","datePublished":"2025-05-01T00:00:00+01:00","description":"The first in a series arguing that web development has drifted from the fundamentals that made the web work, and proposing a way back.","headline":"Web Development at a Crossroads: Returning to Fundamentals","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/web-development-at-a-crossroads"},"url":"https://tomasbasham.dev/development/web-development-at-a-crossroads"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Web Development at a Crossroads: Returning to Fundamentals</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2025-05-01T00:00:00+01:00">01 May 2025</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 4 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+  
+  
+    
+    <details class="series-nav">
+      <summary class="series-nav-summary">
+        <span class="series-nav-title" id="series-nav-title">In this Series</span>
+        <span class="series-nav-position">Part 1 of 5</span>
+      </summary>
+      <nav aria-labelledby="series-nav-title">
+        <ol class="series-nav-list">
+          
+            
+            <li class="series-nav-item series-nav-current" aria-current="page"><strong>Web Development at a Crossroads: Returning to Fundamentals</strong></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/development/hypertext-and-html">HyperText and HTML: Why SPAs Are Dead</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/development/the-css-conundrum">The CSS Conundrum: Why Utility Classes Are Not The Answer</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/development/progressive-enhancement-in-the-modern-web">Progressive Enhancement in the Modern Web: Building Resilient Applications</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/career/building-truly-cross-functional-teams">Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide</a></li>
+            
+          
+        </ol>
+      </nav>
+    </details>
+  
+
+
+      <p>I’ve spent the last few years watching the pendulum swing from server-rendered
+sites to JavaScript-heavy client applications, and I think we’ve gone too far.
+Not because JavaScript is bad, or because single-page applications are never the
+right tool, but because we’ve made them the default for problems they were
+never suited to, and in doing so we’ve built an industry around solving problems
+of our own making.</p>
+
+<p>This is the first in a short series setting out where I think things went wrong
+and what I’d do differently. The topics, roughly in order:</p>
+
+<ul>
+  <li>how the assumption that everything belongs on the client has produced
+needless complexity</li>
+  <li>why hypertext — plain old links and forms — still solves most of what people
+reach for a framework to solve</li>
+  <li>why utility-first CSS trades one set of real problems for another, worse set</li>
+  <li>why progressive enhancement, unfashionable as it’s become, is still the right
+default</li>
+  <li>how all of this bears on team structure, and the frontend/backend split in
+particular</li>
+</ul>
+
+<p>None of this is a case for throwing out modern tooling. Some of it is genuinely
+good. It’s a case for being honest about what problems we’re actually solving
+when we reach for it.</p>
+
+<h2 id="the-cost-nobody-adds-up">The cost nobody adds up</h2>
+
+<p>Most websites don’t need the JavaScript they’re shipping. I don’t mean this as
+a provocation — I mean it as an observation anyone can check by opening the
+network tab on a content site, a dashboard, or a CRUD application and counting
+the megabytes spent re-implementing things the browser already does for free:
+navigation, form submission, caching. Bundle size is the most visible cost, but
+not the worst one. Build pipelines that take minutes to iterate against, test
+suites that have to mock a DOM to run, accessibility bugs that wouldn’t exist
+if the markup were doing the job markup is for — these are the ongoing costs,
+paid by every developer who touches the codebase after the framework decision
+was made.</p>
+
+<p>None of this was unreasonable when it started. Browsers genuinely were
+inconsistent, interactivity genuinely was hard to bolt onto static pages, and
+component models genuinely solved a real organisational problem: how do you let
+many people work on one UI without stepping on each other. The problem is that
+the industry kept the solution long after a large fraction of the sites built
+with it stopped needing what it was solving for.</p>
+
+<h2 id="the-frontendbackend-split">The frontend/backend split</h2>
+
+<p>The clearest organisational symptom of this is the hardening of “frontend” and
+“backend” into separate disciplines, separate teams, and often separate
+reporting lines. This wasn’t always how the web was built, and I don’t think
+it’s how most of it should be built now.</p>
+
+<p>The split isn’t free. It creates a contract — usually a JSON API — that has to
+be negotiated, documented, and renegotiated every time requirements change, and
+every renegotiation is a meeting that wouldn’t have been necessary if one
+person could see the whole path from request to rendered page. It also
+encourages two different teams to optimise for two different things: visual
+polish on one side, system correctness on the other, both legitimate, both
+avoidably in tension when there’s an API boundary enforcing the separation.</p>
+
+<p>I’ll come back to this properly in the last article in this series, because I
+think it’s a consequence of the technical choices more than a cause of them.</p>
+
+<h2 id="hypertext-didnt-go-anywhere">Hypertext didn’t go anywhere</h2>
+
+<p>The thing I keep returning to is that the web’s original idea — documents
+linked to other documents, forms that submit to a server which sends back more
+document — never stopped working. It just stopped being fashionable. Libraries
+like HTMX are interesting precisely because they don’t try to replace this idea
+with something else; they extend it, letting an element trigger a request and
+swap in the response, which is what a browser already does when you click a
+link, just with a bit more control over the target.</p>
+
+<p>I’ll go through what that looks like concretely in the next article.</p>
+
+<h2 id="styling-and-markup-dont-have-to-live-in-the-same-place">Styling and markup don’t have to live in the same place</h2>
+
+<p>The other trend worth naming here, which I’ll cover separately, is co-locating
+HTML, CSS and JavaScript in the name of “component” ergonomics. It solves a
+real discoverability problem — where is the style for this thing — at the cost
+of a worse one: styles that can no longer be changed in one place, because
+they’re no longer in one place. I don’t think that trade is usually worth it,
+and I’ll explain why when I get to CSS specifically.</p>
+
+<p>That’s the shape of what’s coming. The next article starts with hypertext,
+since it’s the foundation the rest of the argument rests on.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-web">
+    <a class="link" href="/tag/web" title="Go to web" aria-label="Go to web">web</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-htmx">
+    <a class="link" href="/tag/htmx" title="Go to htmx" aria-label="Go to htmx">htmx</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-fundamentals">
+    <a class="link" href="/tag/fundamentals" title="Go to fundamentals" aria-label="Go to fundamentals">fundamentals</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

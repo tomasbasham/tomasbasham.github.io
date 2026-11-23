@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>AI-Generated Code Doesn't Change What Good Delivery Looks Like | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="AI-Generated Code Doesn’t Change What Good Delivery Looks Like" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="If implementations are about to become disposable, the thing that has to absorb the churn is the platform underneath them — and most platforms aren’t built for that yet." />
+<meta property="og:description" content="If implementations are about to become disposable, the thing that has to absorb the churn is the platform underneath them — and most platforms aren’t built for that yet." />
+<link rel="canonical" href="https://tomasbasham.dev/career/the-platform-is-the-point" />
+<meta property="og:url" content="https://tomasbasham.dev/career/the-platform-is-the-point" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-05-15T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="AI-Generated Code Doesn’t Change What Good Delivery Looks Like" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2026-05-15T00:00:00+01:00","datePublished":"2026-05-15T00:00:00+01:00","description":"If implementations are about to become disposable, the thing that has to absorb the churn is the platform underneath them — and most platforms aren’t built for that yet.","headline":"AI-Generated Code Doesn’t Change What Good Delivery Looks Like","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/career/the-platform-is-the-point"},"url":"https://tomasbasham.dev/career/the-platform-is-the-point"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">AI-Generated Code Doesn't Change What Good Delivery Looks Like</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2026-05-15T00:00:00+01:00">15 May 2026</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 4 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+
+      <p>There’s an idea doing the rounds that because AI can generate code faster
+than any team, the bottleneck in software delivery has moved: code is now
+cheap, even disposable, and the real constraint is understanding, evaluating
+and governing it. I think that’s largely correct, but it carries an
+assumption worth pulling apart: that the infrastructure underneath the
+software can absorb whatever gets thrown at it. It can’t, not without
+deliberate design, and the people who’ll feel that first aren’t developers —
+it’s whoever is responsible for keeping things running while the velocity of
+change accelerates around them.</p>
+
+<h2 id="code-as-something-you-throw-away">Code as something you throw away</h2>
+
+<p>Chad Fowler’s <a href="https://chadfowler.com/regenerative-software/3mb526js42k26/">Phoenix Architecture</a>
+series makes the case that the durable part of a system isn’t its
+implementation, it’s the evaluations that define correctness: the
+interfaces, the behavioural contracts, the tests that would still hold if
+the whole thing were rewritten in a different language. Code, on this view,
+is closer to cache than to capital — a materialised view of intent that’s
+fine to discard and regenerate, provided the intent itself is written down
+somewhere that survives the rewrite.</p>
+
+<p>None of this is actually new. Experienced engineers have always known that
+the most expensive code is the code you keep, and rewrites have always been
+underrated relative to their reputation. What’s new is the pace this cycle
+can now turn at, and the volume it can produce while turning.</p>
+
+<h2 id="where-the-strain-actually-lands">Where the strain actually lands</h2>
+
+<p>When the rate of change goes up, something has to absorb it, and that
+something is the deployment target — the platform, the infrastructure that
+accepts artefacts and runs them. On a fleet of hand-provisioned servers,
+each with its own accumulated quirks and institutional knowledge, every
+deployment is a small negotiation with the specific machine it’s landing on.
+That friction has historically been self-limiting: snowflakes accumulate,
+runbooks grow, and the rate of change slows to match what the platform can
+actually absorb.</p>
+
+<p>Generative AI doesn’t reduce that friction. It bypasses it at the
+application layer while leaving it completely intact underneath, which
+widens the gap between how fast software can be produced and how safely it
+can be deployed. Platform teams end up facing more deployments, more varied
+workloads, less consistent artefact quality, and more pressure to move
+quickly, without any corresponding change to the infrastructure complexity
+they’re managing. Historically, what gives first under that pressure is
+operational discipline.</p>
+
+<h2 id="the-infrastructure-for-this-already-exists">The infrastructure for this already exists</h2>
+
+<p>The useful part is that the industry has spent over a decade building the
+answer to this, for entirely unrelated reasons: scale, reliability, cost,
+and the general desire to stop treating infrastructure like a collection of
+pets. The underlying idea was to make the unit of deployment portable and
+self-describing, so the artefact stops depending on the specifics of the
+machine it runs on.</p>
+
+<p>Containers are that idea, implemented. They changed operations less because
+process isolation was technically novel — it wasn’t — and more because they
+changed the contract between development and operations: a container image
+is a promise that running it will produce the described behaviour, on any
+machine that honours the contract. That’s precisely the property
+regenerative software needs. If implementations are going to be thrown away
+and regenerated at pace, the deployment target needs to be indifferent to
+exactly what it’s running — whether a given version was written by a person,
+generated by a model, or some mixture of both.</p>
+
+<p>Kubernetes is the same idea at orchestration scale. Strip away the
+operational complexity around it and what’s left is a system for expressing
+desired state and continuously reconciling reality against it: three
+replicas, this much memory and CPU, reachable at this address, replaced
+automatically if unhealthy. That reconciliation loop doesn’t care how the
+new version was produced — rolling out a hand-crafted release and rolling
+out one generated overnight are the same operation to the scheduler. Teams
+running mature Kubernetes platforms are, as a direct consequence,
+structurally ready for AI-accelerated delivery in a way that teams without
+one aren’t: the primitives built to absorb human-authored churn are the same
+primitives that absorb AI-authored churn.</p>
+
+<h2 id="the-seam-needs-more-discipline-not-less">The seam needs more discipline, not less</h2>
+
+<p>The corollary Fowler’s argument doesn’t quite spell out is that the seam
+between disposable code and durable platform needs more care than either
+side individually — the health checks, resource declarations, shutdown
+behaviour, privilege model and image construction that make up the
+container contract. In human-authored software, violations of that contract
+accumulate slowly enough that a team notices during an incident and fixes
+it; the feedback loop is long but it works. Under AI-accelerated delivery,
+the volume crossing that seam goes up enough that violations stop
+accumulating slowly and start arriving in batches.</p>
+
+<p>Which means the right response to AI-driven velocity isn’t to relax
+platform discipline, it’s to enforce it earlier and more systematically —
+not as a gate that slows delivery, but as the contract that makes the
+platform’s indifference to what it’s running sustainable in the first
+place.</p>
+
+<h2 id="the-point">The point</h2>
+
+<p>The teams that come through this well won’t be the ones generating the most
+code. They’ll be the ones who already invested in a deployment target
+capable of accepting, validating and running whatever gets generated,
+quickly and repeatedly. That investment predates AI by a decade and was made
+for entirely different reasons — scale, reliability, cost. AI hasn’t created
+the need for it. It’s just made ignoring it considerably more expensive.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-teams">
+    <a class="link" href="/tag/teams" title="Go to teams" aria-label="Go to teams">teams</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-delivery">
+    <a class="link" href="/tag/delivery" title="Go to delivery" aria-label="Go to delivery">delivery</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-ai-assisted-development">
+    <a class="link" href="/tag/ai-assisted-development" title="Go to ai-assisted-development" aria-label="Go to ai-assisted-development">ai-assisted-development</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

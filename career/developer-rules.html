@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Developer Rules | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Developer Rules" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="3 golden rules for object-oriented development." />
+<meta property="og:description" content="3 golden rules for object-oriented development." />
+<link rel="canonical" href="https://tomasbasham.dev/career/developer-rules" />
+<meta property="og:url" content="https://tomasbasham.dev/career/developer-rules" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:image" content="https://cdn.tomasbasham.dev/covers/aladdin-3-wishes.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-09-25T00:00:00+01:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://cdn.tomasbasham.dev/covers/aladdin-3-wishes.jpg" />
+<meta property="twitter:title" content="Developer Rules" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2015-09-25T00:00:00+01:00","datePublished":"2015-09-25T00:00:00+01:00","description":"3 golden rules for object-oriented development.","headline":"Developer Rules","image":"https://cdn.tomasbasham.dev/covers/aladdin-3-wishes.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/career/developer-rules"},"url":"https://tomasbasham.dev/career/developer-rules"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav navbar-overlay site-nav--hero"
+  x-data="siteNav" x-cloak
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="article-image">
+      <div class="post-image-image" style="background-image: url(https://cdn.tomasbasham.dev/covers/aladdin-3-wishes.jpg)">
+        Article Image
+      </div>
+      <div class="post-meta">
+        <h1 class="post-title">Developer Rules</h1>
+        <div class="cleafix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2015-09-25 00:00">25 Sep 2015</time>
+        </div>
+        <div class="post-reading">
+          <span class="post-reading-time">About 2 min read</span>
+        </div>
+        <div style="text-align:center">
+          <a href="#topofpage" class="topofpage"><i class="fa fa-angle-down"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <a name="topofpage"></a>
+      
+
+
+      <p>I have been working on a fairly large Ruby on Rails application for about a year
+now and have noticed a decline in the readability of the code base as the
+application has become more complex and exacerbated, with small hacks to attempt
+to solve problems. After all, this is supposed to be an agile development team,
+right? As of late the project team and I have decided to take a small pivot in
+our business model and whilst the application will still meet the requirements
+of the project, it has become obvious that there are many features that are no
+longer required and adding bloat. To prevent this bloat from occurring in future
+we have devised the “Golden Rules” to ensure our application controllers and
+models are not overcrowded with code that could really be elsewhere.</p>
+
+<h3 id="the-rules">The Rules</h3>
+
+<p>Here are the rules:</p>
+
+<ol>
+  <li>Classes can be no longer than one hundred lines of code. This includes tests,</li>
+  <li>Methods can be no longer than five lines of code,</li>
+  <li>Methods can have an arity no larger than 4.</li>
+</ol>
+
+<p>Under no circumstance can these rules be broken, or all hell will break loose.</p>
+
+<h3 id="the-tools">The Tools</h3>
+
+<p>Fortunately using Ruby we have been blessed with
+<a href="https://github.com/bbatsov/rubocop">RuboCop</a>, “A Ruby static code analyzer,
+based on the community Ruby style guide”. Just like other linting tools RuboCop
+allows us to define our “Golden Rules” in a configuration file so it can be
+committed to version control and shared amongst the team. The configuration we
+use is as follows:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">ClassLength</span><span class="pi">:</span>
+  <span class="na">Max</span><span class="pi">:</span> <span class="m">100</span>
+
+<span class="na">Documentation</span><span class="pi">:</span>
+  <span class="na">Enabled</span><span class="pi">:</span> <span class="kc">false</span>
+
+<span class="na">LineLength</span><span class="pi">:</span>
+  <span class="na">Max</span><span class="pi">:</span> <span class="m">120</span>
+
+<span class="na">MethodLength</span><span class="pi">:</span>
+  <span class="na">Max</span><span class="pi">:</span> <span class="m">5</span>
+
+<span class="na">ParameterLists</span><span class="pi">:</span>
+  <span class="na">Max</span><span class="pi">:</span> <span class="m">4</span>
+
+<span class="na">SingleSpaceBeforeFirstArg</span><span class="pi">:</span>
+  <span class="na">Enabled</span><span class="pi">:</span> <span class="kc">false</span>
+
+<span class="na">AllCops</span><span class="pi">:</span>
+  <span class="na">Include</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s1">'</span><span class="s">**/Gemfile'</span>
+  <span class="pi">-</span> <span class="s1">'</span><span class="s">**/Rakefile'</span>
+  <span class="pi">-</span> <span class="s1">'</span><span class="s">**/config.ru'</span>
+  <span class="na">Exclude</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s1">'</span><span class="s">db/schema.rb'</span>
+  <span class="pi">-</span> <span class="s1">'</span><span class="s">db/migrate/*.rb'</span>
+</code></pre></div></div>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-ruby">
+    <a class="link" href="/tag/ruby" title="Go to ruby" aria-label="Go to ruby">ruby</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-oop">
+    <a class="link" href="/tag/oop" title="Go to oop" aria-label="Go to oop">oop</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

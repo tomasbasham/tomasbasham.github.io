@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Writing Efficient Dockerfiles | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Writing Efficient Dockerfiles" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="How to write an efficient Dockerfile for development and production environments." />
+<meta property="og:description" content="How to write an efficient Dockerfile for development and production environments." />
+<link rel="canonical" href="https://tomasbasham.dev/development/writing-efficient-dockerfiles" />
+<meta property="og:url" content="https://tomasbasham.dev/development/writing-efficient-dockerfiles" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-01-29T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Writing Efficient Dockerfiles" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2016-01-29T00:00:00+00:00","datePublished":"2016-01-29T00:00:00+00:00","description":"How to write an efficient Dockerfile for development and production environments.","headline":"Writing Efficient Dockerfiles","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/development/writing-efficient-dockerfiles"},"url":"https://tomasbasham.dev/development/writing-efficient-dockerfiles"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Writing Efficient Dockerfiles</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2016-01-29T00:00:00+00:00">29 Jan 2016</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 7 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+
+      <p>In this article, you will learn the importance of structuring Dockerfiles when
+containerising an application and the pitfalls of doing otherwise.</p>
+
+<p>After reading this article, you will have a basic idea of what Docker is, how it
+can help you, and how it makes application development and deployment more
+streamlined.</p>
+
+<h3 id="what-is-docker">What is Docker?</h3>
+
+<p>Docker is a containerisation platform capable of packaging up an application or
+service alongside all of its dependencies within a complete filesystem. This
+filesystem, typically labelled as a Docker image, guarantees that it will always
+run the same, regardless of the environment it is running on.</p>
+
+<p>Everything the application needs to run is included: code, runtime, system
+libraries and anything else you would install on a server.</p>
+
+<h3 id="how-is-this-different-from-vagrant-or-any-other-virtual-machine">How is this different from Vagrant or any other Virtual Machine?</h3>
+
+<p>You may have heard of Vagrant, VirtualBox or any other virtualisation software
+that also allow you to isolate services. These tools have been very popular in
+the past within the development community but all differ majorly which makes the
+development to deployment process far less efficient.</p>
+
+<p>Unlike Docker, each of the above methods requires that you install an entire
+guest operating system for each isolated instance. This is great if you require
+an operating system that differs from the one on your local machine, or you
+require a different operating system for each instance, but considering most
+services run on a linux platform these days this is an unlikely scenario.</p>
+
+<p>Docker mitigates this by sharing the guest machine’s kernel where isolation is
+provided through cgroups and other linux kernel libraries and techniques. This
+means that you are not required to install an entire operating system for each
+service, potentially saving gigabytes of space.</p>
+
+<h3 id="but-what-does-this-mean-to-me">But what does this mean to me?</h3>
+
+<p>It’s all great that I can save space and have linux handle all the dirty work,
+but what are the practical sides to using Docker? How does Docker help me write
+better software? If you’re looking to improve your productivity and not have to
+worry about maintaining multiple environments or tooling, you’ll appreciate the
+following 5 key benefits Docker offers:</p>
+
+<h3 id="1-accelerate-developer-onboarding">1. Accelerate Developer Onboarding</h3>
+
+<p>Docker prevents the need for new developers having to waste hours setting up
+their environments and manually spinning up VM instance to get production code
+to run locally. This process can take all day or longer, and new developers can
+make mistakes.</p>
+
+<p>With Docker all developers in your team can get your multi-service application
+running on their workstation in an automated, repeatable, and efficient way. You
+just run a few commands, and minutes later it all works.</p>
+
+<h3 id="2-inspire-polyglotism">2. Inspire Polyglotism</h3>
+
+<p>Sometimes relying on the language you know best can put a project at a
+disadvantage, but to switch to something else requires developers set up the new
+technology of choice. Since you can isolate an application in a Docker
+container, it becomes possible to broaden your horizons as a developer by
+experimenting with new languages and frameworks.</p>
+
+<h3 id="3-infrastructure-agnostic">3. Infrastructure Agnostic</h3>
+
+<p>Docker allows you to encapsulate your application in such a way that you can
+easily move it between environments. It will work properly in all environments
+and on all machines capable of running Docker.</p>
+
+<h3 id="4-collaboration-as-a-first-principle">4. Collaboration as a First Principle</h3>
+
+<p>The Docker toolset allows developers and sysadmins to work together towards the
+common goal of deploying an application. You can track of version history and
+image updates across the organisation.</p>
+
+<p>Docker acts as an abstraction. You can share, distribute and manage your
+application within <a href="https://hub.docker.com/">Docker Hub</a>, and members of another
+team can link to or test against your application without having to learn or
+worry about how it works.</p>
+
+<h3 id="5-ship-it-quicker">5. Ship It! Quicker</h3>
+
+<p>Without having to spend time setting up a production server, you already have a
+working environment contained within your Docker image. Every time an image is
+updated it can be very quickly deployed to a production server without any
+hassle. This quick turn around provides increased value to end users.</p>
+
+<p>Docker containers can spin up and down in a matter of seconds making it easy to
+scale up and down applications when resources are required or no longer needed.</p>
+
+<h3 id="what-is-a-dockerfile">What is a Dockerfile?</h3>
+
+<p>To build a Docker image the Docker daemon needs to know the steps required to
+setup the environment under which your application or service will be run. This
+is where the Dockerfile comes in. A Dockerfile is a simple series of
+instructions that tells the Docker daemon what it must do to build your image.
+This includes what base image to use, how to grab and install any dependencies
+and finally how to run the container created from the image.</p>
+
+<h3 id="how-they-work">How they work?</h3>
+
+<p>It is important how the Dockerfile is structured because having steps in the
+wrong order can make the build process inefficient and time consuming. In order
+to understand why this is you need to understand how Docker works.</p>
+
+<p>Think of a Docker image as a git repository. Just like git the Docker image is
+built up from a series of “commits”. Each commit represents changes that have
+happened since the last; such that replaying these commits in the correct order
+will reproduce the exact same Docker image.</p>
+
+<p>Every instruction that is performed in the Dockerfile causes Docker to create a
+new commit. Therefore a Dockerfile that has 10 instructions will produce a image
+that is built up of 10 commits.</p>
+
+<p>If you have ever performed a rebase in git then you’ll understand what happens
+if you were to alter one of these commits. Every commit that follows the changed
+commit will be altered and recomputed (a new hash will be calculated). Think of
+this now in terms of Docker. If you build a Docker image containing a Ruby
+application then it is likely that part of the Dockerfile requires
+<code class="language-plaintext highlighter-rouge">bundle install</code> to be run to fetch the application dependencies. Now during
+development you add another dependency to your Gemfile and rebuild the Docker
+image. Since there has been a change to the Gemfile the step in the Dockerfile
+that runs <code class="language-plaintext highlighter-rouge">bundle install</code> needs to be recomputed. Since the hash for this
+commit has altered then each subsequent commit needs to be recomputed also.</p>
+
+<p>The problem with the above is that if the Gemfile is changed frequently then
+this step, and all that follow it, need to be computed every time the image is
+built. If this step is towards the beginning of the Dockerfile then every step
+will need to be computed. This is incredibly inefficient but can be remedied by
+moving the step further toward the end of the Dockerfile.</p>
+
+<h3 id="how-to-write-them-efficiently">How to write them efficiently</h3>
+
+<p>As we have discovered, the order in which instructions are performed in a
+Dockerfile can incur significant efficiency penalties if not considered.
+Therefore the most efficient way to construct a Dockerfile is to move steps that
+change most often towards the end of the Dockerfile. So steps that are the least
+likely to change go first and those most likely go last. This is not a hard and
+fast rule and should be viewed as a guide.</p>
+
+<p>As an example I have included the Dockerfile I use to build a Ruby on Rails
+application:</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> ruby:2.4.2-alpine</span>
+
+<span class="k">WORKDIR</span><span class="s"> /usr/src/app</span>
+
+<span class="c"># Install necessary software packages</span>
+<span class="k">RUN </span>apk add <span class="nt">--no-cache</span> <span class="se">\
+</span>  g++ <span class="se">\
+</span>  git <span class="se">\
+</span>  libc-dev <span class="se">\
+</span>  libxml2-dev <span class="se">\
+</span>  libxslt-dev <span class="se">\
+</span>  make <span class="se">\
+</span>  postgresql <span class="se">\
+</span>  postgresql-dev <span class="se">\
+</span>  tzdata <span class="se">\
+</span>  <span class="o">&amp;&amp;</span> <span class="nb">rm</span> <span class="nt">-rf</span> /var/cache/apk/<span class="k">*</span>
+
+<span class="c"># Add Gemfile and Gemfile.lock separately so docker can cache</span>
+<span class="k">ADD</span><span class="s"> Gemfile Gemfile</span>
+<span class="k">ADD</span><span class="s"> Gemfile.lock Gemfile.lock</span>
+
+<span class="c"># Install things globally, for great justice</span>
+<span class="k">RUN </span>bundle config build.nokogiri <span class="nt">--use-system-libraries</span>
+<span class="k">RUN </span>bundle <span class="nb">install</span>
+
+<span class="c"># Add remaining rails project to project directory</span>
+<span class="k">ADD</span><span class="s"> . /usr/src/app</span>
+
+<span class="k">ENTRYPOINT</span><span class="s"> ["bundle", "exec"]</span>
+
+<span class="k">CMD</span><span class="s"> ["puma", "-C", "config/puma.rb"]</span>
+</code></pre></div></div>
+
+<h3 id="breaking-that-down">Breaking that Down</h3>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> ruby:2.4.2-alpine</span>
+</code></pre></div></div>
+
+<p>The first instruction define the base image. This will never change and must
+appear first.</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Install necessary software packages</span>
+<span class="k">RUN </span>apk add <span class="nt">--no-cache</span> <span class="se">\
+</span>  g++ <span class="se">\
+</span>  git <span class="se">\
+</span>  libc-dev <span class="se">\
+</span>  libxml2-dev <span class="se">\
+</span>  libxslt-dev <span class="se">\
+</span>  make <span class="se">\
+</span>  postgresql <span class="se">\
+</span>  postgresql-dev <span class="se">\
+</span>  tzdata <span class="se">\
+</span>  <span class="o">&amp;&amp;</span> <span class="nb">rm</span> <span class="nt">-rf</span> /var/cache/apk/<span class="k">*</span>
+</code></pre></div></div>
+
+<p>Following this are some software dependencies gathered by <code class="language-plaintext highlighter-rouge">apk</code>. These very
+rarely change whilst I am developing a Ruby on Rails application.</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Add Gemfile and Gemfile.lock separately so docker can cache</span>
+<span class="k">ADD</span><span class="s"> Gemfile Gemfile</span>
+<span class="k">ADD</span><span class="s"> Gemfile.lock Gemfile.lock</span>
+
+<span class="c"># Install things globally, for great justice</span>
+<span class="k">RUN </span>bundle config build.nokogiri <span class="nt">--use-system-libraries</span>
+<span class="k">RUN </span>bundle <span class="nb">install</span>
+</code></pre></div></div>
+
+<p>Next the Gemfile is added and <code class="language-plaintext highlighter-rouge">bundle install</code> is run. This can change from time
+to time during development and as such has been placed after those steps which
+change less frequently. Now when the Gemfile is changed and the image is built
+each step before <code class="language-plaintext highlighter-rouge">bundle install</code> will be taken from the Docker cache and not
+have to be recomputed.</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Add remaining rails project to project directory</span>
+<span class="k">ADD</span><span class="s"> . /usr/src/app</span>
+</code></pre></div></div>
+
+<p>Last the current working directory (or the project directory) is shared with the
+image. The project code changes very frequently during development and has
+therefore been put last. Now when the image it built only steps that follow this
+a recomputed.</p>
+
+<p>Following this procedure makes our Dockerfiles far more efficient and easier to
+reason with.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-docker">
+    <a class="link" href="/tag/docker" title="Go to docker" aria-label="Go to docker">docker</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

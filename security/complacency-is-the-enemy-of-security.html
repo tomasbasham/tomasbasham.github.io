@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Complacency is the Enemy of Security | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Complacency is the Enemy of Security" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="The organisations that get hurt worst by security failures are rarely the ones that never thought about security — they’re the ones that thought about it once, then stopped." />
+<meta property="og:description" content="The organisations that get hurt worst by security failures are rarely the ones that never thought about security — they’re the ones that thought about it once, then stopped." />
+<link rel="canonical" href="https://tomasbasham.dev/security/complacency-is-the-enemy-of-security" />
+<meta property="og:url" content="https://tomasbasham.dev/security/complacency-is-the-enemy-of-security" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-05-26T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Complacency is the Enemy of Security" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2026-05-26T00:00:00+01:00","datePublished":"2026-05-26T00:00:00+01:00","description":"The organisations that get hurt worst by security failures are rarely the ones that never thought about security — they’re the ones that thought about it once, then stopped.","headline":"Complacency is the Enemy of Security","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/security/complacency-is-the-enemy-of-security"},"url":"https://tomasbasham.dev/security/complacency-is-the-enemy-of-security"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Complacency is the Enemy of Security</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2026-05-26T00:00:00+01:00">26 May 2026</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 4 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+
+      <p>A particular kind of institutional blindness sets in when nothing has gone
+wrong for a while. It isn’t laziness, and it isn’t negligence in any obvious
+sense — it’s the slow, unannounced erosion of urgency that comes from an
+absence of consequences. Security has a name for this: complacency, and I
+think it’s more dangerous than most organisations are willing to admit,
+because it doesn’t look like a decision. It looks like the absence of one.</p>
+
+<h2 id="how-it-actually-sets-in">How it actually sets in</h2>
+
+<p>The organisations that suffer the worst security failures are rarely the
+ones that never thought about security. More often they’re the ones that
+thought about it once, set up reasonable foundations, shipped the product,
+watched it run without incident, and quietly stopped thinking about it. Over
+time, the absence of visible harm gets treated as evidence of safety, which
+it isn’t — it’s only evidence that harm hasn’t happened yet. The same
+pattern shows up well outside software: a driver who’s taken the same route
+for years without incident eases off the margins, a business that’s never
+had a fire stops testing the extinguishers.</p>
+
+<h2 id="what-a-disclosure-is-actually-telling-you">What a disclosure is actually telling you</h2>
+
+<p>Security researchers find holes, report them through whatever disclosure
+process exists, and move on. Most engineering teams treat that report as a
+closed incident: fix shipped, researcher thanked, ticket closed. What gets
+missed is the more useful question underneath it — if someone with the
+skill and the inclination to look found this, what else is sitting there
+unfound? A researcher who discloses responsibly represents a narrow slice of
+the population capable of finding the same class of problem; treating their
+report as the whole story, rather than a sample of it, is usually where the
+complacency becomes visible from the outside.</p>
+
+<h2 id="what-it-looks-like-day-to-day">What it looks like day to day</h2>
+
+<p>It rarely announces itself as a decision to deprioritise security. It looks
+like smaller, more reasonable-sounding things: a hardening task that keeps
+losing to something more urgent every sprint, a credential rotation that
+keeps getting deferred because coordinating it is annoying and nothing’s
+gone wrong yet, service-to-service trust that’s never been tightened because
+nobody’s had the time. None of this is unusual — most engineering
+organisations carry some version of it. The question worth asking isn’t
+whether that debt exists, but whether it’s being treated as inert or as
+compounding. Security debt compounds the same way any other technical debt
+does, except the interest is paid in an incident rather than in slower
+builds.</p>
+
+<h2 id="the-asymmetry-that-makes-this-expensive-to-get-wrong">The asymmetry that makes this expensive to get wrong</h2>
+
+<p>Security has a structural asymmetry that complacent organisations tend not
+to sit with: you have to get it right every time, and an attacker only has
+to get it right once. Your organisation has a roadmap, competing priorities,
+and finite attention; an attacker has one objective and no sprint cycle to
+answer to. That asymmetry means the cost of complacency doesn’t accrue
+smoothly — it accumulates silently and then discharges all at once, at a
+time of the attacker’s choosing rather than yours. Reactive security work,
+done under that kind of pressure, costs considerably more than the same work
+done proactively — in engineering time, in trust, and sometimes in
+regulatory exposure.</p>
+
+<p>This is also what makes security different from most other categories of
+product risk. Defer a performance fix and you see it in response times.
+Defer a UX fix and you see it in conversion. The feedback loop is tight
+enough to self-correct. Security’s feedback loop is either years long or
+instantaneous and severe, with very little in between — which means waiting
+for evidence that the risk is real is, in practice, waiting for the incident
+itself.</p>
+
+<h2 id="what-the-alternative-actually-looks-like">What the alternative actually looks like</h2>
+
+<p>The organisations with the strongest security posture aren’t the ones that
+recovered fastest from a breach — they’re the ones that treated the work as
+continuous and unglamorous, including during the quiet periods when nothing
+was obviously on fire. That’s a harder habit to sustain than it sounds,
+because there’s no natural internal pressure keeping it alive once the
+original incident that prompted the foundations fades from memory. It has to
+be maintained deliberately, as a standing property of how the organisation
+works, rather than revisited only when something forces the question.</p>
+
+<p>The uncomfortable part is that most engineering leaders already know which
+items on their own backlog are this kind of risk — the credential hygiene
+that needs attention, the access that hasn’t been audited in a while. The
+honest question isn’t whether those things carry risk; everyone involved
+already knows they do. It’s whether the organisation treats security as
+something actively maintained, or as a state it’s passively in until proven
+otherwise.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-risk">
+    <a class="link" href="/tag/risk" title="Go to risk" aria-label="Go to risk">risk</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-technical-debt">
+    <a class="link" href="/tag/technical-debt" title="Go to technical-debt" aria-label="Go to technical-debt">technical-debt</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-security-culture">
+    <a class="link" href="/tag/security-culture" title="Go to security-culture" aria-label="Go to security-culture">security-culture</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

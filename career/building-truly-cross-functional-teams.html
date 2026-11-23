@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="The technical arguments earlier in this series point at an organisational one — that the frontend/backend split costs more than it buys once the technical gap it was defending narrows." />
+<meta property="og:description" content="The technical arguments earlier in this series point at an organisational one — that the frontend/backend split costs more than it buys once the technical gap it was defending narrows." />
+<link rel="canonical" href="https://tomasbasham.dev/career/building-truly-cross-functional-teams" />
+<meta property="og:url" content="https://tomasbasham.dev/career/building-truly-cross-functional-teams" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-05T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2025-05-05T00:00:00+01:00","datePublished":"2025-05-05T00:00:00+01:00","description":"The technical arguments earlier in this series point at an organisational one — that the frontend/backend split costs more than it buys once the technical gap it was defending narrows.","headline":"Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/career/building-truly-cross-functional-teams"},"url":"https://tomasbasham.dev/career/building-truly-cross-functional-teams"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2025-05-05T00:00:00+01:00">05 May 2025</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 4 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+  
+  
+    
+    <details class="series-nav">
+      <summary class="series-nav-summary">
+        <span class="series-nav-title" id="series-nav-title">In this Series</span>
+        <span class="series-nav-position">Part 5 of 5</span>
+      </summary>
+      <nav aria-labelledby="series-nav-title">
+        <ol class="series-nav-list">
+          
+            
+            <li class="series-nav-item"><a href="/development/web-development-at-a-crossroads">Web Development at a Crossroads: Returning to Fundamentals</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/development/hypertext-and-html">HyperText and HTML: Why SPAs Are Dead</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/development/the-css-conundrum">The CSS Conundrum: Why Utility Classes Are Not The Answer</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/development/progressive-enhancement-in-the-modern-web">Progressive Enhancement in the Modern Web: Building Resilient Applications</a></li>
+            
+          
+            
+            <li class="series-nav-item series-nav-current" aria-current="page"><strong>Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide</strong></li>
+            
+          
+        </ol>
+      </nav>
+    </details>
+  
+
+
+      <p>The rest of this series has been about technical defaults: client-side
+architecture, utility-first CSS, progressive enhancement. None of those
+choices are made in a vacuum — they both shape and get shaped by how teams
+are organised. This last article is about the organisational side: the
+frontend/backend split, why it hardened into something closer to a
+permanent structure than a practical division of labour, and whether it’s
+still worth what it costs.</p>
+
+<h2 id="why-the-split-happened">Why the split happened</h2>
+
+<p>The split had legitimate origins. Early browsers were inconsistent enough
+that cross-browser CSS and JavaScript were genuinely specialist knowledge.
+Backend systems carried real complexity of their own — databases,
+transactions, business logic. The full stack, in the early days, was large
+enough that very few people could hold all of it well at once. Specialising
+made sense.</p>
+
+<p>What’s changed isn’t that the stack got smaller. It’s that the gap between
+“frontend” and “backend” skill, for most applications, has narrowed
+considerably — partly because the technical choices argued for earlier in
+this series (server-rendered HTML, HTMX instead of a bespoke client
+framework, CSS that doesn’t require a build step to reason about) reduce how
+much there is to specialise in on either side.</p>
+
+<h2 id="what-the-split-actually-costs">What the split actually costs</h2>
+
+<p>A JSON API between two teams is a contract, and every contract has to be
+negotiated, documented, and renegotiated whenever requirements change —
+which, on any live product, is constantly. I’ve sat in meetings discussing
+the shape of an API that would have taken less time to simply build, had one
+person been able to see the whole path from request to rendered page.</p>
+
+<p>The split also sets up two teams to optimise for different things by
+default: a frontend team under pressure to ship visual polish, a backend
+team under pressure to protect data integrity and system reliability. Both
+are legitimate priorities. Split across two teams with two reporting lines
+and two sets of metrics, they stop being complementary and start being
+competing, not because the priorities are actually in conflict, but because
+nobody on either side is accountable for reconciling them.</p>
+
+<p>The subtler cost is what it implies about who’s allowed to know what. Once
+“frontend” and “backend” become job titles rather than areas of emphasis,
+developers are discouraged from learning past the boundary, features can’t
+be shipped end-to-end by one person, and context gets lost every time work
+crosses the line between teams. None of this is because the underlying
+material is actually too hard to learn across — most of software
+engineering’s ideas transfer across the boundary just fine. It’s an
+organisational habit, not a cognitive limit.</p>
+
+<h2 id="what-id-build-instead">What I’d build instead</h2>
+
+<p>A cross-functional team, in the sense I mean it, isn’t a frontend developer
+and a backend developer sat at the same desk. It’s a team that owns features
+end-to-end, where most members have both some depth and some breadth —
+T-shaped, in the usual phrase — and where specialisation, where it exists,
+is contextual rather than a permanent label. The team is organised around a
+business domain, not a technical layer, which matters because it’s domains,
+not layers, that actually change when the product changes.</p>
+
+<p>The technical choices from earlier in this series make this easier to
+sustain, not just philosophically compatible with it. Server-rendered HTML
+with HTMX narrows the actual skill gap between “frontend” and “backend”
+work. CSS without a utility-class compiler step is something any team member
+can safely touch. Progressive enhancement creates a natural layering —
+HTML, then CSS, then JavaScript — that maps cleanly onto how much depth a
+given change actually needs, rather than requiring every change to pass
+through a framework-shaped lens regardless of its size.</p>
+
+<h2 id="the-objections-worth-taking-seriously">The objections worth taking seriously</h2>
+
+<p>The strongest counter-argument is that specialists are more efficient at
+narrowly defined tasks, which is true, but it undercounts the coordination
+cost of getting two specialists’ narrow work to meet in the middle. A
+slightly slower generalist who ships a feature end-to-end is often faster,
+measured from idea to production, than two specialists who are individually
+faster but have to synchronise.</p>
+
+<p>The second objection — that full-stack developers capable of this are rare
+— is real but somewhat self-inflicted. Narrow job descriptions and
+permanently separated teams actively discourage people from building the
+breadth this model needs. Hiring and structuring for it is a longer-term fix
+than hiring around it, but it’s the one that actually closes the gap rather
+than permanently working around it.</p>
+
+<p>The third is that some developers genuinely prefer to specialise, which I
+don’t think this model denies anyone. A CSS specialist on a cross-functional
+team is still a specialist; the difference is that their work stays
+connected to the rest of the feature because the team, not an API boundary,
+is the unit of ownership.</p>
+
+<h2 id="where-this-series-lands">Where this series lands</h2>
+
+<p>Across these five articles the thread has been the same: start from the
+primitive that already solves the problem — HTML, HTTP, the cascade — and
+add complexity only where it’s actually earned. Technically, that means
+favouring hypertext over bespoke client architecture, favouring the cascade
+over utility classes, and favouring progressive enhancement over
+JavaScript-first defaults. Organisationally, it means the frontend/backend
+split is worth questioning for the same reason: it was the right answer to a
+technical gap that, for a lot of applications, no longer exists at the size
+it used to.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-teams">
+    <a class="link" href="/tag/teams" title="Go to teams" aria-label="Go to teams">teams</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-cross-functional">
+    <a class="link" href="/tag/cross-functional" title="Go to cross-functional" aria-label="Go to cross-functional">cross-functional</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

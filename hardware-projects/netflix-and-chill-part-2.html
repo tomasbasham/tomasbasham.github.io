@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Netflix and Chill — Part 2 | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Netflix and Chill — Part 2" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Building your own Netflix and chill button tutorial series continuing with the code." />
+<meta property="og:description" content="Building your own Netflix and chill button tutorial series continuing with the code." />
+<link rel="canonical" href="https://tomasbasham.dev/hardware-projects/netflix-and-chill-part-2" />
+<meta property="og:url" content="https://tomasbasham.dev/hardware-projects/netflix-and-chill-part-2" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-05-15T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Netflix and Chill — Part 2" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2016-05-15T00:00:00+01:00","datePublished":"2016-05-15T00:00:00+01:00","description":"Building your own Netflix and chill button tutorial series continuing with the code.","headline":"Netflix and Chill — Part 2","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/hardware-projects/netflix-and-chill-part-2"},"url":"https://tomasbasham.dev/hardware-projects/netflix-and-chill-part-2"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Netflix and Chill — Part 2</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2016-05-15T00:00:00+01:00">15 May 2016</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 5 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+  
+  
+    
+    <details class="series-nav">
+      <summary class="series-nav-summary">
+        <span class="series-nav-title" id="series-nav-title">In this Series</span>
+        <span class="series-nav-position">Part 2 of 3</span>
+      </summary>
+      <nav aria-labelledby="series-nav-title">
+        <ol class="series-nav-list">
+          
+            
+            <li class="series-nav-item"><a href="/hardware-projects/netflix-and-chill">Netflix and Chill</a></li>
+            
+          
+            
+            <li class="series-nav-item series-nav-current" aria-current="page"><strong>Netflix and Chill — Part 2</strong></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/hardware-projects/netflix-and-chill-part-3">Netflix and Chill — Part 3</a></li>
+            
+          
+        </ol>
+      </nav>
+    </details>
+  
+
+
+      <p>We finished <a href="/hardware-projects/netflix-and-chill">last time</a>
+with a complete electronics prototype of our Netflix switch. Next we must
+implement the code to make this a working system.</p>
+
+<p>By now we know what hardware we have available to us, but what are we actually
+trying to achieve? The goal for the original switch from Netflix was to turn on
+the TV and perhaps launch the Netflix app (if you have a compatible TV); perform
+a little light show using the LEDs we hooked up previously; and send messages to
+another internet enabled device. This other device could be used to extend the
+functionality of the switch; making API calls or performing some home
+automation.</p>
+
+<h3 id="code">Code</h3>
+
+<p>I have hosted the code as a 3 part
+<a href="https://gist.github.com/tomasbasham/660c84c97bda9d8acb116062c2f56ae2">gist</a>.
+The main file is
+<a href="https://gist.github.com/tomasbasham/660c84c97bda9d8acb116062c2f56ae2#file-netflix-ino">Netflix.ino</a>
+and orchestrates the hardware we have already hooked up. The other 2 files
+implement a simple class that will generate a carrier wave from the Infrared LED
+enabling it to be used as a remote control. The specific carrier wave will be
+unique to the TV you have and needs to be known before compiling the
+application.</p>
+
+<h3 id="ir-carrier-wave">IR Carrier Wave</h3>
+
+<p>For the switch to work with your brand of TV you must first know the encoded
+signal to turn it on and off. This signal is just a series of pules emitted from
+the IR LED that we can represent as an array of timing information (how long to
+turn the IR LED on, how long to turn it off, how long to turn it on, etc…).</p>
+
+<p>There is a great <a href="https://github.com/z3t0/Arduino-IRremote">library</a> that can
+capture this information for us written by Ken Shirriff. Specifically you want
+to be looking at
+<a href="https://github.com/z3t0/Arduino-IRremote/blob/master/examples/IRrecvDumpV2/IRrecvDumpV2.ino">this file</a>
+but you will need to download and extract the entire library for this to work.</p>
+
+<p>You will need to run this on a separate Arduino hooked up to an IR receiver.
+This is fairly simple to do requiring very little setup. More information on
+this can be found on
+<a href="https://learn.sparkfun.com/tutorials/ir-communication">sparkfun</a>. Once you have
+your raw signal, the output should be assigned to the <code class="language-plaintext highlighter-rouge">data</code> array within
+<a href="https://gist.github.com/tomasbasham/660c84c97bda9d8acb116062c2f56ae2#file-netflix-ino-L45">Netflix.ino</a>.</p>
+
+<h3 id="messaging-queue">Messaging Queue</h3>
+
+<p>As an optional part of this project I have setup a remote messaging queue on
+<a href="https://dashboard.heroku.com/apps">Heroku</a> that I use to dispatch events when
+the switch is activated. This allows any arbitrary code to listen and react to
+these events and perform further actions.</p>
+
+<p>The Particle SDK does already provide a cloud based service that can be used to
+publish events to any listening subscribers. However this requires the
+subscribers to be using the Particle library and tightly couples any application
+to the Particle ecosystem.</p>
+
+<p>I prefer to avoid unnecessary coupling where I can and instead recommend setting
+up a RabbitMQ instance on Heroku. If you too are planning on implementing this
+feature, you’ll need to update the username and password sections of
+<a href="https://gist.github.com/tomasbasham/660c84c97bda9d8acb116062c2f56ae2#file-netflix-ino-L33-34">Netflix.ino</a>.</p>
+
+<p>Any subscribers now need to listen on the <code class="language-plaintext highlighter-rouge">home/netflix</code> topic of the RabbitMQ
+server and can perform any action you want. I intend on writing a touchscreen
+GUI application for the Raspberry Pi that will order me Dominos Pizzas when I’m
+watching a movie. But you can create whatever you want.</p>
+
+<h3 id="particle-build">Particle Build</h3>
+
+<p>Particle supply an <a href="https://build.particle.io">online IDE</a> from where you can
+compile and upload your sketches to your Particle Photon board. It is pretty
+basic, but that is all it needs to be.</p>
+
+<p>Here you can copy across the code into 3 separate files, named exactly as they
+are within the gist.</p>
+
+<p>If you followed along with the messaging queue section of this article you will
+want to include the MQTT library in your sketch using the libraries tool. If you
+do not intend on implementing this particular feature you will want to comment
+out anything relating to it otherwise the code will not compile.</p>
+
+<p>When you have verified and uploaded the code to your Photon it should work just
+as mine in this video:</p>
+
+<figure class="container container-media">
+  <iframe src="//www.youtube.com/embed/z3rXOa8zIs0?rel=0" width="743" height="640" allowfullscreen="" scrolling="no" referrerpolicy="strict-origin"></iframe>
+  <figcaption>Netflix Switch in action</figcaption>
+</figure>
+
+<h3 id="future-work">Future Work</h3>
+
+<p>From my time spent working with the Particle Photon I have noticed a lack of
+simplicity when working with the hardware timers available on the board. These
+timers would enable me to afford the multithreading support I intended to
+generate the Infrared carrier wave. Consequently I have been looking for an
+alternative WiFi enabled microprocessor.</p>
+
+<h3 id="redbearlab-wifi-mini">RedBearLab WiFi Mini</h3>
+
+<p>The RedBearLab WiFi Mini is the most affordable WiFi capable microprocessor
+available at the time of writing that is also compatible with most Arduino
+libraries. It is built with the Texas Instruments CC3200 dual core MCU: an ARM
+Cortex-M4 core running at 80 MHz with a dedicated ARM core for WiFi network
+processing. It also features Over The Air (OTA) download of application firmware
+from other WiFi devices or the Internet, enabling similar firmware upgrades as
+the Particle Photon.</p>
+
+<p>However the RedBearLab WiFi Mini cannot simply replace the Particle Photon. It
+requires its own IDE and some of the lower level features of the board (hardware
+timers) require more advanced C programming, which I will need to work through
+before I commit to working with this board.</p>
+
+<h3 id="timely-library">Timely Library</h3>
+
+<p>The <a href="https://github.com/tomasbasham/Timely">Timely</a> library should go some way
+to make this project possible using the RedBearLab WiFi Mini. Timely is an
+Arduino compatible library capable of controlling the <code class="language-plaintext highlighter-rouge">TIMER</code> registers of both
+AVR and Texas Instrument microprocessors. This is currently still a work in
+progress and I’ll update this article when it is stable.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>You should now have a fully functioning system that can turn on your TV,
+possibly launching the Netflix app if you have a Netflix recommended TV; put on
+a bit of a light show, and optionally dispatch messages to a remote messaging
+queue. In the next article we will finish off our switch by housing it within an
+enclosure and giving it the wow factor.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-raspberry-pi">
+    <a class="link" href="/tag/raspberry-pi" title="Go to raspberry-pi" aria-label="Go to raspberry-pi">raspberry-pi</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-python">
+    <a class="link" href="/tag/python" title="Go to python" aria-label="Go to python">python</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

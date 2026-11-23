@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Kubernetes Networking 2 — Ingress and Egress | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Kubernetes Networking 2 — Ingress and Egress" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Looking further under the hood of networking in Kubernetes." />
+<meta property="og:description" content="Looking further under the hood of networking in Kubernetes." />
+<link rel="canonical" href="https://tomasbasham.dev/operations/kubernetes-networking-2-ingress-and-egress" />
+<meta property="og:url" content="https://tomasbasham.dev/operations/kubernetes-networking-2-ingress-and-egress" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-08-01T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kubernetes Networking 2 — Ingress and Egress" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2017-08-01T00:00:00+01:00","datePublished":"2017-08-01T00:00:00+01:00","description":"Looking further under the hood of networking in Kubernetes.","headline":"Kubernetes Networking 2 — Ingress and Egress","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/operations/kubernetes-networking-2-ingress-and-egress"},"url":"https://tomasbasham.dev/operations/kubernetes-networking-2-ingress-and-egress"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Kubernetes Networking 2 — Ingress and Egress</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2017-08-01T00:00:00+01:00">01 Aug 2017</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 5 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+  
+  
+    
+    <details class="series-nav">
+      <summary class="series-nav-summary">
+        <span class="series-nav-title" id="series-nav-title">In this Series</span>
+        <span class="series-nav-position">Part 2 of 2</span>
+      </summary>
+      <nav aria-labelledby="series-nav-title">
+        <ol class="series-nav-list">
+          
+            
+            <li class="series-nav-item"><a href="/operations/kubernetes-networking">Kubernetes Networking</a></li>
+            
+          
+            
+            <li class="series-nav-item series-nav-current" aria-current="page"><strong>Kubernetes Networking 2 — Ingress and Egress</strong></li>
+            
+          
+        </ol>
+      </nav>
+    </details>
+  
+
+
+      <p>In a <a href="/operations/kubernetes-networking">previous post</a> I wrote
+about the Kubernetes networking model and how it uses <code class="language-plaintext highlighter-rouge">iptables</code> to create a
+Service abstraction allowing for simple service discovery and stable endpoints.
+In this post I want to continue that train of thought and write about how
+Kubernetes manages inbound (Ingress) and outbound (Egress) traffic.</p>
+
+<p>This post focusses on Google Cloud Platform and how it manages traffic,
+therefore not all information discussed will necessarily apply to other cloud
+platforms or network topologies.</p>
+
+<h3 id="the-egress">The Egress</h3>
+
+<p>Accepting forwarded packets via internal IP devices allows LAN nodes to
+communicate with each other; however they still cannot communicate externally to
+the Internet.</p>
+
+<p>To allow LAN nodes with private IP addresses to communicate with external public
+networks requires internal addresses to be translated to addresses of the
+external device (or gateway).</p>
+
+<p>Under the Google Cloud Platform topology each node has its own internal address
+and may be given an external address if necessary. Both the internal and
+external addresses are assigned to the same NIC and managed through a 1:1
+Network Address Translation (NAT).</p>
+
+<p>When a node in a Kubernetes cluster wants to make a request to an external
+public network the 1:1 NAT will take the internal source address and translate
+it to the machines external address. Then when packets are returned the NAT
+reverses the process. There are no surprises here; this is how NAT is supposed
+to work. It is all hidden from the user, but it is a problem for Kubernetes.</p>
+
+<p>Taking this idea further we can explore what happens when a Pod makes a request
+to an external public network. As mentioned in my previous post the Kubernetes
+networking model demands a flattening of the IP address space, allowing any Pod
+on the same cluster to communicate with any other Pod. However the address of
+the Pod is not the address of the node on which it is running. Therefore when it
+sends packets destined for another network the NAT drops them, as it is unable
+to translate an address it does not know.</p>
+
+<p>To solve this issue Kubernetes makes further use of <code class="language-plaintext highlighter-rouge">iptables</code>, configuring IP
+masquerading. When a packet passes through the <code class="language-plaintext highlighter-rouge">iptables</code> rules it has its
+source address altered to the nodes internal address allowing it to now be
+passed through the NAT and sent outbound to the external public network for
+which it was destined. Equally when a packet is returned the <code class="language-plaintext highlighter-rouge">iptables</code> rules
+are able to alter the destination address of the packet to that of the Pod.</p>
+
+<p>By logging onto any one of the nodes in the cluster we are able to see the
+<code class="language-plaintext highlighter-rouge">iptables</code> rules that are responsible for this behaviour.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>iptables-save
+<span class="nt">-A</span> POSTROUTING <span class="o">!</span> <span class="nt">-d</span> 10.0.0.0/8 <span class="nt">-m</span> comment <span class="nt">--comment</span> <span class="s2">"kubenet: SNAT for outbound traffic from cluster"</span> <span class="nt">-m</span> addrtype <span class="o">!</span> <span class="nt">--dst-type</span> LOCAL <span class="nt">-j</span> MASQUERADE
+</code></pre></div></div>
+
+<p>This rule basically states that any packet not destined for any host on the
+<code class="language-plaintext highlighter-rouge">10.0.0.0/8</code> (the default VPC of a Google Cloud Platform project) or
+<code class="language-plaintext highlighter-rouge">127.0.0.0/8</code> network address ranges will be masqueraded.</p>
+
+<h3 id="the-ingress">The Ingress</h3>
+
+<p>Typically a Service defined within a cluster will be given an address that is
+only internally routable. That means only traffic within the same cluster may be
+able to communicate with the Service. When any external traffic destined for the
+cluster reaches the gateway it will likely be dropped.</p>
+
+<p>Instead Kubernetes defines the Ingress resource that provides an abstraction for
+an ingress controller that may provide externally-reachable addresses, load
+balance traffic, terminate SSL, offer name based virtual hosting, and more.
+Below we can see the difference between a Service that is not publicly routable
+and one that is sat behind an Ingress.</p>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/kubernetes-networking/ingress.png" alt="Kubernetes Ingress" /><figcaption>Kubernetes Ingress</figcaption>
+</figure>
+
+<p>The Ingress resource on its own has no effect on the cluster. Instead the
+resource must be satisfied by an ingress controller that is ultimately
+responsible for routing the traffic. This may come in the form of an nginx
+reverse-proxy, HAProxy, or some implementation of a load balancer.</p>
+
+<p>On Google Cloud Platform the default implementation of the ingress controller is
+to provision a Google Cloud Load Balancer (GCLB -
+<a href="https://www.nginx.com/resources/glossary/layer-7-load-balancing/">L7 HTTP load balancer</a>).
+It should be noted that the GCLB ingress controller requires that the Service it
+sits in front of exposes a node port. Therefore I have updated the Service from
+my previous post to use the <code class="language-plaintext highlighter-rouge">NodePort</code> Service type instead of the <code class="language-plaintext highlighter-rouge">ClusterIP</code>
+type.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp get services
+NAME      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+api       NodePort    10.7.241.228   &lt;none&gt;        80:32561/TCP   33d
+</code></pre></div></div>
+
+<p>What this shows is a Service that may be reached within the cluster with the
+address <code class="language-plaintext highlighter-rouge">10.7.241.228:80</code> or externally via the node port <code class="language-plaintext highlighter-rouge">32561</code> using the
+external addresses of one of the nodes.</p>
+
+<p>Now when an Ingress is created it is issued a public IP address that can be used
+to access the Service. To demonstrate this I have created an Ingress to sit in
+front of the Service we’ve been using. The <code class="language-plaintext highlighter-rouge">kubectl</code> command prints out the
+Ingress details.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl <span class="nt">-n</span> myapp get ingress
+NAME      HOSTS     ADDRESS          PORTS     AGE
+api       <span class="k">*</span>         35.190.229.182   80        1d
+
+kubectl <span class="nt">-n</span> myapp describe ingress/api
+Name:             api
+Namespace:        myapp
+Address:          35.190.229.182
+Default backend:  api:80 <span class="o">(</span>10.4.1.14:9000,10.4.2.19:9000<span class="o">)</span>
+Rules:
+  Host  Path  Backends
+  <span class="nt">----</span>  <span class="nt">----</span>  <span class="nt">--------</span>
+  <span class="k">*</span>     <span class="k">*</span>     api:80 <span class="o">(</span>10.4.1.14:9000,10.4.2.19:9000<span class="o">)</span>
+Annotations:
+  forwarding-rule:        k8s-fw-myapp-api--c6a6b5b8b78b3c96
+  target-proxy:           k8s-tp-myapp-api--c6a6b5b8b78b3c96
+  url-map:                k8s-um-myapp-api--c6a6b5b8b78b3c96
+  backends:               <span class="o">{</span><span class="s2">"k8s-be-31444--c6a6b5b8b78b3c96"</span>:<span class="s2">"HEALTHY"</span><span class="o">}</span>
+Events:
+  Type    Reason   Age                 From                     Message
+  <span class="nt">----</span>    <span class="nt">------</span>   <span class="nt">----</span>                <span class="nt">----</span>                     <span class="nt">-------</span>
+  Normal  Service  30s <span class="o">(</span>x149 over 1d<span class="o">)</span>  loadbalancer-controller  default backend <span class="nb">set </span>to api:32561
+</code></pre></div></div>
+
+<p>An Ingress is probably the most powerful way to expose a Service to the wider
+world, especially if exposing multiple Services that all talk the same L7
+protocol. With the GCLB you only pay for a single load balancer, however many
+Services sit behind it.</p>
+
+<h3 id="external-resources">External Resources</h3>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Network_address_translation">Network Address Translation</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Iptables">iptables</a></li>
+  <li><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Kubernetes Ingress</a></li>
+  <li><a href="https://github.com/kubernetes/kubernetes/issues/26508#issuecomment-222376962">NodePort Ingress</a></li>
+</ul>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-docker">
+    <a class="link" href="/tag/docker" title="Go to docker" aria-label="Go to docker">docker</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-iptables">
+    <a class="link" href="/tag/iptables" title="Go to iptables" aria-label="Go to iptables">iptables</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-kubernetes">
+    <a class="link" href="/tag/kubernetes" title="Go to kubernetes" aria-label="Go to kubernetes">kubernetes</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-networking">
+    <a class="link" href="/tag/networking" title="Go to networking" aria-label="Go to networking">networking</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-ingress">
+    <a class="link" href="/tag/ingress" title="Go to ingress" aria-label="Go to ingress">ingress</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

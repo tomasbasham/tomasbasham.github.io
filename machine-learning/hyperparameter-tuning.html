@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Hyperparameter Tuning: Optimising Classifier Performance | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Hyperparameter Tuning: Optimising Classifier Performance" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Investigation into fraud at Enron, concluding with hyperparameter tuning." />
+<meta property="og:description" content="Investigation into fraud at Enron, concluding with hyperparameter tuning." />
+<link rel="canonical" href="https://tomasbasham.dev/machine-learning/hyperparameter-tuning" />
+<meta property="og:url" content="https://tomasbasham.dev/machine-learning/hyperparameter-tuning" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-02-28T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Hyperparameter Tuning: Optimising Classifier Performance" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2019-02-28T00:00:00+00:00","datePublished":"2019-02-28T00:00:00+00:00","description":"Investigation into fraud at Enron, concluding with hyperparameter tuning.","headline":"Hyperparameter Tuning: Optimising Classifier Performance","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/machine-learning/hyperparameter-tuning"},"url":"https://tomasbasham.dev/machine-learning/hyperparameter-tuning"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Hyperparameter Tuning: Optimising Classifier Performance</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2019-02-28T00:00:00+00:00">28 Feb 2019</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 6 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+  
+  
+    
+    <details class="series-nav">
+      <summary class="series-nav-summary">
+        <span class="series-nav-title" id="series-nav-title">In this Series</span>
+        <span class="series-nav-position">Part 13 of 13</span>
+      </summary>
+      <nav aria-labelledby="series-nav-title">
+        <ol class="series-nav-list">
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/identifying-fraud-from-public-enron-data">Identifying Fraud from Public Enron Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/data-cleansing-and-machine-learning">Data Cleansing and Machine Learning</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/dealing-with-incomplete-data">Dealing with Incomplete Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/leaky-data">Leaky Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/removing-outliers-from-source-data">Removing Outliers from Source Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/evaluation-metrics-for-machine-learning">Evaluation Metrics for Machine Learning</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/validation-strategies">Validation Strategies</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/classifier-pre-assessment">Classifier Pre-Assessment</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/building-new-features-from-existig-data">Building New Features from Existing Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/feature-scaling">Feature Scaling</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/selecting-the-right-features">Selecting the Right Features</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/dimensionality-reduction">Dimensionality Reduction</a></li>
+            
+          
+            
+            <li class="series-nav-item series-nav-current" aria-current="page"><strong>Hyperparameter Tuning: Optimising Classifier Performance</strong></li>
+            
+          
+        </ol>
+      </nav>
+    </details>
+  
+
+
+      <p>This closes out the investigation. The previous section left two threads
+unresolved: how many of the engineered features are actually worth keeping, and
+whether the classifiers can be pushed further than their default parameters. Both
+questions turn out to be the same question, since the optimal number of features
+depends on the classifier doing the selecting, and the optimal classifier
+parameters depend on which features it’s given. They need to be tuned together,
+not in sequence.</p>
+
+<p>I’m going to carry forward the two strongest performers from the previous
+sections, Random Forest and AdaBoost, and discard Naive Bayes and SVM. Both were
+comfortably outperformed and neither exposes parameters worth the tuning effort
+here.</p>
+
+<h3 id="choosing-the-number-of-features">Choosing the Number of Features</h3>
+
+<p><code class="language-plaintext highlighter-rouge">RFECV</code> wraps recursive feature elimination with cross-validation, scoring each
+candidate feature count against a chosen metric and settling on whichever count
+performs best. I’m optimising for F1, consistent with every other decision made
+in this project so far.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">RFECV</span>
+<span class="kn">from</span> <span class="n">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">StratifiedShuffleSplit</span>
+
+<span class="n">cv</span> <span class="o">=</span> <span class="nc">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">random_forest_rfecv</span> <span class="o">=</span> <span class="nc">RFECV</span><span class="p">(</span>
+  <span class="n">estimator</span><span class="o">=</span><span class="nc">RandomForestClassifier</span><span class="p">(),</span>
+  <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+  <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+  <span class="n">scoring</span><span class="o">=</span><span class="sh">'</span><span class="s">f1</span><span class="sh">'</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">random_forest_rfecv</span><span class="p">.</span><span class="nf">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="n">random_forest_rfecv</span><span class="p">.</span><span class="n">n_features_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">adaboost_rfecv</span> <span class="o">=</span> <span class="nc">RFECV</span><span class="p">(</span>
+  <span class="n">estimator</span><span class="o">=</span><span class="nc">AdaBoostClassifier</span><span class="p">(),</span>
+  <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+  <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+  <span class="n">scoring</span><span class="o">=</span><span class="sh">'</span><span class="s">f1</span><span class="sh">'</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">adaboost_rfecv</span><span class="p">.</span><span class="nf">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="n">adaboost_rfecv</span><span class="p">.</span><span class="n">n_features_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>11
+</code></pre></div></div>
+
+<p>Neither classifier wants anywhere near the full <code class="language-plaintext highlighter-rouge">extended_features_list</code>. Random
+Forest settles on 7 features, AdaBoost on 11, and the two selections overlap only
+partially — which is consistent with the disagreement in feature importances
+observed previously. This is a reasonable result: each classifier draws its
+decision boundary differently, so there’s no reason to expect them to agree on
+which features matter most, only that each has found the set that matters most
+to it.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">random_forest_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">kept</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">extended_features_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">random_forest_rfecv</span><span class="p">.</span><span class="n">support_</span><span class="p">)</span> <span class="k">if</span> <span class="n">kept</span><span class="p">]</span>
+<span class="n">adaboost_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">kept</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">extended_features_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">adaboost_rfecv</span><span class="p">.</span><span class="n">support_</span><span class="p">)</span> <span class="k">if</span> <span class="n">kept</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="tuning-the-classifiers">Tuning the Classifiers</h3>
+
+<p>With a feature count fixed for each classifier, <code class="language-plaintext highlighter-rouge">GridSearchCV</code> can search the
+hyperparameter space properly. I’m scoring on F1 again, for the same reason as
+above, and using the same cross-validation strategy throughout this project.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+
+<span class="n">random_forest_params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">'</span><span class="s">n_estimators</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+  <span class="sh">'</span><span class="s">criterion</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="sh">'</span><span class="s">gini</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">entropy</span><span class="sh">'</span><span class="p">],</span>
+  <span class="sh">'</span><span class="s">max_depth</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+  <span class="sh">'</span><span class="s">min_samples_split</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">random_forest_grid</span> <span class="o">=</span> <span class="nc">GridSearchCV</span><span class="p">(</span>
+  <span class="nc">RandomForestClassifier</span><span class="p">(),</span>
+  <span class="n">random_forest_params</span><span class="p">,</span>
+  <span class="n">scoring</span><span class="o">=</span><span class="sh">'</span><span class="s">f1</span><span class="sh">'</span><span class="p">,</span>
+  <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">random_forest_grid</span><span class="p">.</span><span class="nf">fit</span><span class="p">(</span><span class="n">features</span><span class="p">[:,</span> <span class="n">random_forest_rfecv</span><span class="p">.</span><span class="n">support_</span><span class="p">],</span> <span class="n">labels</span><span class="p">)</span>
+<span class="n">random_forest_grid</span><span class="p">.</span><span class="n">best_params_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'criterion': 'entropy', 'max_depth': 10, 'min_samples_split': 4, 'n_estimators': 50}
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">adaboost_params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">'</span><span class="s">n_estimators</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span>
+  <span class="sh">'</span><span class="s">learning_rate</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">adaboost_grid</span> <span class="o">=</span> <span class="nc">GridSearchCV</span><span class="p">(</span>
+  <span class="nc">AdaBoostClassifier</span><span class="p">(),</span>
+  <span class="n">adaboost_params</span><span class="p">,</span>
+  <span class="n">scoring</span><span class="o">=</span><span class="sh">'</span><span class="s">f1</span><span class="sh">'</span><span class="p">,</span>
+  <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">adaboost_grid</span><span class="p">.</span><span class="nf">fit</span><span class="p">(</span><span class="n">features</span><span class="p">[:,</span> <span class="n">adaboost_rfecv</span><span class="p">.</span><span class="n">support_</span><span class="p">],</span> <span class="n">labels</span><span class="p">)</span>
+<span class="n">adaboost_grid</span><span class="p">.</span><span class="n">best_params_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'learning_rate': 0.5, 'n_estimators': 100}
+</code></pre></div></div>
+
+<p>Nothing here is surprising on reflection. Entropy edging out gini by a small
+margin is in line with the earlier note that the two criteria rarely differ by
+much. The lower learning rate paired with more estimators for AdaBoost is the
+usual trade: smaller steps, more of them, slightly better generalisation.</p>
+
+<h3 id="results">Results</h3>
+
+<p>Running both tuned classifiers back through <code class="language-plaintext highlighter-rouge">test_classifier</code> with their
+selected feature subsets gives the final comparison for this project.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tuned_random_forest</span> <span class="o">=</span> <span class="nc">RandomForestClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">random_forest_grid</span><span class="p">.</span><span class="n">best_params_</span><span class="p">)</span>
+<span class="n">results</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="sh">'</span><span class="s">Random Forest (tuned)</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="nf">test_classifier</span><span class="p">(</span>
+  <span class="n">tuned_random_forest</span><span class="p">,</span> <span class="n">my_standardised_dataset</span><span class="p">,</span> <span class="p">[</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">]</span> <span class="o">+</span> <span class="n">random_forest_features</span>
+<span class="p">)</span>
+
+<span class="n">tuned_adaboost</span> <span class="o">=</span> <span class="nc">AdaBoostClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">adaboost_grid</span><span class="p">.</span><span class="n">best_params_</span><span class="p">)</span>
+<span class="n">results</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="sh">'</span><span class="s">AdaBoost (tuned)</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="nf">test_classifier</span><span class="p">(</span>
+  <span class="n">tuned_adaboost</span><span class="p">,</span> <span class="n">my_standardised_dataset</span><span class="p">,</span> <span class="p">[</span><span class="sh">'</span><span class="s">poi</span><span class="sh">'</span><span class="p">]</span> <span class="o">+</span> <span class="n">adaboost_features</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RandomForestClassifier(criterion='entropy', max_depth=10, min_samples_split=4,
+            n_estimators=50)
+ Accuracy: 0.88329 Precision: 0.64294 Recall: 0.41400 F1: 0.50362 F2: 0.44588
+ Total predictions: 14000 True positives:  828 False positives:  460 False negatives: 1172 True negatives: 11540
+
+AdaBoostClassifier(learning_rate=0.5, n_estimators=100)
+ Accuracy: 0.87593 Precision: 0.56809 Recall: 0.50750 F1: 0.53610 F2: 0.51846
+ Total predictions: 14000 True positives: 1015 False positives:  771 False negatives:  985 True negatives: 11229
+</code></pre></div></div>
+
+<div class="table-wrapper">
+
+  <table>
+    <thead>
+      <tr>
+        <th> </th>
+        <th>accuracy</th>
+        <th>precision</th>
+        <th>recall</th>
+        <th>f1</th>
+        <th>f2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AdaBoost (tuned)</td>
+        <td>0.88</td>
+        <td>0.57</td>
+        <td>0.51</td>
+        <td>0.54</td>
+        <td>0.52</td>
+      </tr>
+      <tr>
+        <td>Random Forest (tuned)</td>
+        <td>0.88</td>
+        <td>0.64</td>
+        <td>0.41</td>
+        <td>0.50</td>
+        <td>0.45</td>
+      </tr>
+      <tr>
+        <td>AdaBoost (default)</td>
+        <td>0.87</td>
+        <td>0.56</td>
+        <td>0.48</td>
+        <td>0.52</td>
+        <td>0.49</td>
+      </tr>
+      <tr>
+        <td>Random Forest (default)</td>
+        <td>0.88</td>
+        <td>0.69</td>
+        <td>0.31</td>
+        <td>0.42</td>
+        <td>0.34</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>Tuning moved both classifiers in the direction that actually mattered for this
+problem. Random Forest’s recall improved by ten points at a reasonable cost to
+precision; AdaBoost’s recall improved further still and remains the better
+all-round classifier on F1. Neither tuning pass was dramatic, which is itself a
+useful result: it says the earlier feature engineering and scaling work was
+doing most of the heavy lifting, and hyperparameter tuning was only ever going to
+be a final few points of polish, not a substitute for it.</p>
+
+<p>AdaBoost, tuned, with 11 features selected by <code class="language-plaintext highlighter-rouge">RFECV</code>, is the model I would take
+forward: accuracy 0.88, precision 0.57, recall 0.51, comfortably clearing the
+0.3 threshold set at the start of this project on both of the metrics that
+actually matter for identifying a person of interest.</p>
+
+<h3 id="closing-note">Closing Note</h3>
+
+<p>This is the last post in this series. Looking back, the most valuable lessons
+weren’t the individual techniques — cleaning, imputation, scaling, feature
+engineering, selection, tuning — but how much each one depended on the ones
+before it. A classifier tuned against unscaled features would have told me
+nothing useful. A feature selected without cross-validation would have told me
+nothing I could trust. None of these steps work in isolation, and treating them
+as a checklist rather than a pipeline is, I suspect, the most common way this
+kind of project goes wrong.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-enron">
+    <a class="link" href="/tag/enron" title="Go to enron" aria-label="Go to enron">enron</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-statistics">
+    <a class="link" href="/tag/statistics" title="Go to statistics" aria-label="Go to statistics">statistics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-hyperparameter-tuning">
+    <a class="link" href="/tag/hyperparameter-tuning" title="Go to hyperparameter-tuning" aria-label="Go to hyperparameter-tuning">hyperparameter-tuning</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

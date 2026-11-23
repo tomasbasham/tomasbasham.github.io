@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Selecting the Right Features | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+    <link rel="stylesheet" href="/css/katex-KwBvjUzP.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Selecting the Right Features" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Investigation into fraud at Enron, continuing with feature selection" />
+<meta property="og:description" content="Investigation into fraud at Enron, continuing with feature selection" />
+<link rel="canonical" href="https://tomasbasham.dev/machine-learning/selecting-the-right-features" />
+<meta property="og:url" content="https://tomasbasham.dev/machine-learning/selecting-the-right-features" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-29T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Selecting the Right Features" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2019-01-29T00:00:00+00:00","datePublished":"2019-01-29T00:00:00+00:00","description":"Investigation into fraud at Enron, continuing with feature selection","headline":"Selecting the Right Features","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/machine-learning/selecting-the-right-features"},"url":"https://tomasbasham.dev/machine-learning/selecting-the-right-features"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Selecting the Right Features</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2019-01-29T00:00:00+00:00">29 Jan 2019</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 13 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+  
+  
+    
+    <details class="series-nav">
+      <summary class="series-nav-summary">
+        <span class="series-nav-title" id="series-nav-title">In this Series</span>
+        <span class="series-nav-position">Part 11 of 13</span>
+      </summary>
+      <nav aria-labelledby="series-nav-title">
+        <ol class="series-nav-list">
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/identifying-fraud-from-public-enron-data">Identifying Fraud from Public Enron Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/data-cleansing-and-machine-learning">Data Cleansing and Machine Learning</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/dealing-with-incomplete-data">Dealing with Incomplete Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/leaky-data">Leaky Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/removing-outliers-from-source-data">Removing Outliers from Source Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/evaluation-metrics-for-machine-learning">Evaluation Metrics for Machine Learning</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/validation-strategies">Validation Strategies</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/classifier-pre-assessment">Classifier Pre-Assessment</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/building-new-features-from-existig-data">Building New Features from Existing Data</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/feature-scaling">Feature Scaling</a></li>
+            
+          
+            
+            <li class="series-nav-item series-nav-current" aria-current="page"><strong>Selecting the Right Features</strong></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/dimensionality-reduction">Dimensionality Reduction</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/machine-learning/hyperparameter-tuning">Hyperparameter Tuning: Optimising Classifier Performance</a></li>
+            
+          
+        </ol>
+      </nav>
+    </details>
+  
+
+
+      <p>The features in our dataset have a significant influence over the performance of
+the predictive model we are able to create. Broadly speaking, in machine
+learning if you feed garbage into a classifier you should expect only garbage to
+come out. This becomes more important as the number of features in the dataset
+grows. You need not use every available feature when creating a model, therefore
+it is important to discover which features are contributing most to predicting
+the output variable. In our case this is the likelihood an Enron employee is in
+fact a person of interest. This is a very difficult problem which often requires
+a deep understanding of the domain. However it is possible to automatically
+identify a subset of features from the original dataset that are the most
+relevant and useful through a process called feature selection. It is this
+process that may mean the difference between successfully and meaningfully
+modelling the problem and not.</p>
+
+<p>Throughout previous sections it has been accepted that the more data we have the
+better our trained model will be at making predictions. This is generally the
+case but does have a few caveats. For instance, including redundant or partially
+redundant features can be misleading to modelling algorithms. This is especially
+true of linear algorithms such as linear and logistic regression. Furthermore
+irrelevant attributes may contribute to overfitting. Some Decision Tree
+algorithms, including the Random Forest classifier used in this experiment,
+attempt to make splits in feature values. Less relevant features will be split
+on last but may contribute to small amounts of noise, only benefiting the model
+by chance. Overall this could have a large negative impact on model performance
+and accuracy.</p>
+
+<p>We can therefore conclude that the removal of redundant features may benefit the
+performance of a predictive model, lowering the prediction error that would be
+otherwise incurred if using the full dataset. Overall choosing to keep only the
+most relevant features has the following desired effects:</p>
+
+<ul>
+  <li><strong>Reduces Overfitting</strong>: Less redundant data means less opportunity to make
+decisions based on noise.</li>
+  <li><strong>Improves Accuracy</strong>: Less misleading data means modelling accuracy improves.</li>
+  <li><strong>Reduces Training Time</strong>: Less data means that algorithms train faster.</li>
+</ul>
+
+<h3 id="approach-with-caution">Approach with Caution</h3>
+
+<p>Whilst feature selection is a vital part of the machine learning process we must
+be aware of the cost of performing it too early. In reality the choice of
+features may have an impact on the optimal hyperparameter values of our
+predictive model, and those values may also impact the choice of optimal
+features. Therefore we end up in a chicken and egg situation which could be
+solved by considering feature selection as part of the model selection process.
+If not bias may be introduced into our model and result in overfitting.</p>
+
+<p>In addition it would be a mistake to first perform feature selection on the
+entire dataset, then perform model selection, training and validation on the
+selected features. The reason for this is that the validation and testing
+datasets will have also been been used when deciding on the selection of
+features thus introducing bias in the predictive model.</p>
+
+<p>To avoid this situation feature selection must be performed as part of the
+iterative validation process when using such techniques as cross-validation.
+This means that feature selection is performed on the prepared fold right before
+the model is trained. More generally feature selection must be performed on a
+different dataset than that which is used for validation and testing. Moreover
+feature selection must not be performed on the test set, as this will inflate
+estimates of the models’ performance.</p>
+
+<h3 id="feature-importance">Feature Importance</h3>
+
+<p>Bagged Decision Trees like Random Forest and AdaBoost can be used to estimate
+and rank the importance of features in both regression and classification
+problems. We can take advantage of this to get a sense of which features may be
+most important and perform an amount of manual feature selection. The benefit to
+this approach is that each classifier can be given its own crafted subset of
+features. However one drawback is that this technique can only be applied to
+those classifiers that support it. Therefore the Linear Support Vector Machine
+cannot take advantage of this method. However it is still useful nonetheless.</p>
+
+<p>To get a little more context a Bagged Decision Tree is a classifier that fits
+many Decision Trees on a random subset of the original dataset and then takes
+the mean of all their individual predictions, forming a final prediction. Due to
+this each Decision Tree has its own feature importances, which are also averaged
+to create a final set of importances.</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right" columnspacing=""><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><munder><mo>∑</mo><mi>i</mi></munder><mi>i</mi><mi>m</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>s</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><mrow><mo>∣</mo><mi>x</mi><mo>∣</mo></mrow></mfrac></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+f(x) = \frac{\sum_{i}importances(x_i)}{\mid x \mid}
+\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.6757em;vertical-align:-1.0879em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5879em;"><span style="top:-3.5879em;"><span class="pstrut" style="height:3.4397em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4397em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">im</span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.02778em;">or</span><span class="mord mathnormal">t</span><span class="mord mathnormal">an</span><span class="mord mathnormal">ces</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0879em;"><span></span></span></span></span></span></span></span></span></span></span></span>
+
+<p>When the importances are returned from these classifiers they are no longer
+clearly identifiable by name. Instead only the score is returned. Therefore to
+see what these look like I will first define a function to print out the feature
+importances alongside their original names. Luckily the scores are in the same
+order as the features were given to the classifier.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Justify the output of feature importances.
+</span><span class="n">print_importance</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">importance</span><span class="p">:</span> <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">{}:</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">f</span><span class="p">).</span><span class="nf">ljust</span><span class="p">(</span><span class="mi">34</span><span class="p">),</span> <span class="n">importance</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">print_feature_importances</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">features_list</span><span class="p">):</span>
+  <span class="n">feature_name_and_importance</span> <span class="o">=</span> <span class="nf">zip</span><span class="p">(</span><span class="n">features_list</span><span class="p">,</span> <span class="n">clf</span><span class="p">.</span><span class="n">feature_importances_</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">feat</span><span class="p">,</span> <span class="n">importance</span> <span class="ow">in</span> <span class="nf">sorted</span><span class="p">(</span><span class="n">feature_name_and_importance</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="nf">print_importance</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">importance</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now retrieving the feature importances is as simple as accessing the
+<code class="language-plaintext highlighter-rouge">feature_importances_</code> attribute on the trained predictive model as seen below
+with the RandomForestClassifier.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">random_forest_selection</span> <span class="o">=</span> <span class="nc">RandomForestClassifier</span><span class="p">()</span>
+<span class="nf">test_classifier</span><span class="p">(</span><span class="n">random_forest_selection</span><span class="p">,</span> <span class="n">my_standardised_dataset</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">)</span>
+
+<span class="c1"># Print the feature names and importances.
+</span><span class="nf">print_feature_importances</span><span class="p">(</span><span class="n">random_forest_selection</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=None, max_features='auto', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+ Accuracy: 0.88079 Precision: 0.68616 Recall: 0.30500 F1: 0.42229 F2: 0.34312
+ Total predictions: 14000 True positives:  610 False positives:  279 False negatives: 1390 True negatives: 11721
+
+fraction_from_this_person_to_poi:  0.15772587126321302
+from_this_person_to_poi:           0.07913644969485686
+from_poi_to_this_person:           0.07450123046262125
+shared_receipt_with_poi:           0.06905464725199587
+to_messages:                       0.06828217700335208
+exercised_stock_options:           0.06664019639994397
+fraction_from_poi_to_this_person:  0.05883132898850809
+fraction_bonus:                    0.05797301315774215
+bonus:                             0.048260618890688695
+other:                             0.04588831736619155
+deferred_income:                   0.04530660406692018
+fraction_salary:                   0.04512693785651663
+restricted_stock:                  0.03869837751214115
+total_payments:                    0.02862056071515532
+from_messages:                     0.022699320372877748
+salary:                            0.019975283401916417
+fraction_exercised_stock_options:  0.016776764181608478
+total_stock_value:                 0.01650332532685474
+fraction_long_term_incentive:      0.015636726191611848
+long_term_incentive:               0.013637239170273239
+expenses:                          0.010725010725010725
+deferral_payments:                 0.0
+restricted_stock_deferred:         0.0
+loan_advances:                     0.0
+director_fees:                     0.0
+</code></pre></div></div>
+
+<p>It can be seen from the output that the attribute <code class="language-plaintext highlighter-rouge">feature_importances_</code> holds a
+score for each of the features in the dataset representing the estimated
+importance of each feature. The importances are ordered such that those with the
+largest value are considered the most relevant to the classifier whilst those
+towards the bottom are considered of lower relevance and could contribute noise
+to the predictive model.</p>
+
+<p>We can similarly retrieve the feature importances from the AdaBoostClassifier.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">adaboost_selection</span> <span class="o">=</span> <span class="nc">AdaBoostClassifier</span><span class="p">()</span>
+<span class="nf">test_classifier</span><span class="p">(</span><span class="n">adaboost_selection</span><span class="p">,</span> <span class="n">my_standardised_dataset</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">)</span>
+
+<span class="c1"># Print the feature names and importances.
+</span><span class="nf">print_feature_importances</span><span class="p">(</span><span class="n">adaboost_selection</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AdaBoostClassifier(algorithm='SAMME.R', base_estimator=None,
+          learning_rate=1.0, n_estimators=50, random_state=None)
+ Accuracy: 0.87271 Precision: 0.56450 Recall: 0.47700 F1: 0.51707 F2: 0.49226
+ Total predictions: 14000 True positives:  954 False positives:  736 False negatives: 1046 True negatives: 11264
+
+from_this_person_to_poi:           0.14
+shared_receipt_with_poi:           0.1
+fraction_from_poi_to_this_person:  0.1
+fraction_from_this_person_to_poi:  0.1
+expenses:                          0.08
+fraction_salary:                   0.08
+other:                             0.06
+fraction_long_term_incentive:      0.06
+deferral_payments:                 0.04
+bonus:                             0.04
+total_stock_value:                 0.04
+salary:                            0.02
+to_messages:                       0.02
+total_payments:                    0.02
+exercised_stock_options:           0.02
+deferred_income:                   0.02
+long_term_incentive:               0.02
+from_poi_to_this_person:           0.02
+fraction_bonus:                    0.02
+restricted_stock:                  0.0
+restricted_stock_deferred:         0.0
+loan_advances:                     0.0
+from_messages:                     0.0
+director_fees:                     0.0
+fraction_exercised_stock_options:  0.0
+</code></pre></div></div>
+
+<p>It is rather interesting to compare the feature importances of both the
+RandomForestClassifer and the AdaBoostClassifier. It is clear from the results
+that both classifiers do not agree on the 10 most important features despite
+each classifier having arguably equal accuracy thus far. This is further
+indication that accuracy is not a great metric in this experiment.
+However what is clear is that both classifiers regard several of the engineered
+features more important than many of the original features in dataset. This
+would suggest that these features in fact describe a trend in the data posing a
+strong correlation to the output variable.</p>
+
+<p>There would be little point to investigate further whether only using the top
+<code class="language-plaintext highlighter-rouge">n</code> features has any impact on the performance of the predictive model since
+there is likely a co-dependency on the classifier hyperparameters which will be
+investigated in a later section. For now it is enough to know how wildly
+different the importances are for each classifier with their respective default
+options.</p>
+
+<h3 id="univariate-feature-selection">Univariate Feature Selection</h3>
+
+<p>Univariate feature selection works by selecting the most relevant features as
+reported by some univariate statistical function. That is when univariate
+feature selection is applied each feature is assigned a score indicating the
+strength of its relationship with the output variable. One of the most valuable
+properties of univariate feature selection is that it is independent of any one
+implementation of classifier, unlike feature importances which only work with a
+select few modelling implementations.</p>
+
+<p>We can use
+<a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest"><code class="language-plaintext highlighter-rouge">sklearn.feature_selection.SelectKBest</code></a>
+which by default applies the
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.f_classif.html#sklearn.feature_selection.f_classif"><code class="language-plaintext highlighter-rouge">f_classif</code></a>
+scoring function to compute the ANOVA F-value for the provided samples. This is
+a good scoring function for the Enron dataset which contains a few negative
+values. Beside the scoring function the only other parameter to tune here is the
+number of features we wish to keep (default 10).</p>
+
+<p>Alternatively if we had previously normalised the features between 0 and 1 then
+we could use the
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.chi2.html#sklearn.feature_selection.chi2"><code class="language-plaintext highlighter-rouge">chi2</code></a>
+scoring function to compute the chi-squared statistics between each non-negative
+feature and class.</p>
+
+<p>As before I will first define a function to print out the returned scores
+alongside the original name of the feature. This function only differs by name
+and the attribute used to access the scores (<code class="language-plaintext highlighter-rouge">scores_</code>). However for the sake of
+clarity I see no reason to be
+<a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Justify the output of feature scores.
+</span><span class="n">print_score</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">score</span><span class="p">:</span> <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">{}:</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">f</span><span class="p">).</span><span class="nf">ljust</span><span class="p">(</span><span class="mi">34</span><span class="p">),</span> <span class="n">score</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">print_feature_scores</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">features_list</span><span class="p">):</span>
+  <span class="n">feature_name_and_score</span> <span class="o">=</span> <span class="nf">zip</span><span class="p">(</span><span class="n">features_list</span><span class="p">,</span> <span class="n">clf</span><span class="p">.</span><span class="n">scores_</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">feat</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nf">sorted</span><span class="p">(</span><span class="n">feature_name_and_score</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="nf">print_score</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We can then compute the scores by first separating the features from the labels
+using methods provided by the course material and running these through the
+<code class="language-plaintext highlighter-rouge">SelectKBest</code> algorithm. Note that I have set the algorithm to reduce the
+dataset down to the 4 most relevant features. This however will not become
+important until the dataset has been transformed.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">SelectKBest</span>
+<span class="kn">from</span> <span class="n">feature_format</span> <span class="kn">import</span> <span class="n">featureFormat</span><span class="p">,</span> <span class="n">targetFeatureSplit</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="nf">featureFormat</span><span class="p">(</span><span class="n">my_standardised_dataset</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">,</span> <span class="n">sort_keys</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">labels</span><span class="p">,</span> <span class="n">features</span> <span class="o">=</span> <span class="nf">targetFeatureSplit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">select_k_best</span> <span class="o">=</span> <span class="nc">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">).</span><span class="nf">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+<span class="c1"># Print the feature names and scores.
+</span><span class="nf">print_feature_scores</span><span class="p">(</span><span class="n">select_k_best</span><span class="p">,</span> <span class="n">extended_features_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bonus:                             30.996650263046035
+fraction_from_this_person_to_poi:  24.74703911283773
+total_stock_value:                 21.715370553236223
+exercised_stock_options:           21.61831247068783
+fraction_bonus:                    20.11247267477801
+salary:                            17.652821354040245
+shared_receipt_with_poi:           15.901048190153714
+fraction_long_term_incentive:      13.280784474046534
+from_poi_to_this_person:           11.868915005764967
+deferred_income:                   10.877747814724641
+long_term_incentive:               10.438729740129324
+total_payments:                    9.17891146854367
+restricted_stock:                  8.383512828688367
+loan_advances:                     6.949372528479059
+expenses:                          5.038223197623868
+other:                             3.968449361834746
+from_this_person_to_poi:           3.5603092511206285
+fraction_salary:                   2.363441883884539
+to_messages:                       2.259290587732519
+fraction_from_poi_to_this_person:  2.1529983056261957
+director_fees:                     2.030244576563368
+restricted_stock_deferred:         0.7943522196252019
+deferral_payments:                 0.26155708920673937
+from_messages:                     0.16456684445456812
+fraction_exercised_stock_options:  0.05302510191815604
+</code></pre></div></div>
+
+<p>Here we can see the scores that have been assigned to each feature, where the
+largest scores indicate the most relevant features. When the dataset is
+transformed through this algorithm it will return only the 4 most relevant
+features since the <code class="language-plaintext highlighter-rouge">k</code> variable was set to 4. This can been seen below.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">transformed_data</span> <span class="o">=</span> <span class="n">select_k_best</span><span class="p">.</span><span class="nf">transform</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+<span class="n">transformed_data</span><span class="p">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(139, 4)
+</code></pre></div></div>
+
+<p>These 4 features, in order of relevance, are:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">bonus</code></li>
+  <li><code class="language-plaintext highlighter-rouge">fraction_from_this_person_to_poi</code></li>
+  <li><code class="language-plaintext highlighter-rouge">total_stock_value</code></li>
+  <li><code class="language-plaintext highlighter-rouge">exercised_stock_options</code></li>
+</ol>
+
+<p>Interestingly the second most relevant feature to be returned by <code class="language-plaintext highlighter-rouge">SelectKBest</code>
+is an engineered feature describing the messages sent to a person of interest as
+a fraction of total messages they have sent. Perhaps not so surprisingly however
+are the other most relevant features which I intuitively believe to be some of
+the more important drivers indicating a person of interest.</p>
+
+<p>Again it must be noted that the features here do not agree with the feature
+importances returned from the Random Forest and AdaBoost classifiers.</p>
+
+<p>Given that using this algorithm we can select only a subset of features that are
+most relevant the problem is reduced to that of optimising how many features
+should be selected to obtain the most performant predictive model. Choosing this
+value will be the focus of the hyperparameter tuning section of this experiment.</p>
+
+<h3 id="recursive-feature-elimination">Recursive Feature Elimination</h3>
+
+<p>Recursive feature elimination works by identifying which attributes (and
+combination of attributes) contribute the most to predicting the target value.
+This is achieved by first training the predictive model on the initial set of
+features and then removing the least relevant feature, indicated by the smallest
+feature coefficient or feature importance. The model is then retrained and the
+next least relevant feature removed. This process continues by considering
+smaller and smaller sets of features until we arrive at the desired number of
+remaining features.</p>
+
+<p>We can use
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html"><code class="language-plaintext highlighter-rouge">sklearn.feature_selection.RFE</code></a>
+to perform this task, that given a classifier capable of assigning
+weights/scores to each feature, will determine the least relevant feature
+through either the <code class="language-plaintext highlighter-rouge">coef_</code> or <code class="language-plaintext highlighter-rouge">feature_importances_</code> attribute. We have observed
+that the classifiers used in this experiment process either attribute and can
+therefore all be used to perform recursive feature elimination.</p>
+
+<p>It is important to note that features must first be scaled, otherwise there is a
+chance that features with smaller values will have a minimal coefficient and
+therefore be dropped. However if the features are scaled with a preprocessing
+stage these same feature could turn out to be quite important. Fortunately we
+have already covered this in the previous section where we are standardising the
+data using the <code class="language-plaintext highlighter-rouge">StandardScaler</code>.</p>
+
+<p>Unlike univariate feature selection, which scores each feature in isolation,
+recursive feature elimination judges features by how the classifier itself uses
+them. A feature that looks weak on its own can matter a great deal in
+combination with others, and <code class="language-plaintext highlighter-rouge">RFE</code> can see that where <code class="language-plaintext highlighter-rouge">SelectKBest</code> cannot. The
+price is that it must train the classifier once per eliminated feature.</p>
+
+<p>As with univariate feature selection, the problem reduces to deciding how many
+features to keep. Rather than guess, I will use
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFECV.html#sklearn.feature_selection.RFECV"><code class="language-plaintext highlighter-rouge">sklearn.feature_selection.RFECV</code></a>,
+which extends <code class="language-plaintext highlighter-rouge">RFE</code> with a cross-validation step to find the optimal number of
+features for a given metric. As with every other decision so far, I will
+optimise for the F1 score.</p>
+
+<h3 id="where-this-leaves-us">Where This Leaves Us</h3>
+
+<p>Three methods, three different answers. Feature importances, univariate scores
+and recursive elimination each rank the features differently, and none of them
+can be trusted until it has been tested against a held-out set. More
+importantly, each answer depends on the classifier’s hyperparameters, and those
+in turn depend on which features the classifier is given.</p>
+
+<p>That circularity is why I have not run <code class="language-plaintext highlighter-rouge">RFECV</code> here. Running it now, against
+default parameters, would only tell us which features suit a classifier I am
+about to change. The next section tunes the two together, with cross-validation
+wrapped around the whole process so that no test data leaks into the selection.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-enron">
+    <a class="link" href="/tag/enron" title="Go to enron" aria-label="Go to enron">enron</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-statistics">
+    <a class="link" href="/tag/statistics" title="Go to statistics" aria-label="Go to statistics">statistics</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-feature-selection">
+    <a class="link" href="/tag/feature-selection" title="Go to feature-selection" aria-label="Go to feature-selection">feature-selection</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

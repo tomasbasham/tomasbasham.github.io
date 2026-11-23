@@ -1,0 +1,1217 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://tomasbasham.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tomasbasham.dev/" rel="alternate" type="text/html" /><updated>2026-11-23T21:14:19+00:00</updated><id>https://tomasbasham.dev/feed.xml</id><title type="html">Tomas Basham’s Blog</title><subtitle>Tomas Basham&apos;s Technology Blog and Development Portfolio</subtitle><entry><title type="html">The WIP Limit Isn’t the Problem</title><link href="https://tomasbasham.dev/career/the-wip-limit-isnt-the-problem" rel="alternate" type="text/html" title="The WIP Limit Isn’t the Problem" /><published>2026-09-11T00:00:00+01:00</published><updated>2026-09-11T00:00:00+01:00</updated><id>https://tomasbasham.dev/career/the-wip-limit-isnt-the-problem</id><content type="html" xml:base="https://tomasbasham.dev/career/the-wip-limit-isnt-the-problem"><![CDATA[<p>In an earlier post I described a mismatch: I want slow, deliberate, many-voiced
+feedback before work starts, and fast, unambiguous, solitary feedback once it
+does. The resolution was that these aren’t contradictory preferences — they’re
+the same principle, matching the feedback mechanism to whichever oracle can
+actually answer the question at that stage. Human judgement for direction. The
+system for execution.</p>
+
+<p>There’s a related tension I’ve watched play out repeatedly on a small team, and
+it doesn’t resolve the same way. It looks, on the surface, like a scheduling
+problem. It isn’t.</p>
+
+<h2 id="the-oscillation">The oscillation</h2>
+
+<p>The pattern goes roughly like this. The team takes on too many workstreams at
+once — not because anyone mis-scoped the sprint, but because everybody wants
+something of their own to work on, or believes their thing is the higher
+priority, despite that not really being their call to make. So the sprint ends
+up planned as a mixture, a bit of everything, to keep everyone satisfied going
+in.</p>
+
+<p>Inevitably, little of it finishes cleanly. People are pulled out of their own
+work constantly — into code review, into testing sessions, into implementation
+discussions for streams they’re not even driving — and by the end of the sprint
+nobody has actually finished anything. What does get finished is rushed across
+the line in the last day or two.</p>
+
+<p>So the retrospective conclusion is sensible: focus on less. Reduce WIP. The next
+sprint, people pair or mob rather than each running their own stream.</p>
+
+<p>And then a different problem shows up. Only one person can drive at a time. The
+others — the navigators — get bored. They start quietly working on side things
+during the session, less engaged, present but not really there. The work does
+get finished on time this time. But people feel flat about it. Demotivated.
+Under-stretched. Convinced more could have been achieved.</p>
+
+<p>So the next retrospective says: let’s take on more, give people their own things
+again. And the cycle restarts.</p>
+
+<h2 id="why-this-isnt-a-wip-problem">Why this isn’t a WIP problem</h2>
+
+<p>The obvious read is that the team hasn’t found the right WIP limit yet — too
+high causes thrashing, too low causes disengagement, so somewhere in between
+must be correct. I don’t think that’s right, and there’s a tell in the
+pattern that gives it away: it’s frequently the same people, unhappy in both
+states. The person complaining “I never get to finish anything, everything’s
+rushed” in the high-WIP sprint is often the same person complaining “I’m
+bored, I’m not really contributing” in the paired sprint.</p>
+
+<p>If WIP were the actual variable, you wouldn’t expect that. You’d expect the
+complaints to come from different people depending on their tolerance for
+context-switching versus their tolerance for close collaboration. Instead
+the same individuals are dissatisfied on both sides of the dial, which
+suggests the dial isn’t what they actually care about.</p>
+
+<p>What they’re asking for, in both states, looks like the same underlying
+thing: individual, attributable ownership of a solved problem. Something they
+drove, that’s recognisably theirs, that demonstrates the specific expertise
+they bring to the team. High WIP gives everyone a shot at that — their own
+stream, their own area — but not the completion of it, because constant
+interruption means nothing actually gets finished under their name. Pairing
+gives the completion, but only to whoever’s driving that session; the
+navigator gets the outcome without the authorship.</p>
+
+<p>Neither format is failing at its stated job, either. Throughput-wise, the
+low-WIP sprints work — the team said as much, work gets done on time. What’s
+failing is a need nobody’s named out loud in the retrospective, because
+“reduce WIP” and “pair more” are the only vocabulary a sprint retrospective
+tends to offer. Recognition and demonstrated individual expertise aren’t on
+that menu, so the dissatisfaction keeps getting misdiagnosed as a process
+setting, and the process gets nudged back and forth in search of a value that
+isn’t on that axis at all.</p>
+
+<p>It’s the same shape of mistake as the oracle mismatch from the earlier post,
+one level up: using a process mechanism — a WIP limit, a pairing cadence — to
+solve a need that mechanism was never built to answer. A WIP limit is a good
+tool for managing flow efficiency and reducing thrash. It has no lever for
+felt ownership. Turning the dial harder in either direction won’t produce a
+value it was never designed to hold.</p>
+
+<h2 id="where-shaping-fits-and-where-it-doesnt-yet">Where “shaping” fits, and where it doesn’t yet</h2>
+
+<p>This team has already tried, independently, to address a version of this — worth
+mentioning, because it’s evidence the diagnosis isn’t invented after the
+fact. We’ve been experimenting with a <strong>shaping</strong> model rather than conventional
+planning: a rotating pair kicks off each initiative with a lightweight outline,
+the relevant specialists feed in asynchronously by area, a short huddle resolves
+anything unclear, and the facilitator role — whoever drives that shaping —
+rotates each time rather than defaulting to the same person.</p>
+
+<p>The intent lines up closely with the diagnosis above. Rotating the facilitator
+role exists specifically so ownership of <em>direction</em> doesn’t collapse onto one
+person, and so people get turns leading rather than only ever being told what to
+build by some fixed authority. That’s a genuine, structural answer to part of
+the ownership problem — at the design stage.</p>
+
+<p>But it’s a partial answer, not a full one, because it operates entirely upstream
+of the point where the oscillation actually happens. Shaping answers “who got
+heard on the plan, and who’s facilitating it.” It doesn’t yet answer “who gets
+to drive — and finish, under their own name — the <em>implementation</em>.” A team can
+rotate shaping facilitators well and still hit the exact same
+pairing-versus-solo tension once building starts, because that tension lives
+entirely in execution, which shaping doesn’t touch. The gap this post is
+describing sits downstream of everything shaping currently covers.</p>
+
+<h2 id="what-would-actually-close-the-gap">What would actually close the gap</h2>
+
+<p>If the diagnosis is right, the fix isn’t a better WIP number, and it isn’t more
+or less pairing as a blanket policy. It’s treating ownership itself as something
+to be deliberately distributed across the roadmap over time — giving each person
+a stream they drive end-to-end some of the time, and pairing or mobbing at other
+times, rather than picking one mode as “how we work now” and applying it
+uniformly until it stops working and gets swapped for its opposite.</p>
+
+<p>Concretely, that might look like extending the same rotation instinct that
+shaping already applies to facilitation, into execution: an explicit “who owns
+driving this through to done” decision made once at the start of an initiative,
+visible to the team, changing initiative to initiative — rather than an
+implicit, unnamed scramble for it that shows up as either too many parallel
+streams or too many bored navigators, depending on which way the last
+retrospective nudged the dial.</p>
+
+<p>That’s a bigger change than adjusting a WIP limit, and it’s probably a harder
+one to get agreement on — which is exactly why the team needs to see the
+diagnosis clearly first. Turning the dial feels like doing something. Naming
+what the dial can’t fix is less comfortable, but it’s the only version of this
+conversation that stops it from repeating next sprint.</p>
+
+<h2 id="why-driver-rotation-rarely-survives-contact-with-reality">Why driver rotation rarely survives contact with reality</h2>
+
+<p>There’s a smaller-scale version of the same tension worth naming, because it
+complicates the conclusion rather than just illustrating it. Pairing’s usual
+answer to navigator boredom is to rotate the driver frequently. In practice
+this rarely happens without real discipline enforcing it, and the reasons are
+structural, not laziness. Natural stopping points are genuinely hard to find
+mid-problem, and driving isn’t just operating the keyboard — it’s holding the
+shape of a half-built solution in your head. Handing that off mid-thought
+means someone else either preserves your intent or quietly replaces it with
+their own, and watching your own partially-built approach get overridden
+while you can only observe is a real discomfort, not reluctance to share
+credit. Rotate too eagerly and the rotation destroys the very ownership it
+was meant to produce.</p>
+
+<p>There’s also a genuine efficiency case against it: “I could do this faster if
+I were just allowed to drive” is frequently true in the moment. What it
+discounts is that the return on letting someone else drive shows up later, as
+team capability, rather than now, as this task’s completion time — the same
+mistake as everything else here, just measuring the wrong feedback loop. Left
+unmanaged, the loop you can feel immediately wins by default over the one
+that actually matters. And sometimes there simply isn’t slack to spend on
+anyone’s growth right now, and some work is genuinely better driven by
+whoever’s fastest at it.</p>
+
+<p>None of that undermines the point above. Rotation isn’t something that should
+happen mechanically, on principle, at every opportunity — it’s a deliberate
+default, consciously overridden when the cost of slowing down is genuinely
+too high, rather than something that silently never happens because nobody
+wanted to insist on it. That’s the actual difference between a team managing
+this tension on purpose and one stuck oscillating through it by accident.</p>]]></content><author><name>Tomas Basham</name></author><category term="career" /><category term="delivery" /><category term="engineering-culture" /><category term="agile" /><summary type="html"><![CDATA[A team oscillating between too much WIP and too much pairing isn't failing to find the right process setting — it's trying to solve a need for individual ownership using a dial that was never built to hold it.]]></summary></entry><entry><title type="html">Matching the Feedback Loop to the Question</title><link href="https://tomasbasham.dev/career/matching-the-feedback-loop-to-the-question" rel="alternate" type="text/html" title="Matching the Feedback Loop to the Question" /><published>2026-09-10T00:00:00+01:00</published><updated>2026-09-10T00:00:00+01:00</updated><id>https://tomasbasham.dev/career/matching-the-feedback-loop-to-the-question</id><content type="html" xml:base="https://tomasbasham.dev/career/matching-the-feedback-loop-to-the-question"><![CDATA[<p>I recently worked out why I find infrastructure and platform work so satisfying:
+it rewards fast, unambiguous, non-negotiable feedback over slow consensus. The
+system either works or it doesn’t, and it tells you which almost immediately,
+without needing a committee to agree first.</p>
+
+<p>Then I noticed I hold what looks like the exact opposite view about how work
+should move through a delivery process — inception, planning, feedback,
+refinement, estimation, prioritisation, delivery. There, I want the slow
+version. I want deep conversation early. I want to be genuinely confident we’re
+building the correct thing, at the correct time, in the correct order, before
+anyone writes a line of code. Only once work actually begins do I want the fast,
+harsh, solitary feedback back.</p>
+
+<p>At first glance that looks like holding two contradictory preferences. I don’t
+think it is. I think it’s one preference, applied correctly to two different
+kinds of question.</p>
+
+<h2 id="two-different-questions-two-different-oracles">Two different questions, two different oracles</h2>
+
+<p>Any piece of work contains at least two distinct questions, and they are
+answered by different mechanisms.</p>
+
+<p>The first is whether we’re building the correct thing, for the correct
+reason, at the correct time, in the correct order. There is no protocol for
+this. No kernel, no compiler, no test suite can tell you whether the feature
+you’re about to build solves the right problem, or whether now is the right
+time to build it, or whether it should come before or after some other piece
+of work. The only oracle for this class of question is other people’s
+judgement and context — the salesperson who knows what the customer actually
+asked for, the engineer who remembers why the last attempt at this failed,
+the person who knows a dependency is landing next quarter that changes the
+whole calculus. Getting this wrong is expensive, but it’s cheap to get right,
+because at this stage a wrong assumption costs a conversation, not a rewrite.
+Slow, many-voiced deliberation isn’t a tax paid here — it’s the mechanism by
+which correctness gets produced, because there’s no other oracle to consult.</p>
+
+<p>The second is whether this implementation is correct. Once the what and why
+are settled, this question has a different, better oracle: the system
+itself. Does the code compile. Does the protocol negotiate correctly. Does
+the cluster schedule the workload. Does the test pass. This oracle is faster
+than any committee and can’t be argued with or politely disagreed with over
+Slack. Continuing to seek consensus here — re-litigating direction
+mid-implementation, holding design-by-committee meetings about something the
+compiler already has an opinion on — is now pure cost. The question that
+needed people has already been answered; what’s left needs a system.</p>
+
+<h2 id="the-actual-principle">The actual principle</h2>
+
+<p>So the shape of the preference isn’t “fast feedback good, slow feedback bad”,
+or its inverse. It’s to match the feedback mechanism to whichever oracle can
+actually answer the question at that stage of the work.</p>
+
+<p>Before work starts, the only available oracle is human judgement, so that’s
+where the deliberation belongs. Once work starts, a better and faster oracle
+becomes available — the system itself — so that’s where the deliberation
+should move to. Getting this backwards produces two recognisable failure
+modes, in opposite directions.</p>
+
+<p>Skip the discovery conversation, and everyone builds fast, locally
+consistent, collectively wrong things. Each engineer’s individual work might
+have excellent, unambiguous feedback loops — the code works, the tests pass —
+but the team has quietly built four different unreconciled interpretations of
+what “the feature” was supposed to be, and nobody notices until integration,
+or until it ships to a customer who asked for something else entirely.
+There are mechanisms to mitigate this, but that’s out of scope here.</p>
+
+<p>Keep having the discovery conversation once work has started, and you get
+stalled implementation instead. People start re-arguing direction mid-build,
+because the habit of deliberation never learned when to stop. The system
+already has an opinion — the tests are failing, the integration doesn’t work
+— and instead of listening to it, the team keeps convening. That’s
+design-by-committee applied to a question the compiler already answered.</p>
+
+<p>Both look, from a distance, like “too much” or “too little” process. They’re
+the same mistake, just consulting the wrong oracle for the question in front
+of you.</p>
+
+<h2 id="it-was-never-about-speed">It was never about speed</h2>
+
+<p>“Be slow up front, be fast later” is the wrong summary — it would misfire the
+next time the shape of the problem changed. The principle is about which
+mechanism is capable of producing a correct answer to whichever question is
+actually being asked at that point. Early on, that mechanism is conversation,
+because nothing else can see the context a person can see. Later, it’s the
+system, because nothing argues with a protocol and wins.</p>
+
+<p>Wanting deep, many-voiced deliberation during planning and wanting to work
+entirely alone against an unambiguous system once work begins were never in
+tension. They’re the same judgement, applied correctly twice, to two
+different questions that happen to sit next to each other in the same piece
+of work.</p>]]></content><author><name>Tomas Basham</name></author><category term="career" /><category term="engineering-culture" /><category term="delivery" /><summary type="html"><![CDATA[Wanting slow, many-voiced feedback before work starts and fast, solitary feedback once it does isn't a contradiction — it's the same preference applied to two different questions.]]></summary></entry><entry><title type="html">Why Infrastructure Work Feels Different</title><link href="https://tomasbasham.dev/career/why-infrastructure-work-feels-different" rel="alternate" type="text/html" title="Why Infrastructure Work Feels Different" /><published>2026-09-09T00:00:00+01:00</published><updated>2026-09-09T00:00:00+01:00</updated><id>https://tomasbasham.dev/career/why-infrastructure-work-feels-different</id><content type="html" xml:base="https://tomasbasham.dev/career/why-infrastructure-work-feels-different"><![CDATA[<p>I’m an application developer by trade. I ended up working in infrastructure and
+platform engineering out of necessity — someone had to run the Kubernetes
+cluster, someone had to own the cloud account — and somewhere along the way it
+became the work I love most. It took me a long time to work out why.</p>
+
+<h2 id="it-isnt-a-shortage-of-opinions">It isn’t a shortage of opinions</h2>
+
+<p>The easy answer is that infrastructure has fewer valid ways to do something.
+Networking works a particular way. The Linux kernel works a particular way.
+Stray from the accepted approach and things simply stop working. Application
+development, by contrast, seems to have too many opinions — endless ways to skin
+the same cat, and teams that spend real time arguing about which way is correct.</p>
+
+<p>I believed this for a while, and it’s half right at best. Infrastructure isn’t
+actually short of opinions. Ask five platform engineers how to structure a
+multi-tenant Kubernetes cluster, whether to run a service mesh, how secrets
+should be managed, or what your GitOps topology should look like, and you’ll get
+five confidently different answers — argued with exactly the same intensity as
+any application development debate about state management or dependency
+injection.</p>
+
+<p>So “fewer opinions” doesn’t hold up. The real difference isn’t the number of
+valid designs — it’s that the failure mode is legible.</p>
+
+<p>Get a BGP configuration wrong, and routes don’t propagate. Get kernel cgroup
+settings wrong, and the container gets OOM-killed. The system tells you,
+unambiguously and quickly, that you were wrong. There’s no room for the
+failure to be argued away, reframed, or attributed to taste.</p>
+
+<p>A bad abstraction in an application codebase doesn’t page anyone at 3am. It
+doesn’t fail loudly. It just slowly makes the codebase worse, in a way that’s
+contestable — someone can always argue it’s fine, or that the real problem is
+somewhere else, or that it’s a matter of preference. Correctness in
+application architecture is often adjudicated by consensus, because there’s
+no kernel standing over the code ready to reject it. What I actually value,
+then, isn’t a smaller solution space. It’s fast, harsh, non-negotiable
+feedback — the system either works or it doesn’t, and it tells you which
+almost immediately.</p>
+
+<h2 id="domain-modelling-thats-already-done-for-you">Domain modelling that’s already done for you</h2>
+
+<p>I tend to approach architecture through domain modelling first — trying to
+understand the shape of the problem before writing anything. I think this is a
+large part of why infrastructure work resonates so strongly with me
+specifically.</p>
+
+<p>In infrastructure, the domain model is very often <em>already correct</em> before I
+arrive. The model for how a TCP handshake works isn’t up for negotiation.
+Someone solved that decades ago, rigorously, and it’s simply true. My job is to
+discover and apply that model correctly, not to invent it.</p>
+
+<p>In application development, I’m frequently the one who has to invent the domain
+model — extracted from a messy, ambiguous, and often contested business reality.
+And once I’ve built that model, other people get a vote on whether it’s right,
+because there’s no external authority to appeal to. One of these is discovery.
+The other is invention under scrutiny. They are very different postures to hold
+day to day, and I know which one I find more restful.</p>
+
+<h2 id="why-infrastructure-work-is-easier-to-do-alone">Why infrastructure work is easier to do alone</h2>
+
+<p>There’s a related observation worth separating out, because it looks like the
+same claim but isn’t: infrastructure work is often easier to solo. The task is
+clear, and the solution is often just as clear, or more so.</p>
+
+<p>It would be tempting to say this is because the problems are simpler. They’re
+not. It’s because the blast radius of a decision is usually bounded and
+observable. I can make a call, ship it, and watch metrics tell me within
+minutes or hours whether I was right — without first needing four other people
+to sign off. Application architecture decisions frequently can’t be validated
+that fast; the consequences of a wrong choice surface weeks or months later,
+diffused across a codebase multiple people touch. When feedback is slow,
+consensus becomes a substitute for it — you get agreement up front because you
+can’t get proof. Slow feedback loops breed committees. Fast feedback loops let
+one competent person simply get on with it.</p>
+
+<h2 id="the-prediction-this-makes--and-where-it-holds">The prediction this makes — and where it holds</h2>
+
+<p>If this theory is right, it makes a testable prediction: the parts of platform
+work that are <em>most</em> application-development-flavoured should feel less
+satisfying than the deep infrastructure layer, because that’s exactly where the
+fast, legible feedback disappears again. Designing the API for an internal
+developer platform, or deciding whether something should be a CRD or a Helm
+chart, has no protocol standing behind it ready to say “wrong.” It’s a design
+decision, adjudicated by taste and consensus, just like application
+architecture.</p>
+
+<p>That prediction holds for me. I enjoy that layer of work too — but noticeably
+less than the deep infrastructure layer beneath it. Which suggests the
+feedback-loop explanation is doing the real work here, not the “fewer opinions”
+explanation I started with.</p>
+
+<h2 id="discovery-not-invention-under-scrutiny">Discovery, not invention under scrutiny</h2>
+
+<p>Infrastructure work rewards being right quickly rather than persuasive slowly.
+The domain is already correctly modelled by physics and protocol, so the work is
+discovery rather than invention-under-scrutiny. And because the blast radius of
+most decisions is bounded and observable, it’s possible to act alone and let the
+system itself settle arguments that would otherwise need a committee.</p>
+
+<p>That’s a satisfying way to spend a working day. It’s also, as it turns out,
+exactly the wrong way to spend the working days <em>before</em> the work begins — which
+is a different problem, and one I’ll get to separately.</p>]]></content><author><name>Tomas Basham</name></author><category term="career" /><category term="infrastructure" /><category term="engineering-culture" /><summary type="html"><![CDATA[Infrastructure work isn't satisfying because it has fewer valid designs — it's satisfying because the failure mode is legible, and the feedback is fast enough to work alone.]]></summary></entry><entry><title type="html">Complacency is the Enemy of Security</title><link href="https://tomasbasham.dev/security/complacency-is-the-enemy-of-security" rel="alternate" type="text/html" title="Complacency is the Enemy of Security" /><published>2026-05-26T00:00:00+01:00</published><updated>2026-05-26T00:00:00+01:00</updated><id>https://tomasbasham.dev/security/complacency-is-the-enemy-of-security</id><content type="html" xml:base="https://tomasbasham.dev/security/complacency-is-the-enemy-of-security"><![CDATA[<p>A particular kind of institutional blindness sets in when nothing has gone
+wrong for a while. It isn’t laziness, and it isn’t negligence in any obvious
+sense — it’s the slow, unannounced erosion of urgency that comes from an
+absence of consequences. Security has a name for this: complacency, and I
+think it’s more dangerous than most organisations are willing to admit,
+because it doesn’t look like a decision. It looks like the absence of one.</p>
+
+<h2 id="how-it-actually-sets-in">How it actually sets in</h2>
+
+<p>The organisations that suffer the worst security failures are rarely the
+ones that never thought about security. More often they’re the ones that
+thought about it once, set up reasonable foundations, shipped the product,
+watched it run without incident, and quietly stopped thinking about it. Over
+time, the absence of visible harm gets treated as evidence of safety, which
+it isn’t — it’s only evidence that harm hasn’t happened yet. The same
+pattern shows up well outside software: a driver who’s taken the same route
+for years without incident eases off the margins, a business that’s never
+had a fire stops testing the extinguishers.</p>
+
+<h2 id="what-a-disclosure-is-actually-telling-you">What a disclosure is actually telling you</h2>
+
+<p>Security researchers find holes, report them through whatever disclosure
+process exists, and move on. Most engineering teams treat that report as a
+closed incident: fix shipped, researcher thanked, ticket closed. What gets
+missed is the more useful question underneath it — if someone with the
+skill and the inclination to look found this, what else is sitting there
+unfound? A researcher who discloses responsibly represents a narrow slice of
+the population capable of finding the same class of problem; treating their
+report as the whole story, rather than a sample of it, is usually where the
+complacency becomes visible from the outside.</p>
+
+<h2 id="what-it-looks-like-day-to-day">What it looks like day to day</h2>
+
+<p>It rarely announces itself as a decision to deprioritise security. It looks
+like smaller, more reasonable-sounding things: a hardening task that keeps
+losing to something more urgent every sprint, a credential rotation that
+keeps getting deferred because coordinating it is annoying and nothing’s
+gone wrong yet, service-to-service trust that’s never been tightened because
+nobody’s had the time. None of this is unusual — most engineering
+organisations carry some version of it. The question worth asking isn’t
+whether that debt exists, but whether it’s being treated as inert or as
+compounding. Security debt compounds the same way any other technical debt
+does, except the interest is paid in an incident rather than in slower
+builds.</p>
+
+<h2 id="the-asymmetry-that-makes-this-expensive-to-get-wrong">The asymmetry that makes this expensive to get wrong</h2>
+
+<p>Security has a structural asymmetry that complacent organisations tend not
+to sit with: you have to get it right every time, and an attacker only has
+to get it right once. Your organisation has a roadmap, competing priorities,
+and finite attention; an attacker has one objective and no sprint cycle to
+answer to. That asymmetry means the cost of complacency doesn’t accrue
+smoothly — it accumulates silently and then discharges all at once, at a
+time of the attacker’s choosing rather than yours. Reactive security work,
+done under that kind of pressure, costs considerably more than the same work
+done proactively — in engineering time, in trust, and sometimes in
+regulatory exposure.</p>
+
+<p>This is also what makes security different from most other categories of
+product risk. Defer a performance fix and you see it in response times.
+Defer a UX fix and you see it in conversion. The feedback loop is tight
+enough to self-correct. Security’s feedback loop is either years long or
+instantaneous and severe, with very little in between — which means waiting
+for evidence that the risk is real is, in practice, waiting for the incident
+itself.</p>
+
+<h2 id="what-the-alternative-actually-looks-like">What the alternative actually looks like</h2>
+
+<p>The organisations with the strongest security posture aren’t the ones that
+recovered fastest from a breach — they’re the ones that treated the work as
+continuous and unglamorous, including during the quiet periods when nothing
+was obviously on fire. That’s a harder habit to sustain than it sounds,
+because there’s no natural internal pressure keeping it alive once the
+original incident that prompted the foundations fades from memory. It has to
+be maintained deliberately, as a standing property of how the organisation
+works, rather than revisited only when something forces the question.</p>
+
+<p>The uncomfortable part is that most engineering leaders already know which
+items on their own backlog are this kind of risk — the credential hygiene
+that needs attention, the access that hasn’t been audited in a while. The
+honest question isn’t whether those things carry risk; everyone involved
+already knows they do. It’s whether the organisation treats security as
+something actively maintained, or as a state it’s passively in until proven
+otherwise.</p>]]></content><author><name>Tomas Basham</name></author><category term="security" /><category term="risk" /><category term="technical-debt" /><category term="security-culture" /><summary type="html"><![CDATA[The organisations that get hurt worst by security failures are rarely the ones that never thought about security — they're the ones that thought about it once, then stopped.]]></summary></entry><entry><title type="html">AI-Generated Code Doesn’t Change What Good Delivery Looks Like</title><link href="https://tomasbasham.dev/career/the-platform-is-the-point" rel="alternate" type="text/html" title="AI-Generated Code Doesn’t Change What Good Delivery Looks Like" /><published>2026-05-15T00:00:00+01:00</published><updated>2026-05-15T00:00:00+01:00</updated><id>https://tomasbasham.dev/career/the-platform-is-the-point</id><content type="html" xml:base="https://tomasbasham.dev/career/the-platform-is-the-point"><![CDATA[<p>There’s an idea doing the rounds that because AI can generate code faster
+than any team, the bottleneck in software delivery has moved: code is now
+cheap, even disposable, and the real constraint is understanding, evaluating
+and governing it. I think that’s largely correct, but it carries an
+assumption worth pulling apart: that the infrastructure underneath the
+software can absorb whatever gets thrown at it. It can’t, not without
+deliberate design, and the people who’ll feel that first aren’t developers —
+it’s whoever is responsible for keeping things running while the velocity of
+change accelerates around them.</p>
+
+<h2 id="code-as-something-you-throw-away">Code as something you throw away</h2>
+
+<p>Chad Fowler’s <a href="https://chadfowler.com/regenerative-software/3mb526js42k26/">Phoenix Architecture</a>
+series makes the case that the durable part of a system isn’t its
+implementation, it’s the evaluations that define correctness: the
+interfaces, the behavioural contracts, the tests that would still hold if
+the whole thing were rewritten in a different language. Code, on this view,
+is closer to cache than to capital — a materialised view of intent that’s
+fine to discard and regenerate, provided the intent itself is written down
+somewhere that survives the rewrite.</p>
+
+<p>None of this is actually new. Experienced engineers have always known that
+the most expensive code is the code you keep, and rewrites have always been
+underrated relative to their reputation. What’s new is the pace this cycle
+can now turn at, and the volume it can produce while turning.</p>
+
+<h2 id="where-the-strain-actually-lands">Where the strain actually lands</h2>
+
+<p>When the rate of change goes up, something has to absorb it, and that
+something is the deployment target — the platform, the infrastructure that
+accepts artefacts and runs them. On a fleet of hand-provisioned servers,
+each with its own accumulated quirks and institutional knowledge, every
+deployment is a small negotiation with the specific machine it’s landing on.
+That friction has historically been self-limiting: snowflakes accumulate,
+runbooks grow, and the rate of change slows to match what the platform can
+actually absorb.</p>
+
+<p>Generative AI doesn’t reduce that friction. It bypasses it at the
+application layer while leaving it completely intact underneath, which
+widens the gap between how fast software can be produced and how safely it
+can be deployed. Platform teams end up facing more deployments, more varied
+workloads, less consistent artefact quality, and more pressure to move
+quickly, without any corresponding change to the infrastructure complexity
+they’re managing. Historically, what gives first under that pressure is
+operational discipline.</p>
+
+<h2 id="the-infrastructure-for-this-already-exists">The infrastructure for this already exists</h2>
+
+<p>The useful part is that the industry has spent over a decade building the
+answer to this, for entirely unrelated reasons: scale, reliability, cost,
+and the general desire to stop treating infrastructure like a collection of
+pets. The underlying idea was to make the unit of deployment portable and
+self-describing, so the artefact stops depending on the specifics of the
+machine it runs on.</p>
+
+<p>Containers are that idea, implemented. They changed operations less because
+process isolation was technically novel — it wasn’t — and more because they
+changed the contract between development and operations: a container image
+is a promise that running it will produce the described behaviour, on any
+machine that honours the contract. That’s precisely the property
+regenerative software needs. If implementations are going to be thrown away
+and regenerated at pace, the deployment target needs to be indifferent to
+exactly what it’s running — whether a given version was written by a person,
+generated by a model, or some mixture of both.</p>
+
+<p>Kubernetes is the same idea at orchestration scale. Strip away the
+operational complexity around it and what’s left is a system for expressing
+desired state and continuously reconciling reality against it: three
+replicas, this much memory and CPU, reachable at this address, replaced
+automatically if unhealthy. That reconciliation loop doesn’t care how the
+new version was produced — rolling out a hand-crafted release and rolling
+out one generated overnight are the same operation to the scheduler. Teams
+running mature Kubernetes platforms are, as a direct consequence,
+structurally ready for AI-accelerated delivery in a way that teams without
+one aren’t: the primitives built to absorb human-authored churn are the same
+primitives that absorb AI-authored churn.</p>
+
+<h2 id="the-seam-needs-more-discipline-not-less">The seam needs more discipline, not less</h2>
+
+<p>The corollary Fowler’s argument doesn’t quite spell out is that the seam
+between disposable code and durable platform needs more care than either
+side individually — the health checks, resource declarations, shutdown
+behaviour, privilege model and image construction that make up the
+container contract. In human-authored software, violations of that contract
+accumulate slowly enough that a team notices during an incident and fixes
+it; the feedback loop is long but it works. Under AI-accelerated delivery,
+the volume crossing that seam goes up enough that violations stop
+accumulating slowly and start arriving in batches.</p>
+
+<p>Which means the right response to AI-driven velocity isn’t to relax
+platform discipline, it’s to enforce it earlier and more systematically —
+not as a gate that slows delivery, but as the contract that makes the
+platform’s indifference to what it’s running sustainable in the first
+place.</p>
+
+<h2 id="the-point">The point</h2>
+
+<p>The teams that come through this well won’t be the ones generating the most
+code. They’ll be the ones who already invested in a deployment target
+capable of accepting, validating and running whatever gets generated,
+quickly and repeatedly. That investment predates AI by a decade and was made
+for entirely different reasons — scale, reliability, cost. AI hasn’t created
+the need for it. It’s just made ignoring it considerably more expensive.</p>]]></content><author><name>Tomas Basham</name></author><category term="career" /><category term="teams" /><category term="delivery" /><category term="ai-assisted-development" /><summary type="html"><![CDATA[If implementations are about to become disposable, the thing that has to absorb the churn is the platform underneath them — and most platforms aren't built for that yet.]]></summary></entry><entry><title type="html">Structuring Terraform Ownership in Layers</title><link href="https://tomasbasham.dev/infrastructure/structuring-terraform-ownership-layers" rel="alternate" type="text/html" title="Structuring Terraform Ownership in Layers" /><published>2026-04-30T00:00:00+01:00</published><updated>2026-04-30T00:00:00+01:00</updated><id>https://tomasbasham.dev/infrastructure/structuring-terraform-ownership-layers</id><content type="html" xml:base="https://tomasbasham.dev/infrastructure/structuring-terraform-ownership-layers"><![CDATA[<p>Infrastructure teams tend to discover the same problem at different points in
+their growth. Someone adds a resource to the wrong workspace, a plan runs
+against the wrong state file, and suddenly you are staring at a proposed
+deletion of something critical. The instinct is to consolidate — one workspace,
+one state file, one place where everything lives. That instinct is wrong.</p>
+
+<p>The right model comes from asking a different question entirely: who should be
+allowed to change this?</p>
+
+<h3 id="infrastructure-is-not-flat">Infrastructure is not flat</h3>
+
+<p>Cloud infrastructure has a natural hierarchy. Some resources are foundational —
+the identity pools, the folder structure, the organisation policies that govern
+what is even possible within your environment. Others are shared services: a
+Kubernetes cluster, a database, a message queue that multiple teams depend
+upon. Others still are workload-specific, tightly coupled to a single
+application and owned entirely by the team that builds it.</p>
+
+<p>Treating all of these as equivalent, managed from the same workspace with the
+same credentials, collapses a meaningful distinction. It also maximises blast
+radius. When a workspace can touch everything, a mistake anywhere can affect
+everything.</p>
+
+<p>The layered model addresses this by decomposing Terraform configuration into
+four tiers, each with its own workspace, its own service account, and its own
+permission boundary.</p>
+
+<h3 id="the-four-tiers">The four tiers</h3>
+
+<p><strong>Organisation</strong> is the root. It owns the trust infrastructure that all
+subsequent automation depends upon: the Workload Identity Pools that allow CI/CD
+pipelines to authenticate without long-lived keys, the folder hierarchy that
+structures the environment, and the organisation-wide policies that define what
+is permissible across every project beneath them. Custom IAM roles that other
+layers will later reference are also defined here.</p>
+
+<p>What the Organisation workspace does not own is general service account
+management. It establishes the rules of the game. Everything else belongs to a
+layer above it.</p>
+
+<p><strong>Governance</strong> owns the containers. In GCP, a project is a hard isolation
+boundary — a separate IAM namespace, a separate quota domain, a separate unit of
+billing. Creating a project is an administrative act that precedes everything
+else, and it lives in the Governance workspace. This layer also creates the
+service accounts and IAM principals that Platform and Delivery teams will later
+assume when provisioning resources or running workloads.</p>
+
+<p>The separation of project administration from project tenancy is one of the more
+important principles in this model. The team deploying an application should not
+also hold the ability to modify the IAM bindings that govern access to the
+project it runs in.</p>
+
+<p>In AWS, the equivalent isolation boundary is an account rather than a
+project. The Governance workspace would own account vending through AWS
+Organizations and the IAM roles that downstream workloads assume via
+cross-account trust. The concept is identical; only the resource types differ.</p>
+
+<p><strong>Platform</strong> owns shared services. Kubernetes clusters, networking, DNS zones,
+shared image repositories — the infrastructure that Delivery teams depend upon
+but should not be able to modify directly. Changes here require platform team
+involvement. Application teams are consumers, not owners.</p>
+
+<p><strong>Delivery</strong> is where software reaches customers. Application services,
+deployment configuration, workload-specific storage — these live in Delivery
+workspaces, owned and operated by the teams that build the products. They
+operate with autonomy within their layer because the layers below have already
+established the boundaries within which that autonomy is safe.</p>
+
+<h3 id="data-sources-as-contracts">Data sources as contracts</h3>
+
+<p>Shared Terraform state is a coupling mechanism. A workspace that can read
+another workspace’s state file can read everything in it, and often ends up
+depending on implementation details that were never intended as a public
+interface.</p>
+
+<p>The better pattern is the <code class="language-plaintext highlighter-rouge">data</code> source. Rather than sharing state, a lower
+layer promises to maintain a resource with a known name. An upper layer looks
+that resource up.</p>
+
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Delivery workspace — references a DNS zone it does not own</span>
+<span class="nx">data</span> <span class="s2">"google_dns_managed_zone"</span> <span class="s2">"private"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="s2">"services-private"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_dns_record_set"</span> <span class="s2">"app"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="o">=</span> <span class="s2">"my-service.${data.google_dns_managed_zone.private.dns_name}"</span>
+  <span class="nx">managed_zone</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">google_dns_managed_zone</span><span class="p">.</span><span class="nx">private</span><span class="p">.</span><span class="nx">name</span>
+  <span class="nx">type</span>         <span class="o">=</span> <span class="s2">"A"</span>
+  <span class="nx">ttl</span>          <span class="o">=</span> <span class="mi">300</span>
+  <span class="nx">rrdatas</span>      <span class="o">=</span> <span class="p">[</span><span class="nx">google_compute_address</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">address</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The Delivery workspace’s service account holds
+<code class="language-plaintext highlighter-rouge">roles/dns.resourceRecordSetsOwner</code> — enough to manage records within the zone,
+but not to create, delete, or reconfigure it. The <code class="language-plaintext highlighter-rouge">data</code> source lookup requires
+only <code class="language-plaintext highlighter-rouge">roles/dns.reader</code>. The zone is the Platform team’s contract to maintain;
+the records within it are the Delivery team’s concern.</p>
+
+<p>The same applies to service accounts. A Delivery workspace that needs to assign
+an identity to a workload does not create that identity — it looks it up.</p>
+
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Delivery workspace — uses an identity it does not manage</span>
+<span class="nx">data</span> <span class="s2">"google_service_account"</span> <span class="s2">"app"</span> <span class="p">{</span>
+  <span class="nx">account_id</span> <span class="o">=</span> <span class="s2">"my-application"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_cloud_run_v2_service"</span> <span class="s2">"app"</span> <span class="p">{</span>
+  <span class="nx">name</span>     <span class="o">=</span> <span class="s2">"my-application"</span>
+  <span class="nx">location</span> <span class="o">=</span> <span class="s2">"europe-west2"</span>
+
+  <span class="nx">template</span> <span class="p">{</span>
+    <span class="nx">service_account</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">google_service_account</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">email</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The service account was provisioned in the Governance workspace. The Delivery
+workspace can reference it and assign it to a workload. It cannot modify the
+account’s permissions or create accounts alongside it.</p>
+
+<h3 id="iam-follows-the-same-shape">IAM follows the same shape</h3>
+
+<p>The layered model maps directly onto the roles held by each workspace’s service
+account.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Workspace</th>
+      <th>Owns</th>
+      <th>Example roles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Organisation</td>
+      <td>WIPs, folder structure, org policies, custom roles</td>
+      <td><code class="language-plaintext highlighter-rouge">roles/iam.organizationRoleAdmin</code>, <code class="language-plaintext highlighter-rouge">roles/orgpolicy.policyAdmin</code></td>
+    </tr>
+    <tr>
+      <td>Governance</td>
+      <td>Projects, billing, service accounts, IAM principals</td>
+      <td><code class="language-plaintext highlighter-rouge">roles/resourcemanager.projectCreator</code>, <code class="language-plaintext highlighter-rouge">roles/iam.serviceAccountAdmin</code></td>
+    </tr>
+    <tr>
+      <td>Platform</td>
+      <td>Kubernetes clusters, DNS zones, shared networking</td>
+      <td><code class="language-plaintext highlighter-rouge">roles/container.admin</code>, <code class="language-plaintext highlighter-rouge">roles/dns.admin</code>, <code class="language-plaintext highlighter-rouge">roles/compute.networkAdmin</code></td>
+    </tr>
+    <tr>
+      <td>Delivery</td>
+      <td>Application services, workload-specific records and buckets</td>
+      <td><code class="language-plaintext highlighter-rouge">roles/run.admin</code>, <code class="language-plaintext highlighter-rouge">roles/dns.resourceRecordSetsOwner</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Within any given layer, per-concern service accounts are preferable to
+team-level shared accounts. A single <code class="language-plaintext highlighter-rouge">platform-sa</code> with broad permissions
+creates invisible contention — in GCP, quota attribution operates per service
+account, and a shared account makes that attribution opaque. Scoped accounts
+like <code class="language-plaintext highlighter-rouge">artifact-registry-administrator-sa</code> also limit the damage if a credential
+is compromised.</p>
+
+<h3 id="keyless-authentication-completes-the-picture">Keyless authentication completes the picture</h3>
+
+<p>Scoped service accounts are the right unit of identity, but long-lived keys
+undermine the model regardless of how carefully you scope them. A static key
+grants persistent access. The natural complement to layered workspaces is
+Workload Identity Federation — short-lived OIDC credentials that a CI/CD
+pipeline assumes for the duration of a job and cannot hold beyond it.</p>
+
+<p>In GCP, a dedicated identity project managed by the Organisation workspace hosts
+Workload Identity Pools for Terraform Cloud and GitHub Actions alike.</p>
+
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Organisation workspace — establishes the federation trust</span>
+<span class="nx">resource</span> <span class="s2">"google_iam_workload_identity_pool"</span> <span class="s2">"tfc"</span> <span class="p">{</span>
+  <span class="nx">workload_identity_pool_id</span> <span class="o">=</span> <span class="s2">"terraform-cloud"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_iam_workload_identity_pool_provider"</span> <span class="s2">"tfc"</span> <span class="p">{</span>
+  <span class="nx">workload_identity_pool_id</span>          <span class="o">=</span> <span class="nx">google_iam_workload_identity_pool</span><span class="p">.</span><span class="nx">tfc</span><span class="p">.</span><span class="nx">workload_identity_pool_id</span>
+  <span class="nx">workload_identity_pool_provider_id</span> <span class="o">=</span> <span class="s2">"tfc-provider"</span>
+
+  <span class="nx">oidc</span> <span class="p">{</span>
+    <span class="nx">issuer_uri</span> <span class="o">=</span> <span class="s2">"https://app.terraform.io"</span>
+  <span class="p">}</span>
+
+  <span class="nx">attribute_mapping</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"google.subject"</span>                   <span class="p">=</span> <span class="s2">"assertion.sub"</span>
+    <span class="s2">"attribute.terraform_workspace_id"</span> <span class="p">=</span> <span class="s2">"assertion.terraform_workspace_id"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Workspace-specific attribute conditions on IAM bindings ensure that each
+Terraform Cloud workspace can only assume its designated service account. The
+Delivery workspace cannot escalate to Governance credentials. The trust boundary
+is enforced at the identity layer, not by convention.</p>
+
+<p>One nuance: for elevated workspaces — Organisation and Governance — retaining
+service account impersonation rather than direct WIF principal binding preserves
+<code class="language-plaintext highlighter-rouge">iam.serviceAccounts.actAs</code> as an explicit control point and produces cleaner
+audit trails. For lower-privilege workspaces, direct binding is simpler. A
+hybrid approach is sensible; the choice of where to draw that line is a function
+of your audit requirements.</p>
+
+<h3 id="blast-radius-is-the-real-metric">Blast radius is the real metric</h3>
+
+<p>The value of this model is not architectural elegance. It is bounded failure.</p>
+
+<p>When something goes wrong in a Delivery workspace, the damage is contained to
+that workspace’s resources. A misconfigured <code class="language-plaintext highlighter-rouge">count</code> expression cannot delete a
+VPC. A <code class="language-plaintext highlighter-rouge">terraform destroy</code> run against the wrong directory cannot revoke the IAM
+bindings the entire platform depends upon. The blast radius of a change is
+determined by what the executing credential can touch — not by what you intended
+to change.</p>
+
+<p>This is why the boundaries matter across repositories too, not just within
+Terraform workspaces. A workspace that combines Kubernetes configuration with
+general configuration management has a larger blast radius than two workspaces
+that each do one thing. The discipline of separation is not overhead. It is the
+mechanism by which a mistake stays local.</p>
+
+<h3 id="this-scales-down-as-well-as-up">This scales down as well as up</h3>
+
+<p>It is easy to read a four-tier model and conclude it only makes sense with a
+dedicated platform team and significant organisational complexity. That
+conclusion is wrong.</p>
+
+<p>A team of two engineers benefits from the separation. When you are working on a
+delivery task, the confidence that <code class="language-plaintext highlighter-rouge">terraform apply</code> cannot inadvertently
+destroy shared infrastructure is not a luxury — it is what lets you move at
+speed without anxiety. The layers are not bureaucracy. They are the thing that
+makes autonomy safe.</p>
+
+<p>The practical starting point for a small team is two workspaces: one combining
+Organisation and Governance concerns with elevated permissions, and one
+combining Platform and Delivery resources that reference the foundation via
+<code class="language-plaintext highlighter-rouge">data</code> sources. The four-tier model is the natural destination as the
+infrastructure and team grow. It does not need to be the starting point.</p>
+
+<h3 id="least-privilege-applied-to-tooling">Least privilege, applied to tooling</h3>
+
+<p>The layered model is the principle of least privilege applied to infrastructure
+tooling rather than to IAM policy alone. Every workspace holds exactly the
+access it needs to do its job.</p>
+
+<p>A misconfigured plan in a workspace with too-broad permissions can cause damage
+that takes hours to unpick. The same misconfiguration in a tightly-scoped
+workspace fails immediately, with a permissions error that tells you exactly
+what went wrong.</p>
+
+<p>Noisy, local failures are the goal.</p>]]></content><author><name>Tomas Basham</name></author><category term="infrastructure" /><category term="terraform" /><category term="infrastructure-as-code" /><category term="ownership" /><category term="security" /><summary type="html"><![CDATA[Why a flat Terraform workspace maximises blast radius, and how a four-tier ownership model bounds it instead.]]></summary></entry><entry><title type="html">Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide</title><link href="https://tomasbasham.dev/career/building-truly-cross-functional-teams" rel="alternate" type="text/html" title="Building Truly Cross-Functional Teams: Beyond the Frontend-Backend Divide" /><published>2025-05-05T00:00:00+01:00</published><updated>2025-05-05T00:00:00+01:00</updated><id>https://tomasbasham.dev/career/building-truly-cross-functional-teams</id><content type="html" xml:base="https://tomasbasham.dev/career/building-truly-cross-functional-teams"><![CDATA[<p>The rest of this series has been about technical defaults: client-side
+architecture, utility-first CSS, progressive enhancement. None of those
+choices are made in a vacuum — they both shape and get shaped by how teams
+are organised. This last article is about the organisational side: the
+frontend/backend split, why it hardened into something closer to a
+permanent structure than a practical division of labour, and whether it’s
+still worth what it costs.</p>
+
+<h2 id="why-the-split-happened">Why the split happened</h2>
+
+<p>The split had legitimate origins. Early browsers were inconsistent enough
+that cross-browser CSS and JavaScript were genuinely specialist knowledge.
+Backend systems carried real complexity of their own — databases,
+transactions, business logic. The full stack, in the early days, was large
+enough that very few people could hold all of it well at once. Specialising
+made sense.</p>
+
+<p>What’s changed isn’t that the stack got smaller. It’s that the gap between
+“frontend” and “backend” skill, for most applications, has narrowed
+considerably — partly because the technical choices argued for earlier in
+this series (server-rendered HTML, HTMX instead of a bespoke client
+framework, CSS that doesn’t require a build step to reason about) reduce how
+much there is to specialise in on either side.</p>
+
+<h2 id="what-the-split-actually-costs">What the split actually costs</h2>
+
+<p>A JSON API between two teams is a contract, and every contract has to be
+negotiated, documented, and renegotiated whenever requirements change —
+which, on any live product, is constantly. I’ve sat in meetings discussing
+the shape of an API that would have taken less time to simply build, had one
+person been able to see the whole path from request to rendered page.</p>
+
+<p>The split also sets up two teams to optimise for different things by
+default: a frontend team under pressure to ship visual polish, a backend
+team under pressure to protect data integrity and system reliability. Both
+are legitimate priorities. Split across two teams with two reporting lines
+and two sets of metrics, they stop being complementary and start being
+competing, not because the priorities are actually in conflict, but because
+nobody on either side is accountable for reconciling them.</p>
+
+<p>The subtler cost is what it implies about who’s allowed to know what. Once
+“frontend” and “backend” become job titles rather than areas of emphasis,
+developers are discouraged from learning past the boundary, features can’t
+be shipped end-to-end by one person, and context gets lost every time work
+crosses the line between teams. None of this is because the underlying
+material is actually too hard to learn across — most of software
+engineering’s ideas transfer across the boundary just fine. It’s an
+organisational habit, not a cognitive limit.</p>
+
+<h2 id="what-id-build-instead">What I’d build instead</h2>
+
+<p>A cross-functional team, in the sense I mean it, isn’t a frontend developer
+and a backend developer sat at the same desk. It’s a team that owns features
+end-to-end, where most members have both some depth and some breadth —
+T-shaped, in the usual phrase — and where specialisation, where it exists,
+is contextual rather than a permanent label. The team is organised around a
+business domain, not a technical layer, which matters because it’s domains,
+not layers, that actually change when the product changes.</p>
+
+<p>The technical choices from earlier in this series make this easier to
+sustain, not just philosophically compatible with it. Server-rendered HTML
+with HTMX narrows the actual skill gap between “frontend” and “backend”
+work. CSS without a utility-class compiler step is something any team member
+can safely touch. Progressive enhancement creates a natural layering —
+HTML, then CSS, then JavaScript — that maps cleanly onto how much depth a
+given change actually needs, rather than requiring every change to pass
+through a framework-shaped lens regardless of its size.</p>
+
+<h2 id="the-objections-worth-taking-seriously">The objections worth taking seriously</h2>
+
+<p>The strongest counter-argument is that specialists are more efficient at
+narrowly defined tasks, which is true, but it undercounts the coordination
+cost of getting two specialists’ narrow work to meet in the middle. A
+slightly slower generalist who ships a feature end-to-end is often faster,
+measured from idea to production, than two specialists who are individually
+faster but have to synchronise.</p>
+
+<p>The second objection — that full-stack developers capable of this are rare
+— is real but somewhat self-inflicted. Narrow job descriptions and
+permanently separated teams actively discourage people from building the
+breadth this model needs. Hiring and structuring for it is a longer-term fix
+than hiring around it, but it’s the one that actually closes the gap rather
+than permanently working around it.</p>
+
+<p>The third is that some developers genuinely prefer to specialise, which I
+don’t think this model denies anyone. A CSS specialist on a cross-functional
+team is still a specialist; the difference is that their work stays
+connected to the rest of the feature because the team, not an API boundary,
+is the unit of ownership.</p>
+
+<h2 id="where-this-series-lands">Where this series lands</h2>
+
+<p>Across these five articles the thread has been the same: start from the
+primitive that already solves the problem — HTML, HTTP, the cascade — and
+add complexity only where it’s actually earned. Technically, that means
+favouring hypertext over bespoke client architecture, favouring the cascade
+over utility classes, and favouring progressive enhancement over
+JavaScript-first defaults. Organisationally, it means the frontend/backend
+split is worth questioning for the same reason: it was the right answer to a
+technical gap that, for a lot of applications, no longer exists at the size
+it used to.</p>]]></content><author><name>Tomas Basham</name></author><category term="career" /><category term="teams" /><category term="cross-functional" /><summary type="html"><![CDATA[The technical arguments earlier in this series point at an organisational one — that the frontend/backend split costs more than it buys once the technical gap it was defending narrows.]]></summary></entry><entry><title type="html">Progressive Enhancement in the Modern Web: Building Resilient Applications</title><link href="https://tomasbasham.dev/development/progressive-enhancement-in-the-modern-web" rel="alternate" type="text/html" title="Progressive Enhancement in the Modern Web: Building Resilient Applications" /><published>2025-05-04T00:00:00+01:00</published><updated>2025-05-04T00:00:00+01:00</updated><id>https://tomasbasham.dev/development/progressive-enhancement-in-the-modern-web</id><content type="html" xml:base="https://tomasbasham.dev/development/progressive-enhancement-in-the-modern-web"><![CDATA[<p>The previous two articles argued against defaults — client-heavy
+architecture, utility-first styling — that trade a foundation for
+convenience. This one is about the principle that, in my view, should have
+stayed the default all along: progressive enhancement.</p>
+
+<h2 id="what-it-actually-means">What it actually means</h2>
+
+<p>Progressive enhancement starts with semantic HTML that works with nothing
+else, adds CSS to make it look right, and adds JavaScript last, to make it
+behave better. The point isn’t nostalgia for simpler interfaces — it’s that
+if any layer fails to load, the layer beneath it still works. A page built
+this way degrades; a page built JavaScript-first, with HTML as an
+afterthought generated at runtime, doesn’t degrade, it just breaks.</p>
+
+<h2 id="a-search-box-built-up-in-layers">A search box, built up in layers</h2>
+
+<p>Start with a form that needs nothing but HTTP:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/search"</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"search"</span><span class="nt">&gt;</span>Search:<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"search"</span> <span class="na">id=</span><span class="s">"search"</span> <span class="na">name=</span><span class="s">"q"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Search<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>This works everywhere, is indexable, and needs no explanation. Now add
+autocomplete with HTMX and Alpine:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/search"</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"search"</span><span class="nt">&gt;</span>Search:<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;input</span>
+    <span class="na">type=</span><span class="s">"search"</span>
+    <span class="na">id=</span><span class="s">"search"</span>
+    <span class="na">name=</span><span class="s">"q"</span>
+    <span class="na">hx-get=</span><span class="s">"/api/suggestions"</span>
+    <span class="na">hx-trigger=</span><span class="s">"keyup delay:500ms"</span>
+    <span class="na">hx-target=</span><span class="s">"#suggestions"</span>
+    <span class="na">x-data=</span><span class="s">"{ query: '' }"</span>
+    <span class="na">x-model=</span><span class="s">"query"</span>
+  <span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Search<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"suggestions"</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>Every keystroke now fires a debounced request to <code class="language-plaintext highlighter-rouge">/api/suggestions</code>, and the
+response fills the suggestions div. Crucially, if that endpoint is slow,
+broken, or the HTMX script fails to load entirely, the form hasn’t lost
+anything — it still submits, the server still returns results, the user
+still searches. Autocomplete was added, not substituted for the thing it’s
+enhancing.</p>
+
+<p>Pushing further with <code class="language-plaintext highlighter-rouge">hx-boost</code>:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"/search"</span> <span class="na">method=</span><span class="s">"get"</span> <span class="na">hx-boost=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"search"</span><span class="nt">&gt;</span>Search:<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;input</span>
+    <span class="na">type=</span><span class="s">"search"</span>
+    <span class="na">id=</span><span class="s">"search"</span>
+    <span class="na">name=</span><span class="s">"q"</span>
+    <span class="na">hx-get=</span><span class="s">"/api/suggestions"</span>
+    <span class="na">hx-trigger=</span><span class="s">"keyup delay:500ms"</span>
+    <span class="na">hx-target=</span><span class="s">"#suggestions"</span>
+    <span class="na">x-data=</span><span class="s">"{ query: '' }"</span>
+    <span class="na">x-model=</span><span class="s">"query"</span>
+    <span class="na">hx-indicator=</span><span class="s">".spinner"</span>
+  <span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Search<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"spinner"</span> <span class="na">style=</span><span class="s">"display:none;"</span><span class="nt">&gt;</span>Loading...<span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"suggestions"</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>Now even the form submission itself avoids a full page reload. The same
+guarantee holds: strip away HTMX and the form reverts to the plain version a
+few paragraphs up, not to nothing.</p>
+
+<h2 id="why-this-still-matters-when-everyone-has-javascript">Why this still matters when “everyone has JavaScript”</h2>
+
+<p>The usual objection is that JavaScript failure is a theoretical concern —
+practically every visitor has it enabled. That’s beside the point. Scripts
+fail to load over flaky mobile connections, get mangled by corporate
+proxies, collide with browser extensions, or simply throw on a browser
+nobody tested against. Progressive enhancement isn’t about supporting
+JavaScript-disabled browsers; it’s about not betting the entire interface on
+a layer that fails for ordinary, unglamorous reasons on a long enough tail of
+requests.</p>
+
+<p>It’s also not slower to build, in my experience — it’s slower to build
+badly, the first time, because it forces you to settle what the feature
+actually does before deciding how to make it nicer. Teams that skip that step
+end up debugging edge cases in the JavaScript layer that wouldn’t exist if
+the HTML layer had been made to work first.</p>
+
+<h2 id="html-and-http-already-do-most-of-this">HTML and HTTP already do most of this</h2>
+
+<p>Forms, links, and the full range of HTTP methods are underused primitives.
+A plain <code class="language-plaintext highlighter-rouge">&lt;form&gt;</code> gives you validation, keyboard navigation, accessibility,
+and autofill for free; a plain <code class="language-plaintext highlighter-rouge">&lt;a&gt;</code> gives you history, middle-click,
+right-click, and keyboard navigation for free. HTMX’s contribution isn’t
+replacing these — it’s extending them to methods HTML forms don’t natively
+support:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;button</span> <span class="na">hx-delete=</span><span class="s">"/items/1"</span> <span class="na">hx-target=</span><span class="s">"#items-list"</span><span class="nt">&gt;</span>
+  Delete Item
+<span class="nt">&lt;/button&gt;</span>
+</code></pre></div></div>
+
+<p>That’s still a request/response cycle against a URL; HTMX just lets the
+button issue a <code class="language-plaintext highlighter-rouge">DELETE</code> instead of forcing the page through a form that only
+understands <code class="language-plaintext highlighter-rouge">GET</code> and <code class="language-plaintext highlighter-rouge">POST</code>.</p>
+
+<p>Alpine fills a similar, smaller role for purely client-side state:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">x-data=</span><span class="s">"{ open: false }"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="err">@</span><span class="na">click=</span><span class="s">"open = !open"</span><span class="nt">&gt;</span>Toggle<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">x-show=</span><span class="s">"open"</span><span class="nt">&gt;</span>Content<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>If Alpine fails to load here, the content is still visible — it just won’t
+toggle. That’s the whole philosophy in miniature: enhancement that fails
+safe.</p>
+
+<h2 id="where-progressive-enhancement-still-meets-resistance">Where progressive enhancement still meets resistance</h2>
+
+<p>The strongest version of the complaint is that modern applications are too
+complex for this approach to scale. I don’t think that holds up — GitHub is
+not a simple application and is built this way extensively — but it’s worth
+taking seriously rather than dismissing outright, because some interactions
+genuinely are client-state-heavy enough that layering doesn’t make sense (a
+drawing tool, a live collaborative editor). What’s true for most
+applications, though, including most of what gets built as a SPA by
+default, is that they’re forms and data display, which is precisely the
+problem HTML was built to solve.</p>
+
+<p>Progressive enhancement, utility-first CSS’s alternatives, and the case
+against SPAs by default all point the same direction: start from the
+primitive that already does the job, and add only what genuinely improves on
+it. The last article in this series asks what that means for how teams are
+structured around this work — specifically, whether the frontend/backend
+split still earns its cost once the technical gap between the two narrows.</p>]]></content><author><name>Tomas Basham</name></author><category term="development" /><category term="javascript" /><category term="htmx" /><category term="alpinejs" /><category term="progressive-enhancement" /><summary type="html"><![CDATA[Progressive enhancement is unfashionable, but starting from working HTML and layering on JavaScript still produces more resilient applications.]]></summary></entry><entry><title type="html">The CSS Conundrum: Why Utility Classes Are Not The Answer</title><link href="https://tomasbasham.dev/development/the-css-conundrum" rel="alternate" type="text/html" title="The CSS Conundrum: Why Utility Classes Are Not The Answer" /><published>2025-05-03T00:00:00+01:00</published><updated>2025-05-03T00:00:00+01:00</updated><id>https://tomasbasham.dev/development/the-css-conundrum</id><content type="html" xml:base="https://tomasbasham.dev/development/the-css-conundrum"><![CDATA[<p>The previous two articles in this series argued for pulling web development
+back toward hypertext and away from unnecessary client-side architecture. This
+one covers a parallel trend in styling: the rise of utility-first CSS,
+TailwindCSS in particular, and the broader habit of embedding presentation
+directly in markup.</p>
+
+<h2 id="the-problems-tailwind-actually-solves">The problems Tailwind actually solves</h2>
+
+<p>Traditional CSS has real failure modes, and it’s worth naming them honestly
+before arguing against the fix. Selectors are globally scoped, so two
+developers can collide on a class name without realising it. The cascade,
+useful as it is, makes it easy to produce specificity fights nobody can trace
+back to their source. Large stylesheets accumulate dead rules nobody’s
+confident enough to delete. Utility-first frameworks solve all of this by
+sidestepping it: a class like <code class="language-plaintext highlighter-rouge">bg-blue-500</code> can never collide, can never be
+overridden unexpectedly, and is either used on the page or it isn’t.</p>
+
+<p>That’s a real trade, not a fake one. The question is what you give up to make it.</p>
+
+<h2 id="what-gets-lost">What gets lost</h2>
+
+<p>Compare these two versions of the same component:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"flex flex-col md:flex-row justify-between items-center p-4 bg-gray-100 rounded-lg shadow-md"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"flex items-center mb-4 md:mb-0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">"w-10 h-10 rounded-full mr-4"</span> <span class="na">src=</span><span class="s">"avatar.jpg"</span> <span class="na">alt=</span><span class="s">"User avatar"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;h3</span> <span class="na">class=</span><span class="s">"text-lg font-medium text-gray-900"</span><span class="nt">&gt;</span>User Name<span class="nt">&lt;/h3&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"text-sm text-gray-500"</span><span class="nt">&gt;</span>User Title<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"</span><span class="nt">&gt;</span>
+    Follow
+  <span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"user-card"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"user-profile"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">"avatar"</span> <span class="na">src=</span><span class="s">"avatar.jpg"</span> <span class="na">alt=</span><span class="s">"User avatar"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"user-info"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;h3</span> <span class="na">class=</span><span class="s">"name"</span><span class="nt">&gt;</span>User Name<span class="nt">&lt;/h3&gt;</span>
+      <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"title"</span><span class="nt">&gt;</span>User Title<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"follow-button"</span><span class="nt">&gt;</span>Follow<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>The first tells you nothing about what the component is until you’ve parsed
+every class on every element. The second tells you in one glance: a user
+card, with a profile and a follow button. That’s not a style preference —
+semantic markup is supposed to describe structure, and the utility-class
+version has given that job up entirely in exchange for the collision-safety
+described above.</p>
+
+<p>The maintainability cost follows from the same trade. If a design system
+decision changes — say, standard button padding — the semantic version
+changes one rule. The utility version means grepping every file that
+happens to use that combination of classes and hoping you found them all.
+Responsive variants make this worse before they make it better: <code class="language-plaintext highlighter-rouge">md:flex-row</code>
+and <code class="language-plaintext highlighter-rouge">md:mb-0</code> scattered through markup is exactly the kind of noise that
+semantic class names were invented to hide.</p>
+
+<p>The usual justification is colocation — keeping everything about a component
+in one file so there’s nowhere else to look. But colocation and coupling are
+the same thing described from two different angles. Keeping style and markup
+in one file doesn’t eliminate the need for consistency, it just means every
+place that needs it has to restate it, which is worse for consistency, not
+better.</p>
+
+<h2 id="what-css-was-actually-for">What CSS was actually for</h2>
+
+<p>The cascade, inheritance, and specificity exist to let presentation be
+defined once and applied broadly, and to let it change in one place when the
+underlying intent changes. That’s not an accident of the spec; it’s the
+reason it’s called Cascading Style Sheets rather than Per-Element Style
+Attributes. Utility classes don’t improve on that model — they opt out of it,
+in favour of a programmatic style closer to inline styling, dressed up as
+classes.</p>
+
+<h2 id="where-id-actually-land">Where I’d actually land</h2>
+
+<p>None of this is an argument for the stylesheet chaos that made Tailwind
+attractive in the first place. CSS Modules give you real scoping without the
+global-namespace risk. Sass or plain CSS with sensible partials and variables
+give you the cascade back without reintroducing the collision problem. CSS
+custom properties cover most of what people reach for a JavaScript-driven
+design-token system to do. BEM, applied with some discipline, gives markup
+back its semantics while still keeping class names predictable. All four
+solve the real problems that made utility classes look necessary, without
+giving up what semantic HTML and the cascade are for.</p>
+
+<p>The next article in this series moves from CSS to a principle that both of
+the previous two implicitly depend on: progressive enhancement, and why
+building up from working HTML is still the right default even when a page
+ends up fully interactive.</p>]]></content><author><name>Tomas Basham</name></author><category term="development" /><category term="css" /><category term="tailwindcss" /><summary type="html"><![CDATA[Utility-first CSS solved real problems with the cascade, but at the cost of the separation between structure and presentation.]]></summary></entry><entry><title type="html">HyperText and HTML: Why SPAs Are Dead</title><link href="https://tomasbasham.dev/development/hypertext-and-html" rel="alternate" type="text/html" title="HyperText and HTML: Why SPAs Are Dead" /><published>2025-05-02T00:00:00+01:00</published><updated>2025-05-02T00:00:00+01:00</updated><id>https://tomasbasham.dev/development/hypertext-and-html</id><content type="html" xml:base="https://tomasbasham.dev/development/hypertext-and-html"><![CDATA[<p>The first article in this series set out my general complaint: that modern web
+development defaults to client-side complexity for problems that don’t need
+it. This one is about the specific case of single-page applications, and about
+why I think the pendulum is already swinging back, whether or not the industry
+has noticed yet.</p>
+
+<h2 id="why-spas-happened">Why SPAs happened</h2>
+
+<p>The rise of the SPA wasn’t an accident or a fad. Around 2010–2015 several
+things arrived at once: smartphones set an expectation for app-like
+interaction, browser APIs matured enough to support it, JavaScript engines got
+fast enough to make it tolerable, and React gave teams a component model that
+solved a genuine organisational problem — how a dozen people work on one UI
+without constantly colliding. For a while, these applications solved real
+problems: rich interaction without full page reloads, and a clean separation
+that let frontend and backend teams scale independently.</p>
+
+<p>The costs took longer to show up than the benefits did.</p>
+
+<h2 id="what-it-costs">What it costs</h2>
+
+<p>Open the dependency tree of a moderately complex React application and you’ll
+typically find a bundler, a transpiler, a state management library, a router,
+a form library, a data-fetching layer, and a component-testing framework —
+each one solving a real problem in isolation, and each one adding to a stack
+of complexity that doesn’t exist at all when HTML is rendered on the server.
+None of these tools are badly designed. The complexity isn’t a bug in any one
+of them; it’s the sum of needing all of them at once to do what a server used
+to do by itself.</p>
+
+<p>The deeper issue is what I’d call the JSON API fallacy: the assumption that a
+backend should serve JSON even when it has exactly one consumer, the frontend
+of the same application. The typical SPA request looks like this — browser
+loads a near-empty HTML shell, JavaScript executes, JavaScript fetches JSON,
+JavaScript turns that JSON into HTML, and only then does the user see
+anything. A server rendering the page directly skips three of those four
+steps. The JSON step only earns its complexity when there’s a second consumer
+of the API — a mobile app, a third party — that actually needs it. Most
+CRUD applications don’t have one.</p>
+
+<p>That fallacy also reinforces the frontend/backend split I mentioned in the
+first article: a JSON API is a contract, and contracts have to be negotiated,
+documented, and renegotiated every time the product changes. A team that
+didn’t need the contract in the first place doesn’t pay that cost.</p>
+
+<h2 id="what-htmx-actually-does">What HTMX actually does</h2>
+
+<p>HTMX is interesting because it doesn’t propose an alternative architecture —
+it extends the one the browser already has.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;button</span> <span class="na">hx-post=</span><span class="s">"/submit"</span> <span class="na">hx-target=</span><span class="s">"#response-div"</span><span class="nt">&gt;</span>
+  Submit
+<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"response-div"</span><span class="nt">&gt;&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>Two attributes turn a button into an asynchronous form submission that
+replaces the contents of a target element with whatever HTML the server
+sends back. No JSON, no client-side templating, no state to keep in sync
+between a store and the DOM — the server still owns the rendering, HTMX just
+gives it a way to update part of a page instead of the whole thing. It’s the
+same request/response model the web has always had, with slightly finer
+control over where the response lands.</p>
+
+<h2 id="where-spas-still-make-sense">Where SPAs still make sense</h2>
+
+<p>I don’t think this argument extends to every application. Offline-first
+tools, design and drawing applications, games — anything where the state
+genuinely lives on the client and the server is secondary — are legitimately
+served by a client-heavy architecture. What I’m arguing against is the default,
+not the exception: most dashboards, content sites, and CRUD applications
+don’t have offline requirements or client-side state worth the name, and
+building them as SPAs anyway is solving a problem the project doesn’t have.</p>
+
+<h2 id="what-this-means-for-frontend-work">What this means for frontend work</h2>
+
+<p>The obvious objection is that a lot of careers are built on frontend
+frameworks, and simplifying the default architecture threatens that. I think
+this gets the causality backwards: some of the complexity in frontend
+tooling exists because the specialisation needs defending, not because the
+problems demand it. But that doesn’t mean frontend expertise disappears —
+accessibility, animation, layout, and genuinely interactive client-side
+behaviour are still hard, specialist problems. What changes is that frontend
+developers would be solving those problems instead of re-implementing server
+rendering in the browser.</p>
+
+<p>Pulling the architecture back toward hypertext doesn’t shrink what frontend
+developers do. It moves the boundary between frontend and backend from a
+JSON contract to a shared page, which is the thread I’ll pick back up in the
+last article in this series, on team structure.</p>
+
+<p>The next article is CSS, and specifically what utility-first frameworks like
+Tailwind get right and where I think they go wrong.</p>]]></content><author><name>Tomas Basham</name></author><category term="development" /><category term="web" /><category term="htmx" /><category term="spa" /><summary type="html"><![CDATA[Why single-page applications solved real problems for a time, and why HTML plus HTMX now solves most of the same problems more simply.]]></summary></entry></feed>

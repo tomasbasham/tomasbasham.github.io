@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>The WIP Limit Isn't the Problem | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="The WIP Limit Isn’t the Problem" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="A team oscillating between too much WIP and too much pairing isn’t failing to find the right process setting — it’s trying to solve a need for individual ownership using a dial that was never built to hold it." />
+<meta property="og:description" content="A team oscillating between too much WIP and too much pairing isn’t failing to find the right process setting — it’s trying to solve a need for individual ownership using a dial that was never built to hold it." />
+<link rel="canonical" href="https://tomasbasham.dev/career/the-wip-limit-isnt-the-problem" />
+<meta property="og:url" content="https://tomasbasham.dev/career/the-wip-limit-isnt-the-problem" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-09-11T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="The WIP Limit Isn’t the Problem" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2026-09-11T00:00:00+01:00","datePublished":"2026-09-11T00:00:00+01:00","description":"A team oscillating between too much WIP and too much pairing isn’t failing to find the right process setting — it’s trying to solve a need for individual ownership using a dial that was never built to hold it.","headline":"The WIP Limit Isn’t the Problem","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/career/the-wip-limit-isnt-the-problem"},"url":"https://tomasbasham.dev/career/the-wip-limit-isnt-the-problem"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">The WIP Limit Isn't the Problem</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2026-09-11T00:00:00+01:00">11 Sep 2026</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 7 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+
+      <p>In an earlier post I described a mismatch: I want slow, deliberate, many-voiced
+feedback before work starts, and fast, unambiguous, solitary feedback once it
+does. The resolution was that these aren’t contradictory preferences — they’re
+the same principle, matching the feedback mechanism to whichever oracle can
+actually answer the question at that stage. Human judgement for direction. The
+system for execution.</p>
+
+<p>There’s a related tension I’ve watched play out repeatedly on a small team, and
+it doesn’t resolve the same way. It looks, on the surface, like a scheduling
+problem. It isn’t.</p>
+
+<h2 id="the-oscillation">The oscillation</h2>
+
+<p>The pattern goes roughly like this. The team takes on too many workstreams at
+once — not because anyone mis-scoped the sprint, but because everybody wants
+something of their own to work on, or believes their thing is the higher
+priority, despite that not really being their call to make. So the sprint ends
+up planned as a mixture, a bit of everything, to keep everyone satisfied going
+in.</p>
+
+<p>Inevitably, little of it finishes cleanly. People are pulled out of their own
+work constantly — into code review, into testing sessions, into implementation
+discussions for streams they’re not even driving — and by the end of the sprint
+nobody has actually finished anything. What does get finished is rushed across
+the line in the last day or two.</p>
+
+<p>So the retrospective conclusion is sensible: focus on less. Reduce WIP. The next
+sprint, people pair or mob rather than each running their own stream.</p>
+
+<p>And then a different problem shows up. Only one person can drive at a time. The
+others — the navigators — get bored. They start quietly working on side things
+during the session, less engaged, present but not really there. The work does
+get finished on time this time. But people feel flat about it. Demotivated.
+Under-stretched. Convinced more could have been achieved.</p>
+
+<p>So the next retrospective says: let’s take on more, give people their own things
+again. And the cycle restarts.</p>
+
+<h2 id="why-this-isnt-a-wip-problem">Why this isn’t a WIP problem</h2>
+
+<p>The obvious read is that the team hasn’t found the right WIP limit yet — too
+high causes thrashing, too low causes disengagement, so somewhere in between
+must be correct. I don’t think that’s right, and there’s a tell in the
+pattern that gives it away: it’s frequently the same people, unhappy in both
+states. The person complaining “I never get to finish anything, everything’s
+rushed” in the high-WIP sprint is often the same person complaining “I’m
+bored, I’m not really contributing” in the paired sprint.</p>
+
+<p>If WIP were the actual variable, you wouldn’t expect that. You’d expect the
+complaints to come from different people depending on their tolerance for
+context-switching versus their tolerance for close collaboration. Instead
+the same individuals are dissatisfied on both sides of the dial, which
+suggests the dial isn’t what they actually care about.</p>
+
+<p>What they’re asking for, in both states, looks like the same underlying
+thing: individual, attributable ownership of a solved problem. Something they
+drove, that’s recognisably theirs, that demonstrates the specific expertise
+they bring to the team. High WIP gives everyone a shot at that — their own
+stream, their own area — but not the completion of it, because constant
+interruption means nothing actually gets finished under their name. Pairing
+gives the completion, but only to whoever’s driving that session; the
+navigator gets the outcome without the authorship.</p>
+
+<p>Neither format is failing at its stated job, either. Throughput-wise, the
+low-WIP sprints work — the team said as much, work gets done on time. What’s
+failing is a need nobody’s named out loud in the retrospective, because
+“reduce WIP” and “pair more” are the only vocabulary a sprint retrospective
+tends to offer. Recognition and demonstrated individual expertise aren’t on
+that menu, so the dissatisfaction keeps getting misdiagnosed as a process
+setting, and the process gets nudged back and forth in search of a value that
+isn’t on that axis at all.</p>
+
+<p>It’s the same shape of mistake as the oracle mismatch from the earlier post,
+one level up: using a process mechanism — a WIP limit, a pairing cadence — to
+solve a need that mechanism was never built to answer. A WIP limit is a good
+tool for managing flow efficiency and reducing thrash. It has no lever for
+felt ownership. Turning the dial harder in either direction won’t produce a
+value it was never designed to hold.</p>
+
+<h2 id="where-shaping-fits-and-where-it-doesnt-yet">Where “shaping” fits, and where it doesn’t yet</h2>
+
+<p>This team has already tried, independently, to address a version of this — worth
+mentioning, because it’s evidence the diagnosis isn’t invented after the
+fact. We’ve been experimenting with a <strong>shaping</strong> model rather than conventional
+planning: a rotating pair kicks off each initiative with a lightweight outline,
+the relevant specialists feed in asynchronously by area, a short huddle resolves
+anything unclear, and the facilitator role — whoever drives that shaping —
+rotates each time rather than defaulting to the same person.</p>
+
+<p>The intent lines up closely with the diagnosis above. Rotating the facilitator
+role exists specifically so ownership of <em>direction</em> doesn’t collapse onto one
+person, and so people get turns leading rather than only ever being told what to
+build by some fixed authority. That’s a genuine, structural answer to part of
+the ownership problem — at the design stage.</p>
+
+<p>But it’s a partial answer, not a full one, because it operates entirely upstream
+of the point where the oscillation actually happens. Shaping answers “who got
+heard on the plan, and who’s facilitating it.” It doesn’t yet answer “who gets
+to drive — and finish, under their own name — the <em>implementation</em>.” A team can
+rotate shaping facilitators well and still hit the exact same
+pairing-versus-solo tension once building starts, because that tension lives
+entirely in execution, which shaping doesn’t touch. The gap this post is
+describing sits downstream of everything shaping currently covers.</p>
+
+<h2 id="what-would-actually-close-the-gap">What would actually close the gap</h2>
+
+<p>If the diagnosis is right, the fix isn’t a better WIP number, and it isn’t more
+or less pairing as a blanket policy. It’s treating ownership itself as something
+to be deliberately distributed across the roadmap over time — giving each person
+a stream they drive end-to-end some of the time, and pairing or mobbing at other
+times, rather than picking one mode as “how we work now” and applying it
+uniformly until it stops working and gets swapped for its opposite.</p>
+
+<p>Concretely, that might look like extending the same rotation instinct that
+shaping already applies to facilitation, into execution: an explicit “who owns
+driving this through to done” decision made once at the start of an initiative,
+visible to the team, changing initiative to initiative — rather than an
+implicit, unnamed scramble for it that shows up as either too many parallel
+streams or too many bored navigators, depending on which way the last
+retrospective nudged the dial.</p>
+
+<p>That’s a bigger change than adjusting a WIP limit, and it’s probably a harder
+one to get agreement on — which is exactly why the team needs to see the
+diagnosis clearly first. Turning the dial feels like doing something. Naming
+what the dial can’t fix is less comfortable, but it’s the only version of this
+conversation that stops it from repeating next sprint.</p>
+
+<h2 id="why-driver-rotation-rarely-survives-contact-with-reality">Why driver rotation rarely survives contact with reality</h2>
+
+<p>There’s a smaller-scale version of the same tension worth naming, because it
+complicates the conclusion rather than just illustrating it. Pairing’s usual
+answer to navigator boredom is to rotate the driver frequently. In practice
+this rarely happens without real discipline enforcing it, and the reasons are
+structural, not laziness. Natural stopping points are genuinely hard to find
+mid-problem, and driving isn’t just operating the keyboard — it’s holding the
+shape of a half-built solution in your head. Handing that off mid-thought
+means someone else either preserves your intent or quietly replaces it with
+their own, and watching your own partially-built approach get overridden
+while you can only observe is a real discomfort, not reluctance to share
+credit. Rotate too eagerly and the rotation destroys the very ownership it
+was meant to produce.</p>
+
+<p>There’s also a genuine efficiency case against it: “I could do this faster if
+I were just allowed to drive” is frequently true in the moment. What it
+discounts is that the return on letting someone else drive shows up later, as
+team capability, rather than now, as this task’s completion time — the same
+mistake as everything else here, just measuring the wrong feedback loop. Left
+unmanaged, the loop you can feel immediately wins by default over the one
+that actually matters. And sometimes there simply isn’t slack to spend on
+anyone’s growth right now, and some work is genuinely better driven by
+whoever’s fastest at it.</p>
+
+<p>None of that undermines the point above. Rotation isn’t something that should
+happen mechanically, on principle, at every opportunity — it’s a deliberate
+default, consciously overridden when the cost of slowing down is genuinely
+too high, rather than something that silently never happens because nobody
+wanted to insist on it. That’s the actual difference between a team managing
+this tension on purpose and one stuck oscillating through it by accident.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-delivery">
+    <a class="link" href="/tag/delivery" title="Go to delivery" aria-label="Go to delivery">delivery</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-engineering-culture">
+    <a class="link" href="/tag/engineering-culture" title="Go to engineering-culture" aria-label="Go to engineering-culture">engineering-culture</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-agile">
+    <a class="link" href="/tag/agile" title="Go to agile" aria-label="Go to agile">agile</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+{
+  "_resources/css/katex.css": {
+    "file": "css/katex-KwBvjUzP.css",
+    "src": "_resources/css/katex.css",
+    "isEntry": true,
+    "names": [
+      "katex.css"
+    ]
+  },
+  "_resources/css/style.css": {
+    "file": "css/style-CyXwpMAg.css",
+    "src": "_resources/css/style.css",
+    "isEntry": true,
+    "names": [
+      "style.css"
+    ]
+  },
+  "_resources/js/app.ts": {
+    "file": "js/app-D4vro8h3.js",
+    "name": "app",
+    "src": "_resources/js/app.ts",
+    "isEntry": true
+  },
+  "_resources/js/sw.ts": {
+    "file": "sw.js",
+    "name": "sw",
+    "src": "_resources/js/sw.ts",
+    "isEntry": true
+  },
+  "node_modules/@fontsource-variable/open-sans/files/open-sans-latin-ext-wght-normal.woff2": {
+    "file": "assets/open-sans-latin-ext-wght-normal-DPNHYqvY.woff2",
+    "src": "node_modules/@fontsource-variable/open-sans/files/open-sans-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/open-sans/files/open-sans-latin-wght-normal.woff2": {
+    "file": "assets/open-sans-latin-wght-normal-CWNzRldh.woff2",
+    "src": "node_modules/@fontsource-variable/open-sans/files/open-sans-latin-wght-normal.woff2"
+  },
+  "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-400-italic.woff2": {
+    "file": "assets/libertinus-serif-latin-400-italic-B2pw30VD.woff2",
+    "src": "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-400-italic.woff2"
+  },
+  "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-400-normal.woff2": {
+    "file": "assets/libertinus-serif-latin-400-normal-UuLrF836.woff2",
+    "src": "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-400-normal.woff2"
+  },
+  "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-700-italic.woff2": {
+    "file": "assets/libertinus-serif-latin-700-italic-lPpydvp6.woff2",
+    "src": "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-700-italic.woff2"
+  },
+  "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-700-normal.woff2": {
+    "file": "assets/libertinus-serif-latin-700-normal-DgcGlGzg.woff2",
+    "src": "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-700-normal.woff2"
+  },
+  "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-ext-400-italic.woff2": {
+    "file": "assets/libertinus-serif-latin-ext-400-italic-Cxjd9wk1.woff2",
+    "src": "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-ext-400-italic.woff2"
+  },
+  "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-ext-400-normal.woff2": {
+    "file": "assets/libertinus-serif-latin-ext-400-normal-D-_kZ8o8.woff2",
+    "src": "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-ext-400-normal.woff2"
+  },
+  "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-ext-700-italic.woff2": {
+    "file": "assets/libertinus-serif-latin-ext-700-italic-BLLviln_.woff2",
+    "src": "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-ext-700-italic.woff2"
+  },
+  "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-ext-700-normal.woff2": {
+    "file": "assets/libertinus-serif-latin-ext-700-normal-CZnEAd_f.woff2",
+    "src": "node_modules/@fontsource/libertinus-serif/files/libertinus-serif-latin-ext-700-normal.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff2": {
+    "file": "assets/KaTeX_AMS-Regular-By658UzJ.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff2": {
+    "file": "assets/KaTeX_Caligraphic-Bold-CKJcxpnQ.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2": {
+    "file": "assets/KaTeX_Caligraphic-Regular-DY5ow2G2.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.woff2": {
+    "file": "assets/KaTeX_Fraktur-Bold-BN3qknki.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.woff2": {
+    "file": "assets/KaTeX_Fraktur-Regular-Bt1A9szT.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Main-Bold.woff2": {
+    "file": "assets/KaTeX_Main-Bold-CXybyQWI.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Bold.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.woff2": {
+    "file": "assets/KaTeX_Main-BoldItalic-Df9whx8h.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Main-Italic.woff2": {
+    "file": "assets/KaTeX_Main-Italic-OpX7JZ4Q.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Italic.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff2": {
+    "file": "assets/KaTeX_Main-Regular-Bg9sdKmA.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.woff2": {
+    "file": "assets/KaTeX_Math-BoldItalic-BGkjICpL.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff2": {
+    "file": "assets/KaTeX_Math-Italic-C5-Ai3kR.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.woff2": {
+    "file": "assets/KaTeX_SansSerif-Bold-Brp9aoHQ.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.woff2": {
+    "file": "assets/KaTeX_SansSerif-Italic-CNxAGjzy.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.woff2": {
+    "file": "assets/KaTeX_SansSerif-Regular-juWZlc-9.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Script-Regular.woff2": {
+    "file": "assets/KaTeX_Script-Regular-Cf8GH74L.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Script-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff2": {
+    "file": "assets/KaTeX_Size1-Regular-C0z4_8mq.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff2": {
+    "file": "assets/KaTeX_Size2-Regular-DOCm8PBK.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Size4-Regular.woff2": {
+    "file": "assets/KaTeX_Size4-Regular-CHxDaOWL.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Size4-Regular.woff2"
+  },
+  "node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.woff2": {
+    "file": "assets/KaTeX_Typewriter-Regular-DDVyWfOc.woff2",
+    "src": "node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.woff2"
+  }
+}

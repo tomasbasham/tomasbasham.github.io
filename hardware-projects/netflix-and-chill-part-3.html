@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- Character encoding & viewport: must come first -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Page identity -->
+    <title>Netflix and Chill — Part 3 | Tomas Basham's Blog</title>
+
+    <!-- no-js/js swap: must be a blocking script, run before any CSS that depends on it -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Applies a stored light/dark choice before first paint (no flash) -->
+    
+<script>
+  (function () {
+    try {
+      var choice = window.localStorage.getItem('theme');
+      if (choice === 'dark' || choice === 'light') {
+        document.documentElement.setAttribute('data-theme', choice);
+      }
+    } catch (e) {
+      // Storage unavailable: fall back to the system preference.
+    }
+  })();
+</script>
+
+
+    <!-- Fonts are served from this site. Fetch the two used on every page now, rather than when the stylesheet first needs them. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/libertinus-serif-latin-400-normal-UuLrF836.woff2"/>
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/open-sans-latin-wght-normal-CWNzRldh.woff2"/>
+
+    <!-- Render-blocking resources: stylesheets -->
+    <link rel="stylesheet" href="/css/style-CyXwpMAg.css" media="screen"/>
+    
+
+    <!-- Start fetching the script now; it is only executed at the end of <body> -->
+    <link href="/js/app-D4vro8h3.js" rel="modulepreload" crossorigin="anonymous"/>
+
+    <!-- Non-rendering metadata: description, social, SEO, feed -->
+    <link type="application/atom+xml" rel="alternate" href="https://tomasbasham.dev/feed.xml" title="Tomas Basham&apos;s Blog" />
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Netflix and Chill — Part 3" />
+<meta name="author" content="Tomas Basham" />
+<meta property="og:locale" content="en_GB" />
+<meta name="description" content="Building your own Netflix and chill button tutorial series concluding with assembly." />
+<meta property="og:description" content="Building your own Netflix and chill button tutorial series concluding with assembly." />
+<link rel="canonical" href="https://tomasbasham.dev/hardware-projects/netflix-and-chill-part-3" />
+<meta property="og:url" content="https://tomasbasham.dev/hardware-projects/netflix-and-chill-part-3" />
+<meta property="og:site_name" content="Tomas Basham’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-06-10T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Netflix and Chill — Part 3" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Tomas Basham"},"dateModified":"2016-06-10T00:00:00+01:00","datePublished":"2016-06-10T00:00:00+01:00","description":"Building your own Netflix and chill button tutorial series concluding with assembly.","headline":"Netflix and Chill — Part 3","mainEntityOfPage":{"@type":"WebPage","@id":"https://tomasbasham.dev/hardware-projects/netflix-and-chill-part-3"},"url":"https://tomasbasham.dev/hardware-projects/netflix-and-chill-part-3"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <!-- Icons & manifest -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48.png"/>
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg"/>
+    <link rel="icon" href="/images/favicon.ico"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5"/>
+
+    <link rel="manifest" href="/site.webmanifest/"/>
+    <meta name="theme-color" content="#ffffff">
+
+    
+    <!-- Analytics: non-blocking, loaded last -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51944071-1"></script>
+    
+  </head>
+  <body>
+    
+    
+<header
+  class="navbar navbar-sticky site-nav"
+  
+>
+  <div class="container">
+    <a class="navbar-brand" href="/">Tomas Basham's Blog</a>
+
+    <button class="navbar-toggle" type="button" popovertarget="site-menu" aria-label="Menu">
+      <span class="navbar-toggle-icon"></span>
+    </button>
+
+    <div class="navbar-menu" id="site-menu" popover>
+      <button class="navbar-close" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Close menu">&times;</button>
+      <nav class="navbar-nav" aria-label="Profiles">
+        <ul>
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <li><a href="https://github.com/tomasbasham" target="_blank" rel="noopener noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+          
+            
+              <li><a href="https://www.linkedin.com/in/tomas-basham-06244646" target="_blank" rel="noopener noreferrer">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://www.instagram.com/tomasbasham" target="_blank" rel="noopener noreferrer">Instagram<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+            
+              <li><a href="https://bsky.app/profile/tomasbasham.dev" target="_blank" rel="noopener noreferrer">Bluesky<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            
+          
+        </ul>
+      </nav>
+      <div class="navbar-actions">
+        
+<div
+  class="theme-toggle"
+  x-data
+  x-effect="$store.darkMode.preference === 'system' ? document.documentElement.removeAttribute('data-theme') : document.documentElement.setAttribute('data-theme', $store.darkMode.preference)"
+>
+  <div class="theme-switch" role="group" aria-label="Colour theme" x-cloak>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Match system"
+      aria-label="Match system"
+      :aria-pressed="$store.darkMode.preference === 'system' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'system' }"
+      @click="$store.darkMode.setPreference('system')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Light"
+      aria-label="Light"
+      :aria-pressed="$store.darkMode.preference === 'light' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'light' }"
+      @click="$store.darkMode.setPreference('light')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button
+      class="theme-switch-option"
+      type="button"
+      title="Dark"
+      aria-label="Dark"
+      :aria-pressed="$store.darkMode.preference === 'dark' ? 'true' : 'false'"
+      :class="{ active: $store.darkMode.preference === 'dark' }"
+      @click="$store.darkMode.setPreference('dark')"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+    
+    <main class="content">
+  <article class="post" itemscope itemtype="http://schema.org/Article" x-data="parallaxHeading">
+    
+    
+    <div class="no-article-image">
+      <div class="post-meta">
+        <h1 class="post-title">Netflix and Chill — Part 3</h1>
+        <div class="clearfix post-meta-text">
+          <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+          <h4 class="author-name" itemprop="author" itemscope itemtype="http://schema.org/Person">Tomas Basham</h4>
+          on
+          <time datetime="2016-06-10T00:00:00+01:00">10 Jun 2016</time>
+        </div>
+      </div>
+    </div>
+    
+    <section class="post-content">
+      
+      <div class="post-reading">
+        <span class="post-reading-time">About 4 min read</span>
+      </div>
+      
+      <a name="topofpage"></a>
+      
+
+  
+  
+    
+    <details class="series-nav">
+      <summary class="series-nav-summary">
+        <span class="series-nav-title" id="series-nav-title">In this Series</span>
+        <span class="series-nav-position">Part 3 of 3</span>
+      </summary>
+      <nav aria-labelledby="series-nav-title">
+        <ol class="series-nav-list">
+          
+            
+            <li class="series-nav-item"><a href="/hardware-projects/netflix-and-chill">Netflix and Chill</a></li>
+            
+          
+            
+            <li class="series-nav-item"><a href="/hardware-projects/netflix-and-chill-part-2">Netflix and Chill — Part 2</a></li>
+            
+          
+            
+            <li class="series-nav-item series-nav-current" aria-current="page"><strong>Netflix and Chill — Part 3</strong></li>
+            
+          
+        </ol>
+      </nav>
+    </details>
+  
+
+
+      <p>If you have been following along with this tutorial series you should have a
+working
+<a href="/hardware-projects/netflix-and-chill">electronic prototype</a> with
+the necessary <a href="/hardware-projects/netflix-and-chill-part-2">code</a>
+to turn on your TV and signal an external messaging queue to later extend the
+functionality of your switch using a Raspberry Pi or other internet enabled
+device.</p>
+
+<p>In this final part of the tutorial series I will conclude with the assembly.
+This I found to be the most time consuming step and where I most often had to go
+back to the “drawing board”.</p>
+
+<p>It is worth noting that the
+<a href="http://makeit.netflix.com/downloads/build_step6_SwitchModels.zip">original files</a>
+posted by Netflix are in a very awkward format. They seem to have been modelled
+in SolidWorks 2016, and unless you have a small fortune or happen to work with
+this product you will be unable to open these files. Fortunately my
+<a href="https://www.linkedin.com/in/daniel-basham-99557a65">brother</a> is a product
+designer and uses this particular version at his place of employment. I have had
+him edit the models to accomodate my own design changes and export them in a
+much more compatible format. The models can be found
+<a href="https://github.com/tomasbasham/netflix-switch-models/tree/master">here</a>.</p>
+
+<h3 id="chassis-and-backplate">Chassis and Backplate</h3>
+
+<p>The chasis will house the electronics from
+<a href="/hardware-projects/netflix-and-chill">part 1</a> preventing bits
+from rattling around when we finally put everything together. You can build this
+from any material that you like but I opted for plastic. More specifically I had
+this part 3D printed in Polylactic Acid (PLA) biodegradable thermoplastic with a
+100 micron layer height. Since I do not yet own a 3D printer I had this printed
+though the <a href="https://www.3dhubs.com">3D Hubs</a> service. The turnaround time can
+vary depending upon the local printing house you choose but I received a very
+professional, good quality print that I was very happy with.</p>
+
+<p>I used the same service to print the backplate that will keep the chassis within
+the outer enclosure. You can get a copy of these printed yourself using this
+<a href="http://www.thingiverse.com/apps/3d-print-with-3d-hubs/run?thing_id=1743817">quick link</a>
+however you are limited to the filament colour options and the printing house.
+Instead I’d clone the repo linked to above and manually submit the print job to
+3D Hubs.</p>
+
+<div class="embed">
+  <script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-chassis.stl"></script>
+  <script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-backplate.stl"></script>
+</div>
+
+<h3 id="enclosure">Enclosure</h3>
+
+<p>The enclosure envelops all the circuitry and the chassis, having the backplate
+securely fasten to its rear end. It is this part that gives the switch it’s
+finished look. I had originally intended to get this made from solid Oak and
+have it milled using a CNC milling machine. There are a few online services
+where you can have this made, operating similarly to 3DHubs, however everyone I
+contacted ignored my requests. So as a backup plan I had this printed too from
+PLA through 3DHubs.</p>
+
+<p>For reference the site I attempted to use was <a href="https://www.fabhub.io/">Fabhub</a>,
+a global network of professional fabricators making digital designs, on demand,
+all over the world. You may have more luck than I did but it would appear the
+order size is too small for any of the fabricators to deem worth their time.</p>
+
+<p>This design almost mirrors that which was originally put together by the Netflix
+team. I have merged the logo and the chassis into one solid piece, and I have
+lengthened the recess under the logo to accommodate the LED Backlight.</p>
+
+<div class="embed">
+  <script src="https://embed.github.com/view/3d/tomasbasham/netflix-switch-models/master/netflix-switch-enclosure.stl"></script>
+</div>
+
+<h3 id="assembly">Assembly</h3>
+
+<p>Due to the physical dimensions of the enclosure, assembly is no easy feat. First
+and foremost there are going to be a lot of wires living inside this box. I
+first attempted soldering each of the LEDs to their respective resistors,
+transistors and wires essentially making many little circuits that I could piece
+together.</p>
+
+<figure class="container container-media"><img src="https://cdn.tomasbasham.dev/posts/netflix-and-chill/netflix-switch-wires.jpg" alt="Netflix Switch Wires" /><figcaption>Netflix Switch Wires</figcaption>
+</figure>
+
+<p>Quickly realising this was far too fiddly I instead opted to create my own PCB
+for the lighting array that comprises of the 5 indicator lights and the LED
+Backlight. Although this has not reduced the number of wires by a lot, it allows
+me to securely fasten down all of the lights to the enclosure and have a neat
+block of wires extending from the board to the Spark Photon.</p>
+
+<p>I have uploaded the <a href="https://en.wikipedia.org/wiki/Gerber_format">gerber files</a>
+to <a href="https://oshpark.com/">OSH Park</a> where they will print the exact same board
+for you for around £8 (for 3 boards — minimum order). This is incredibly cheap
+and will definitely mitigate a lot of frustration whilst assembling.</p>
+
+<p><a href="https://oshpark.com/shared_projects/wV6vJPb5"><img src="https://oshpark.com/assets/badge-5b7ec47045b78aef6eb9d83b3bac6b1920de805e9a0c227658eac6e19a045b9c.png" alt="Order from OSH Park" /></a></p>
+
+<p>After receiving the boards I used a technique called
+<a href="/electronics/tricks-of-the-trade-hotplate-reflow">hotplate reflow</a>
+to attach some surface mount resistors I had lying around. These are the same
+value resistors as in the prototype but just far more compact as to make the
+electronics take up as little room as possible.</p>
+
+<p>As for everything else it is a matter of following the prototype we made in a
+previous article and hooking it up to both the power supplied through the LiPo
+battery and the Spark Photon development board.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Finally having come to the end of this tutorial series you should have created
+your own Netflix switch capable of controlling your TV and potentially sending
+message to a remote message broker.</p>
+
+<p>In future I intend to revisit making the enclosure out of wood as I feel it will
+give it a far better finish, but until then I am happy with the results.</p>
+
+    </section>
+    <footer class="bottom-teaser grid fixed-columns">
+  <div class="is-left">
+    <h5 class="index-headline featured">
+      <span>Written by</span>
+    </h5>
+    <section class="author">
+      
+      <div class="author-image" style="background-image: url(https://github.com/tomasbasham.png)">Blog Logo</div>
+      <h4>Tomas Basham</h4>
+      <p class="bio">Software Engineer</p>
+    </section>
+  </div>
+  <div class="is-right">
+    <h5 class="index-headline featured">
+      <span>Tags</span>
+    </h5>
+    
+<section class="tags">
+  
+  
+  <div class="tag post-tag post-tag-3d-printing">
+    <a class="link" href="/tag/3d-printing" title="Go to 3d-printing" aria-label="Go to 3d-printing">3d-printing</a>
+  </div>
+  
+  <div class="tag post-tag post-tag-raspberry-pi">
+    <a class="link" href="/tag/raspberry-pi" title="Go to raspberry-pi" aria-label="Go to raspberry-pi">raspberry-pi</a>
+  </div>
+  
+  
+</section>
+
+
+  </div>
+</footer>
+
+  </article>
+</main>
+
+    <footer class="site-footer">
+  <div class="footer-links">
+    <div class="container footer-container">
+      <div class="grid fixed-columns footer-grid">
+        <div class="footer-menu">
+          <h3>Big &hearts;</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://go.dev/">Golang</a></li>
+            <li class="menu-item"><a href="https://www.docker.com/">docker</a></li>
+            <li class="menu-item"><a href="https://www.bashamsburgers.com/">bashamsburgers</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Links</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="/">Blog</a></li>
+            <li class="menu-item"><a href="https://github.com/tomasbasham?tab=repositories&type=source">Projects</a></li>
+            <li class="menu-item"><a href="/archive">Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-menu">
+          <h3>Become a Friend</h3>
+          <ul class="menu-list">
+            <li class="menu-item"><a href="https://github.com/tomasbasham">GitHub</a></li>
+            <li class="menu-item"><a href="https://www.linkedin.com/in/tomas-basham-06244646">Linkedin</a></li>
+            <li class="menu-item"><a href="https://bsky.app/profile/tomasbasham.dev">Bluesky</a></li>
+            <li class="menu-item"><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-landscape"></div>
+  <div class="footer-legal">
+    <div class="inner">
+      <section class="copyright">
+        <p>All content copyright <a href="mailto:">tomasbasham</a> &copy; 2026 &bull; All rights reserved.</p>
+      </section>
+      <section class="poweredby">
+        <p>Made with ♥ using <a href="http://jekyllrb.com">Jekyll</a></p>
+      </section>
+    </div>
+  </div>
+</footer>
+
+    <script type="module" src="/js/app-D4vro8h3.js" media="screen" crossorigin="anonymous"></script>
+  </body>
+</html>
