@@ -34,7 +34,7 @@ jobs:
     - name: Build website
       run: bundle exec rake build
     - name: Deploy to Cloudflare Pages
-      uses: cloudflare/wrangler-action@v3
+      uses: cloudflare/wrangler-action@v4
       with:
         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
